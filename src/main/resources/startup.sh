@@ -2,7 +2,7 @@
 #
 #
 APP_DIR=/home/developer/eju-micro-app
-APP_NAME=eju-micro-app
+APP_NAME=boot
 APP_CONF=$APP_DIR/application.properties
 
 #set java home
