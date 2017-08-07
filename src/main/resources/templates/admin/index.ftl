@@ -96,7 +96,7 @@ jsMap={"":"//dingey.github.io/demo/adminlte/dist/js/app.min.js,//dingey.github.i
     <section class="sidebar">   
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li class="header">MAIN NAVIGATION</li>
+        <li class="header"><@spring.message "main-navigation"/></li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-share"></i> <span>Multilevel</span>
@@ -130,7 +130,11 @@ jsMap={"":"//dingey.github.io/demo/adminlte/dist/js/app.min.js,//dingey.github.i
             <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
           </ul>
         </li>
-        <li><a href="../drag_table.html"><i class="fa fa-book"></i> <span>拖拽表格</span></a></li>
+        <li><a href=""><i class="fa fa-fw fa-gears"></i> <span>设置</span></a>
+         <ul class="treeview-menu">
+            <li><a href="permission"><i class="fa fa-fw fa-key"></i>权限设置</a></li>
+         </ul>
+        </li>
         <li class="header">LABELS</li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
@@ -167,7 +171,7 @@ jsMap={"":"//dingey.github.io/demo/adminlte/dist/js/app.min.js,//dingey.github.i
               <i class="fa fa-gear"></i>
             </a>
             <ul class="dropdown-menu" style="min-width: 60px;">
-              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="closeTabs()">关闭所有</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="closeTabs()"><@spring.message "close-all"/></a></li>
             </ul>
           </li>
           <li class="active" id="li_tab_1"><a href="#tab_1" data-toggle="tab">Tab 1<i class="fa fa-fw fa-close" onclick="closeTab('1')"></i></a></li>
