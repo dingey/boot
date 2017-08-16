@@ -7,7 +7,9 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,147 +17,190 @@ import java.util.regex.Pattern;
  * @author d
  */
 public class SqlProvider {
+	static HashMap<String, String> sqls = new HashMap<String, String>();
+
 	public String insert(Object bean) {
-		Class<?> beanClass = bean.getClass();
-		String tableName = getTableName(beanClass);
-		List<Field> fields = getFields(beanClass);
-		StringBuilder insertSql = new StringBuilder();
-		List<String> insertParas = new ArrayList<String>();
-		List<String> insertParaNames = new ArrayList<String>();
-		insertSql.append("INSERT INTO ").append(tableName).append("(");
-		try {
-			for (int i = 0; i < fields.size(); i++) {
-				Field field = fields.get(i);
-				field.setAccessible(true);
-				Object value = field.get(bean);
-				if (((beanClass.isAnnotationPresent(IgnoreNull.class)
-						&& beanClass.getAnnotation(IgnoreNull.class).value())
-						|| (field.isAnnotationPresent(IgnoreNull.class)
-								&& field.getAnnotation(IgnoreNull.class).value()))
-						&& value == null || field.isAnnotationPresent(Transient.class)) {
-					continue;
+		return getAndPut(bean, "insert", new Function<Object, String>() {
+			@Override
+			public String apply(Object t) {
+				Class<?> beanClass = bean.getClass();
+				String tableName = getTableName(beanClass);
+				List<Field> fields = getFields(beanClass);
+				StringBuilder insertSql = new StringBuilder();
+				List<String> insertParas = new ArrayList<String>();
+				List<String> insertParaNames = new ArrayList<String>();
+				insertSql.append("INSERT INTO ").append(tableName).append("(");
+				try {
+					for (int i = 0; i < fields.size(); i++) {
+						Field field = fields.get(i);
+						field.setAccessible(true);
+						Object value = field.get(bean);
+						if (((beanClass.isAnnotationPresent(IgnoreNull.class)
+								&& beanClass.getAnnotation(IgnoreNull.class).value())
+								|| (field.isAnnotationPresent(IgnoreNull.class)
+										&& field.getAnnotation(IgnoreNull.class).value()))
+								&& value == null || field.isAnnotationPresent(Transient.class)) {
+							continue;
+						}
+						insertParaNames.add(getColumn(field));
+						insertParas.add("#{" + field.getName() + "}");
+					}
+				} catch (Exception e) {
+					new RuntimeException("get insert sql is exceptoin:" + e);
 				}
-				insertParaNames.add(getColumn(field));
-				insertParas.add("#{" + field.getName() + "}");
+				for (int i = 0; i < insertParaNames.size(); i++) {
+					insertSql.append(insertParaNames.get(i));
+					if (i != insertParaNames.size() - 1)
+						insertSql.append(",");
+				}
+				insertSql.append(")").append(" VALUES(");
+				for (int i = 0; i < insertParas.size(); i++) {
+					insertSql.append(insertParas.get(i));
+					if (i != insertParas.size() - 1)
+						insertSql.append(",");
+				}
+				insertSql.append(")");
+				return insertSql.toString();
 			}
-		} catch (Exception e) {
-			new RuntimeException("get insert sql is exceptoin:" + e);
-		}
-		for (int i = 0; i < insertParaNames.size(); i++) {
-			insertSql.append(insertParaNames.get(i));
-			if (i != insertParaNames.size() - 1)
-				insertSql.append(",");
-		}
-		insertSql.append(")").append(" VALUES(");
-		for (int i = 0; i < insertParas.size(); i++) {
-			insertSql.append(insertParas.get(i));
-			if (i != insertParas.size() - 1)
-				insertSql.append(",");
-		}
-		insertSql.append(")");
-		return insertSql.toString();
+		});
 	}
 
 	public String update(Object bean) {
-		Class<?> beanClass = bean.getClass();
-		String tableName = getTableName(beanClass);
-		List<Field> fields = getFields(beanClass);
-		StringBuilder updateSql = new StringBuilder();
-		updateSql.append(" UPDATE ").append(tableName).append(" SET ");
-		String id = "id";
-		try {
-			for (int i = 0; i < fields.size(); i++) {
-				Field field = fields.get(i);
-				field.setAccessible(true);
-				Object value = field.get(bean);
-				if (((beanClass.isAnnotationPresent(IgnoreNull.class)
-						&& beanClass.getAnnotation(IgnoreNull.class).value())
-						|| (field.isAnnotationPresent(IgnoreNull.class)
-								&& field.getAnnotation(IgnoreNull.class).value()))
-						&& value == null || field.isAnnotationPresent(Transient.class)) {
-					continue;
-				} else if (field.isAnnotationPresent(Id.class)) {
-					id = field.getName();
-					continue;
+		return getAndPut(bean, "update", new Function<Object, String>() {
+			@Override
+			public String apply(Object t) {
+				Class<?> beanClass = bean.getClass();
+				String tableName = getTableName(beanClass);
+				List<Field> fields = getFields(beanClass);
+				StringBuilder updateSql = new StringBuilder();
+				updateSql.append("UPDATE ").append(tableName).append(" SET ");
+				String id = "id";
+				try {
+					for (int i = 0; i < fields.size(); i++) {
+						Field field = fields.get(i);
+						field.setAccessible(true);
+						Object value = field.get(bean);
+						if (((beanClass.isAnnotationPresent(IgnoreNull.class)
+								&& beanClass.getAnnotation(IgnoreNull.class).value())
+								|| (field.isAnnotationPresent(IgnoreNull.class)
+										&& field.getAnnotation(IgnoreNull.class).value()))
+								&& value == null || field.isAnnotationPresent(Transient.class)) {
+							continue;
+						} else if (field.isAnnotationPresent(Id.class)) {
+							id = field.getName();
+							continue;
+						}
+						updateSql.append(getColumn(field)).append("=#{").append(field.getName()).append("},");						
+					}
+				} catch (Exception e) {
+					new RuntimeException("get update sql is exceptoin:" + e);
 				}
-				updateSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
-				if (i != fields.size() - 1) {
-					updateSql.append(",");
-				}
+				updateSql.deleteCharAt(updateSql.length()-1);
+				updateSql.append(" where ").append(camel2Underline(id)).append(" =#{").append(id).append("}");
+				return updateSql.toString();
 			}
-		} catch (Exception e) {
-			new RuntimeException("get update sql is exceptoin:" + e);
-		}
-		updateSql.append(" where ").append(camel2Underline(id)).append(" =#{").append(id).append("}");
-		return updateSql.toString();
+		});
 	}
 
 	public String realyDelete(Object bean) {
-		Class<?> beanClass = bean.getClass();
-		String tableName = getTableName(beanClass);
-		List<Field> fields = getFields(beanClass);
-		StringBuilder deleteSql = new StringBuilder();
-		deleteSql.append(" DELETE FROM ").append(tableName).append(" WHERE ");
-		try {
-			for (int i = 0; i < fields.size(); i++) {
-				Field field = fields.get(i);
-				if (field.isAnnotationPresent(Id.class)) {
-					deleteSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
-					break;
+		return getAndPut(bean, "realyDelete", new Function<Object, String>() {
+			@Override
+			public String apply(Object t) {
+				Class<?> beanClass = bean.getClass();
+				String tableName = getTableName(beanClass);
+				List<Field> fields = getFields(beanClass);
+				StringBuilder deleteSql = new StringBuilder();
+				deleteSql.append(" DELETE FROM ").append(tableName).append(" WHERE ");
+				try {
+					for (int i = 0; i < fields.size(); i++) {
+						Field field = fields.get(i);
+						if (field.isAnnotationPresent(Id.class)) {
+							deleteSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
+							break;
+						}
+					}
+				} catch (Exception e) {
+					new RuntimeException("get delete sql is exceptoin:" + e);
 				}
+				return deleteSql.toString();
 			}
-		} catch (Exception e) {
-			new RuntimeException("get delete sql is exceptoin:" + e);
-		}
-		return deleteSql.toString();
+		});
 	}
 
 	public String delete(Object bean) {
-		Class<?> beanClass = bean.getClass();
-		String tableName = getTableName(beanClass);
-		List<Field> fields = getFields(beanClass);
-		StringBuilder deleteSql = new StringBuilder();
-		deleteSql.append(" UPDATE ").append(tableName).append(" SET DEL_FLAG=1 WHERE ");
-		try {
-			for (int i = 0; i < fields.size(); i++) {
-				Field field = fields.get(i);
-				if (field.isAnnotationPresent(Id.class)) {
-					deleteSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
-					break;
+		return getAndPut(bean, "delete", new Function<Object, String>() {
+			@Override
+			public String apply(Object t) {
+				Class<?> beanClass = bean.getClass();
+				String tableName = getTableName(beanClass);
+				List<Field> fields = getFields(beanClass);
+				StringBuilder deleteSql = new StringBuilder();
+				deleteSql.append(" UPDATE ").append(tableName).append(" SET DEL_FLAG=1 WHERE ");
+				try {
+					for (int i = 0; i < fields.size(); i++) {
+						Field field = fields.get(i);
+						if (field.isAnnotationPresent(Id.class)) {
+							deleteSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
+							break;
+						}
+					}
+				} catch (Exception e) {
+					new RuntimeException("get delete sql is exceptoin:" + e);
 				}
+				return deleteSql.toString();
 			}
-		} catch (Exception e) {
-			new RuntimeException("get delete sql is exceptoin:" + e);
-		}
-		return deleteSql.toString();
+		});
 	}
 
 	public String get(Object bean) {
-		Class<?> beanClass = bean.getClass();
-		String tableName = getTableName(beanClass);
-		List<Field> fields = getFields(beanClass);
-		StringBuilder getSql = new StringBuilder();
-		getSql.append("SELECT * FROM ").append(tableName).append(" WHERE ");
-		try {
-			for (int i = 0; i < fields.size(); i++) {
-				Field field = fields.get(i);
-				if (field.isAnnotationPresent(Id.class)) {
-					getSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
-					break;
+		return getAndPut(bean, "get", new Function<Object, String>() {
+			@Override
+			public String apply(Object t) {
+				Class<?> beanClass = bean.getClass();
+				String tableName = getTableName(beanClass);
+				List<Field> fields = getFields(beanClass);
+				StringBuilder getSql = new StringBuilder();
+				getSql.append("SELECT * FROM ").append(tableName).append(" WHERE ");
+				try {
+					for (int i = 0; i < fields.size(); i++) {
+						Field field = fields.get(i);
+						if (field.isAnnotationPresent(Id.class)) {
+							getSql.append(getColumn(field)).append("=#{").append(field.getName()).append("}");
+							break;
+						}
+					}
+				} catch (Exception e) {
+					new RuntimeException("get delete sql is exceptoin:" + e);
 				}
+				return getSql.toString();
 			}
-		} catch (Exception e) {
-			new RuntimeException("get delete sql is exceptoin:" + e);
-		}
-		return getSql.toString();
+		});
 	}
 
 	public String findList(Object bean) {
-		Class<?> beanClass = bean.getClass();
-		String tableName = getTableName(beanClass);
-		StringBuilder getSql = new StringBuilder();
-		getSql.append("SELECT * FROM ").append(tableName);
-		return getSql.toString();
+		return getAndPut(bean, "findList", new Function<Object, String>() {
+			@Override
+			public String apply(Object t) {
+				Class<?> beanClass = bean.getClass();
+				String tableName = getTableName(beanClass);
+				StringBuilder getSql = new StringBuilder();
+				getSql.append("SELECT * FROM ").append(tableName);
+				return getSql.toString();
+			}
+		});
+	}
+
+	static String getAndPut(Object bean, String method, Function<Object, String> func) {
+		String key = bean.getClass().getName() + "_" + method;
+		if (!bean.getClass().isAnnotationPresent(IgnoreNull.class) && sqls.containsKey(key)) {
+			return sqls.get(key);
+		} else {
+			String apply = func.apply(bean);
+			if (!bean.getClass().isAnnotationPresent(IgnoreNull.class)) {
+				sqls.put(key, apply);
+			}
+			return apply;
+		}
 	}
 
 	String getTableName(Class<?> beanClass) {
@@ -231,7 +276,7 @@ public class SqlProvider {
 		Matcher matcher = pattern.matcher(line);
 		while (matcher.find()) {
 			String word = matcher.group();
-			sb.append(word.toUpperCase());
+			sb.append(word.toLowerCase());
 			sb.append(matcher.end() == line.length() ? "" : "_");
 		}
 		return sb.toString();
