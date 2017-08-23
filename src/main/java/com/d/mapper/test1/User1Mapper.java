@@ -23,6 +23,6 @@ public interface User1Mapper {
 	@UpdateProvider(type = SqlProvider.class, method = "update")
 	int update(User user);
 
-	@DeleteProvider(type = SqlProvider.class, method = "realyDelete")
+	@DeleteProvider(type = SqlProvider.class, method = "delete")
 	int delete(Long id);
 }
