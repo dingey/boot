@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
@@ -17,15 +19,31 @@ public interface BaseMapper<T> {
 	@Options(useGeneratedKeys = true)
 	int insert(T t);
 
+	@InsertProvider(type = SqlProvider.class, method = "insertSelective")
+	@Options(useGeneratedKeys = true)
+	int insertSelective(T t);
+
 	@UpdateProvider(type = SqlProvider.class, method = "update")
 	int update(T t);
 
-	@UpdateProvider(type = SqlProvider.class, method = "delete")
+	@UpdateProvider(type = SqlProvider.class, method = "updateSelective")
+	int updateSelective(T t);
+
+	@UpdateProvider(type = SqlProvider.class, method = "deleteMark")
 	int delete(T t);
 
 	@SelectProvider(type = SqlProvider.class, method = "get")
 	T get(T t);
 
-	@SelectProvider(type = SqlProvider.class, method = "findList")
-	List<T> findList(T t);
+	@SelectProvider(type = SqlProvider.class, method = "findAll")
+	List<T> findAll(T t);
+
+	@Select("${sql}")
+	List<T> findBySql(@Param("sql") String sql);
+
+	@SelectProvider(type = SqlProvider.class, method = "countAll")
+	int countAll(T t);
+
+	@Select("${sql}")
+	int countBySql(@Param("sql") String sql);
 }
