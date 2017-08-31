@@ -1,8 +1,6 @@
 package com.d.util;
 
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,37 +38,11 @@ public class NullUtil {
 				}
 			}
 			return m;
-		} else if (type == java.lang.Byte.class) {
+		} else if (type == java.lang.Byte.class || type == java.lang.Short.class || type == java.lang.Integer.class
+				|| type == java.lang.Long.class || type == java.lang.Double.class || type == java.lang.Float.class
+				|| type == java.math.BigDecimal.class||type == java.math.BigInteger.class) {
 			if (o == null) {
-				return Byte.valueOf("0");
-			}
-		} else if (type == java.lang.Short.class) {
-			if (o == null) {
-				return Short.valueOf("0");
-			}
-		} else if (type == java.lang.Integer.class) {
-			if (o == null) {
-				return Integer.valueOf("0");
-			}
-		} else if (type == java.lang.Long.class) {
-			if (o == null) {
-				return Long.valueOf("0");
-			}
-		} else if (type == java.lang.Double.class) {
-			if (o == null) {
-				return Double.valueOf("0");
-			}
-		} else if (type == java.lang.Float.class) {
-			if (o == null) {
-				return Float.valueOf("0");
-			}
-		} else if (type == java.math.BigDecimal.class) {
-			if (o == null) {
-				return BigDecimal.valueOf(0);
-			}
-		} else if (type == java.math.BigInteger.class) {
-			if (o == null) {
-				return BigInteger.valueOf(0);
+				return 0;
 			}
 		} else if (type == java.util.Date.class || type == java.lang.String.class) {
 			if (o == null)
