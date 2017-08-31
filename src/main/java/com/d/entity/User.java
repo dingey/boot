@@ -14,7 +14,7 @@ public class User implements Serializable {
 	private String password;
 	private UserSexEnum userSex;
 	private String nickName;
-
+	
 	public User() {
 		super();
 	}

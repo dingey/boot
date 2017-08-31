@@ -8,6 +8,7 @@ jsMap={"":"//dingey.github.io/demo/adminlte/dist/js/app.min.js,//dingey.github.i
 			<p>n1:${n1}</p>
 			<p>n2:${n2}</p>
 			<p>user:${user.userName},${user.id},${user.userSex}</p>
+			<p>map:${map.map.name},${map.map.user.userSex}</p>
 		</div>
 	</div>
 </div>

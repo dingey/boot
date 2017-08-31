@@ -34,6 +34,8 @@ public class NullUtil {
 					Object v = m.get(key);
 					if (v == null) {
 						m.put(key, "");
+					}else{
+						m.put(key, replaceObjectNullFields(v, v.getClass()));
 					}
 				}
 			}
