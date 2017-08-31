@@ -1,6 +1,7 @@
 package com.d.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.d.enums.UserSexEnum;
 import com.d.util.SqlProvider.Id;
@@ -14,7 +15,8 @@ public class User implements Serializable {
 	private String password;
 	private UserSexEnum userSex;
 	private String nickName;
-	
+	private Date create;
+
 	public User() {
 		super();
 	}
@@ -64,6 +66,14 @@ public class User implements Serializable {
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+
+	public Date getCreate() {
+		return create;
+	}
+
+	public void setCreate(Date create) {
+		this.create = create;
 	}
 
 	@Override

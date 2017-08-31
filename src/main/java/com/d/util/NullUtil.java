@@ -34,7 +34,7 @@ public class NullUtil {
 					Object v = m.get(key);
 					if (v == null) {
 						m.put(key, "");
-					}else{
+					} else {
 						m.put(key, replaceObjectNullFields(v, v.getClass()));
 					}
 				}
@@ -81,11 +81,11 @@ public class NullUtil {
 		} else if (type == java.util.ArrayList.class || type == java.util.LinkedList.class) {
 			if (o == null)
 				return new ArrayList<>();
-		}else if(type.isEnum()){
+		} else if (type.isEnum()) {
 			if (o == null) {
 				return type.getEnumConstants()[0];
 			}
-		} else if (type != java.lang.Object.class) {			
+		} else if (type != java.lang.Object.class) {
 			if (o == null) {
 				try {
 					o = type.newInstance();
@@ -93,19 +93,21 @@ public class NullUtil {
 					e.printStackTrace();
 				}
 			}
+			HashMap<String, Object> map = new HashMap<>();
 			for (Field f : type.getDeclaredFields()) {
 				Object object = null;
 				try {
 					f.setAccessible(true);
 					object = f.get(o);
 					if (object == null) {
-						f.set(o, replaceObjectNullFields(object, f.getType()));
+						object = replaceObjectNullFields(object, f.getType());
 					}
+					map.put(f.getName(), object);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
-			return o;
+			return map;
 		}
 		return o;
 	}
