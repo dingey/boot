@@ -17,8 +17,9 @@ public class User1MapperTest extends ApplicationTests {
 	public void test() {
 		User u = new User();
 		u.setId(1L);
-		u=user1Mapper.getOne(u);
-		System.out.println(u);
-		user1Mapper.getAll();
+		u=user1Mapper.get(u);
+//		System.out.println(u);
+//		user1Mapper.getAll();
+		User user = user1Mapper.getById(1);
 	}
 }

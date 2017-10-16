@@ -1,5 +1,6 @@
 package com.d.base;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.annotations.InsertProvider;
@@ -46,4 +47,6 @@ public interface BaseMapper<T> {
 
 	@Select("${sql}")
 	int countBySql(@Param("sql") String sql);
+	
+	T getById(Serializable id);
 }
