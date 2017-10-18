@@ -76,10 +76,4 @@ public class User implements Serializable {
 		this.create = create;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "userName " + this.userName + ", pasword " + this.password + "sex " + userSex.name();
-	}
-
 }

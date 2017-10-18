@@ -16,10 +16,11 @@ import java.util.regex.Pattern;
  * @author d
  */
 public class SqlProvider {
-	static final HashMap<String, String> sqls = new HashMap<String, String>();
+	static final HashMap<String, String> sqls = new HashMap<>();
+	static final HashMap<String, List<Field>> modelFieldsMap = new HashMap<>();
 
 	public String insert(Object bean) {
-		return getCache(bean, "insert", new Func<Object>() {
+		return getCachedSql(bean, "insert", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				return getInsertSql(bean, false);
@@ -34,11 +35,11 @@ public class SqlProvider {
 	public String getInsertSql(Object bean, boolean selective) {
 		String tableName = camel2Underline(bean.getClass().getSimpleName());
 		StringBuilder insertSql = new StringBuilder();
-		List<String> insertParas = new ArrayList<String>();
-		List<String> insertParaNames = new ArrayList<String>();
+		List<String> props = new ArrayList<>();
+		List<String> columns = new ArrayList<>();
 		insertSql.append("INSERT INTO ").append(tableName).append("(");
 		try {
-			for (Field field : getFields(bean.getClass())) {
+			for (Field field : getCachedModelFields(bean.getClass())) {
 				if (selective) {
 					field.setAccessible(true);
 					Object value = field.get(bean);
@@ -46,24 +47,24 @@ public class SqlProvider {
 						continue;
 					}
 				}
-				if(field.isAnnotationPresent(Transient.class)){
+				if (field.isAnnotationPresent(Transient.class) || field.isAnnotationPresent(IgnoreInsert.class)) {
 					continue;
 				}
-				insertParaNames.add(camel2Underline(field.getName()));
-				insertParas.add("#{" + field.getName() + "}");
+				columns.add(camel2Underline(field.getName()));
+				props.add("#{" + field.getName() + "}");
 			}
 		} catch (Exception e) {
 			new RuntimeException("get insert sql is exceptoin:" + e);
 		}
-		for (int i = 0; i < insertParaNames.size(); i++) {
-			insertSql.append(insertParaNames.get(i));
-			if (i != insertParaNames.size() - 1)
+		for (int i = 0; i < columns.size(); i++) {
+			insertSql.append(columns.get(i));
+			if (i != columns.size() - 1)
 				insertSql.append(",");
 		}
 		insertSql.append(")").append(" VALUES(");
-		for (int i = 0; i < insertParas.size(); i++) {
-			insertSql.append(insertParas.get(i));
-			if (i != insertParas.size() - 1)
+		for (int i = 0; i < props.size(); i++) {
+			insertSql.append(props.get(i));
+			if (i != props.size() - 1)
 				insertSql.append(",");
 		}
 		insertSql.append(")");
@@ -71,15 +72,15 @@ public class SqlProvider {
 	}
 
 	public String update(Object bean) {
-		return getCache(bean, "update", new Func<Object>() {
+		return getCachedSql(bean, "update", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				return getUpdateSql(bean, false);
 			}
 		});
 	}
-	
-	public String updateSelective(Object bean){
+
+	public String updateSelective(Object bean) {
 		return getUpdateSql(bean, true);
 	}
 
@@ -89,7 +90,7 @@ public class SqlProvider {
 		updateSql.append("UPDATE ").append(tableName).append(" SET ");
 		String id = "id";
 		try {
-			for (Field field : getFields(bean.getClass())) {
+			for (Field field : getCachedModelFields(bean.getClass())) {
 				if (selective) {
 					field.setAccessible(true);
 					Object value = field.get(bean);
@@ -100,7 +101,8 @@ public class SqlProvider {
 				if (field.isAnnotationPresent(Id.class)) {
 					id = field.getName();
 					continue;
-				}else if(field.isAnnotationPresent(Transient.class)){
+				} else if (field.isAnnotationPresent(Transient.class)
+						|| field.isAnnotationPresent(IgnoreUpdate.class)) {
 					continue;
 				}
 				updateSql.append(camel2Underline(field.getName())).append("=#{").append(field.getName()).append("},");
@@ -114,11 +116,11 @@ public class SqlProvider {
 	}
 
 	public String delete(Object bean) {
-		return getCache(bean, "delete", new Func<Object>() {
+		return getCachedSql(bean, "delete", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				String tableName = camel2Underline(bean.getClass().getSimpleName());
-				List<Field> fields = getFields(bean.getClass());
+				List<Field> fields = getCachedModelFields(bean.getClass());
 				StringBuilder deleteSql = new StringBuilder();
 				deleteSql.append(" DELETE FROM ").append(tableName).append(" WHERE ");
 				try {
@@ -139,7 +141,7 @@ public class SqlProvider {
 	}
 
 	public String deleteMark(Object bean) {
-		return getCache(bean, "deleteMark", new Func<Object>() {
+		return getCachedSql(bean, "deleteMark", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				String tableName = camel2Underline(bean.getClass().getSimpleName());
@@ -166,7 +168,7 @@ public class SqlProvider {
 	}
 
 	public String get(Object bean) {
-		return getCache(bean, "get", new Func<Object>() {
+		return getCachedSql(bean, "get", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				String tableName = camel2Underline(bean.getClass().getSimpleName());
@@ -191,7 +193,7 @@ public class SqlProvider {
 	}
 
 	public String findAll(Object bean) {
-		return getCache(bean, "findAll", new Func<Object>() {
+		return getCachedSql(bean, "findAll", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				String tableName = camel2Underline(bean.getClass().getSimpleName());
@@ -201,9 +203,9 @@ public class SqlProvider {
 			}
 		});
 	}
-	
+
 	public String countAll(Object bean) {
-		return getCache(bean, "countAll", new Func<Object>() {
+		return getCachedSql(bean, "countAll", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
 				String tableName = camel2Underline(bean.getClass().getSimpleName());
@@ -214,7 +216,7 @@ public class SqlProvider {
 		});
 	}
 
-	static String getCache(Object bean, String method, Func<Object> func) {
+	private static String getCachedSql(Object bean, String method, Func<Object> func) {
 		String key = bean.getClass().getName() + "_" + method;
 		if (sqls.containsKey(key)) {
 			return sqls.get(key);
@@ -222,6 +224,16 @@ public class SqlProvider {
 			String apply = func.apply(bean);
 			sqls.put(key, apply);
 			return apply;
+		}
+	}
+
+	public static List<Field> getCachedModelFields(Class<?> beanClass) {
+		if (modelFieldsMap.containsKey(beanClass.getName())) {
+			return modelFieldsMap.get(beanClass.getName());
+		} else {
+			List<Field> fields = getFields(beanClass);
+			modelFieldsMap.put(beanClass.getName(), fields);
+			return fields;
 		}
 	}
 
@@ -279,15 +291,22 @@ public class SqlProvider {
 		}
 		return sb.toString();
 	}
-	
+
 	@FunctionalInterface
 	public interface Func<T> {
 		String apply(T t);
 	}
-	
+
+	@Target({ ElementType.TYPE })
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface Table {
+		String value();
+	}
+
 	@Target({ ElementType.FIELD })
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Id {
+		boolean autoGenerated() default false;
 	}
 
 	@Target({ ElementType.FIELD })
@@ -298,5 +317,15 @@ public class SqlProvider {
 	@Target({ ElementType.FIELD })
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface DeleteMark {
+	}
+
+	@Target({ ElementType.FIELD })
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface IgnoreInsert {
+	}
+
+	@Target({ ElementType.FIELD })
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface IgnoreUpdate {
 	}
 }

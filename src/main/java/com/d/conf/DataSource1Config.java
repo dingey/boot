@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
-import com.d.base.RegistMapper;
-
 import javax.sql.DataSource;
 
 /**
@@ -51,10 +49,5 @@ public class DataSource1Config {
     @Primary
     public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
-    }
-    
-    @Bean(name = "registMapper")
-    public RegistMapper getRegistMapper(@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory){
-		return new RegistMapper(sqlSessionFactory); 	
     }
 }
