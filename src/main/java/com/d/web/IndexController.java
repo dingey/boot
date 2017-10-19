@@ -19,7 +19,7 @@ public class IndexController extends BaseController {
 	@Resource
 	private MessageSource messageSource;
 
-	@RequestMapping(path = { "", "/", "/index" })
+	@RequestMapping(path = { "", "/"})
 	public String index(Model m) {
 		return "admin/index";
 	}
