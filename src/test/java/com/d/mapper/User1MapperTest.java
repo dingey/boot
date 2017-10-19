@@ -16,9 +16,9 @@ public class User1MapperTest extends ApplicationTests {
 
 	@Override
 	public void test() {
-		// get();
+		get();
 		// insert();
-		user1Mapper.getById(1);
+		 getByid();
 	}
 
 	public void get() {
@@ -26,6 +26,10 @@ public class User1MapperTest extends ApplicationTests {
 		u.setId(1L);
 		User user = user1Mapper.get(u);
 		System.out.println(user.toString());
+	}
+
+	public void getByid() {
+		user1Mapper.getById(1);
 	}
 
 	public void insert() {
