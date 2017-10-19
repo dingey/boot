@@ -18,6 +18,7 @@ public class User1MapperTest extends ApplicationTests {
 	public void test() {
 		// get();
 		// insert();
+		user1Mapper.getById(1);
 	}
 
 	public void get() {

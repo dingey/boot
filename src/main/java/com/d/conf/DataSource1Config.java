@@ -19,35 +19,44 @@ import javax.sql.DataSource;
  * Created by summer on 2016/11/25.
  */
 @Configuration
-@MapperScan(basePackages = "com.d.mapper.test1", sqlSessionTemplateRef  = "test1SqlSessionTemplate")
+@MapperScan(basePackages = "com.d.mapper.test1", sqlSessionTemplateRef = "test1SqlSessionTemplate")
 public class DataSource1Config {
 
-    @Bean(name = "test1DataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.test1")
-    @Primary
-    public DataSource testDataSource() {
-        return DataSourceBuilder.create().build();
-    }
+	@Bean(name = "test1DataSource")
+	@ConfigurationProperties(prefix = "spring.datasource.test1")
+	@Primary
+	public DataSource testDataSource() {
+		return DataSourceBuilder.create().build();
+	}
 
-    @Bean(name = "test1SqlSessionFactory")
-    @Primary
-    public SqlSessionFactory testSqlSessionFactory(@Qualifier("test1DataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-        bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/test1/*.xml"));
-        bean.setConfigLocation(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mybatis-config.xml")[0]);
-        return bean.getObject();
-    }
+	@Bean(name = "test1SqlSessionFactory")
+	@Primary
+	public SqlSessionFactory testSqlSessionFactory(@Qualifier("test1DataSource") DataSource dataSource)
+			throws Exception {
+		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+		bean.setDataSource(dataSource);
+		bean.setMapperLocations(
+				new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/test1/*.xml"));
+		bean.setConfigLocation(
+				new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mybatis-config.xml")[0]);
+		return bean.getObject();
+	}
 
-    @Bean(name = "test1TransactionManager")
-    @Primary
-    public DataSourceTransactionManager testTransactionManager(@Qualifier("test1DataSource") DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
+	@Bean(name = "test1TransactionManager")
+	@Primary
+	public DataSourceTransactionManager testTransactionManager(@Qualifier("test1DataSource") DataSource dataSource) {
+		return new DataSourceTransactionManager(dataSource);
+	}
 
-    @Bean(name = "test1SqlSessionTemplate")
-    @Primary
-    public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
-        return new SqlSessionTemplate(sqlSessionFactory);
-    }
+	@Bean(name = "test1SqlSessionTemplate")
+	@Primary
+	public SqlSessionTemplate testSqlSessionTemplate(
+			@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+
+	@Bean(name = "mybatisCrud")
+	public MybatisCrud getMybatisCrud(@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+		return new MybatisCrud(sqlSessionFactory);
+	}
 }
