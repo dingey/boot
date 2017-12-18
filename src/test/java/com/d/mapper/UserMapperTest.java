@@ -1,35 +1,34 @@
 package com.d.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.d.ApplicationTests;
 import com.d.entity.User;
-import com.d.mapper.test1.User1Mapper;
+import com.d.mapper.UserMapper;
 import com.di.kit.JsonUtil;
 
 /**
  * @author d
  */
-public class User1MapperTest extends ApplicationTests {
+public class UserMapperTest extends ApplicationTests {
 	@Autowired
-	User1Mapper user1Mapper;
+	UserMapper userMapper;
 
 	@Override
 	public void test() {
-		get();
+		// get();
 		// insert();
-		 getByid();
+		getByid();
 	}
 
 	public void get() {
 		User u = new User();
 		u.setId(1L);
-		User user = user1Mapper.get(u);
+		User user = userMapper.get(u);
 		System.out.println(user.toString());
 	}
 
 	public void getByid() {
-		user1Mapper.getById(1);
+		userMapper.getById(1);
 	}
 
 	public void insert() {
@@ -40,7 +39,7 @@ public class User1MapperTest extends ApplicationTests {
 		// u.setUserSex(UserSexEnum.MAN);
 		// u.setCreate(new Date());
 		System.out.println(JsonUtil.toJson(u));
-		user1Mapper.insertSelective(u);
+		userMapper.insertSelective(u);
 		System.out.println(JsonUtil.toJson(u));
 	}
 }

@@ -3,8 +3,7 @@ package com.d.web;
 import java.util.List;
 
 import com.d.entity.User;
-import com.d.mapper.test1.User1Mapper;
-import com.d.mapper.test2.User2Mapper;
+import com.d.mapper.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,36 +14,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private User1Mapper user1Mapper;
+    private UserMapper userMapper;
 
-	@Autowired
-	private User2Mapper user2Mapper;
-	
 	@RequestMapping("/getUsers")
 	public List<User> getUsers() {
-		List<User> users=user1Mapper.getAll();
+		List<User> users=userMapper.getAll();
 		return users;
 	}
 	
     @RequestMapping("/getUser")
     public User getUser(Long id) {
-    	User user=user2Mapper.getOne(id);
+    	User user=userMapper.getById(id);
         return user;
     }
     
     @RequestMapping("/add")
     public void save(User user) {
-        user2Mapper.insert(user);
+    	userMapper.insert(user);
     }
     
     @RequestMapping(value="update")
     public void update(User user) {
-        user2Mapper.update(user);
+    	userMapper.update(user);
     }
     
     @RequestMapping(value="/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
-        //user1Mapper.delete(id);
+        //userMapper.delete(id);
     }
     
 }
