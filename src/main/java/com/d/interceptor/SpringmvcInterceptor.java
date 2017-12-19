@@ -1,4 +1,4 @@
-package com.d.type.interceptor;
+package com.d.interceptor;
 
 import java.util.ArrayList;
 import java.util.Arrays;

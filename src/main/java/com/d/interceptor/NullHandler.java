@@ -1,4 +1,4 @@
-package com.d.type.interceptor;
+package com.d.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.d.type.interceptor;
+package com.d.interceptor;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

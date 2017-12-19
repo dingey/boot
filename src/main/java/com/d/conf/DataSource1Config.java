@@ -36,7 +36,7 @@ public class DataSource1Config {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
 		bean.setMapperLocations(
-				new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/test1/*.xml"));
+				new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/*.xml"));
 		bean.setConfigLocation(
 				new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mybatis-config.xml")[0]);
 		return bean.getObject();

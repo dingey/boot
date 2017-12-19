@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.d.type.interceptor.NullHandler;
+import com.d.interceptor.ShiroInterceptor;
 
 /**
  * @author di
@@ -18,6 +18,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 	 * @param registry
 	 */
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new NullHandler()).addPathPatterns("/**");
+		// registry.addInterceptor(new NullHandler()).addPathPatterns("/**");
+		registry.addInterceptor(new ShiroInterceptor()).addPathPatterns("/**");
 	}
 }
