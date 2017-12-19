@@ -22,7 +22,7 @@ public class UserMapperTest extends ApplicationTests {
 
 	public void get() {
 		User u = new User();
-		u.setId(1L);
+		u.setId(1);
 		User user = userMapper.get(u);
 		System.out.println(user.toString());
 	}
@@ -33,7 +33,7 @@ public class UserMapperTest extends ApplicationTests {
 
 	public void insert() {
 		User u = new User();
-		u.setUserName("test");
+		u.setUsername("test");
 		u.setPassword("test");
 		// u.setNickName("test");
 		// u.setUserSex(UserSexEnum.MAN);

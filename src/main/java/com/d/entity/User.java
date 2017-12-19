@@ -1,47 +1,29 @@
 package com.d.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.d.base.BaseEntity;
 
-import com.d.enums.UserSexEnum;
-import com.d.util.SqlProvider.Id;
-
-public class User implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-	@Id
-	private Long id;
-	private String userName;
+public class User extends BaseEntity<User> {
+	private static final long serialVersionUID = 2556099876558544970L;
+	private String username;
+	private String name;
 	private String password;
-	private UserSexEnum userSex;
-	private String nickName;
-	private Date create;
+	private String salt;
+	private Integer state;
 
-	public User() {
-		super();
+	public String getUsername() {
+		return username;
 	}
 
-	public User(String userName, String password, UserSexEnum userSex) {
-		super();
-		this.password = password;
-		this.userName = userName;
-		this.userSex = userSex;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public Long getId() {
-		return id;
+	public String getName() {
+		return name;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPassword() {
@@ -52,28 +34,28 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public UserSexEnum getUserSex() {
-		return userSex;
+	public String getSalt() {
+		return salt;
 	}
 
-	public void setUserSex(UserSexEnum userSex) {
-		this.userSex = userSex;
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
-	public String getNickName() {
-		return nickName;
+	public Integer getState() {
+		return state;
 	}
 
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
-	public Date getCreate() {
-		return create;
+	/**
+	 * 密码盐.
+	 * 
+	 * @return
+	 */
+	public String getCredentialsSalt() {
+		return this.username + this.salt;
 	}
-
-	public void setCreate(Date create) {
-		this.create = create;
-	}
-
 }

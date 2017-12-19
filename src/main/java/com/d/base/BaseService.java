@@ -21,7 +21,7 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 	private Class<T> entityClass;
 	private Field entityId;
 
-	public T get(long id) {
+	public T get(Integer id) {
 		T t = getEntity();
 		t.setId(id);
 		return this.get(t);
@@ -68,7 +68,7 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 		}
 	}
 
-	public int delete(long id) {
+	public int delete(Integer id) {
 		T t = getEntity();
 		t.setId(id);
 		return mapper.delete(t);
