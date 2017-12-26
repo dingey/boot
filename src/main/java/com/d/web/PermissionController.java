@@ -59,10 +59,14 @@ public class PermissionController {
 		}
 		if (permission != null) {
 			mappings.add(permission.getPermission());
+		}else{
+			permission=new Permission();
+			permission.setId(id);
 		}
 		model.addAttribute("permission", permission);
 		model.addAttribute("mappings", mappings);
 		model.addAttribute("list", list);
+		model.addAttribute("id", id);
 		return "/admin/permission/edit";
 	}
 

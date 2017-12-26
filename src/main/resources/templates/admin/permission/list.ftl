@@ -145,7 +145,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 		zTree.selectNode(treeNode);
 		setTimeout(function() {
-			$("#modal-body").load("edit?"+treeNode.id+" #form",function(){
+			$("#modal-body").load("edit?id="+treeNode.id+" #form",function(){
 				$(".bs-example-modal-sm").modal({backdrop: 'static', keyboard: false});
 			});
 		}, 0);
