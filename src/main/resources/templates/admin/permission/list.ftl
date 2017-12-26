@@ -80,16 +80,13 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 		//console.log(JSON.stringify(treeNodes));
 	}
 	function zTreeOnDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
-		if (moveType == "inner") {
-			console.log("拖拽[" + treeNodes[0].name + ";pId:" + treeNodes[0].pId
-					+ "]" + targetNode.id);
-		} else if (moveType == "prev") {
-			console.log("拖拽[" + treeNodes[0].name + ";pId:" + treeNodes[0].pId
-					+ "]" + targetNode.pId);
-		} else if (moveType == "next") {
-			console.log("拖拽[" + treeNodes[0].name + ";pId:" + treeNodes[0].pId
-					+ "]" + targetNode.pId);
-		}
+		var index =  $.fn.zTree.getZTreeObj(treeId).getNodeIndex(treeNodes[0]);
+		var id=treeNodes[0].id;
+		var pid=treeNodes[0].pId==null?0:treeNodes[0].pId;
+		console.log(treeNodes[0].name+"[id:"+id+",pid:"+pid+",index:"+index+"]");
+		$.post("sort","id="+id+"&pid="+pid+"&index="+index,function(data){
+			
+		},"text");
 	}
 	function printAllNode() {
 		var data = [];
@@ -157,7 +154,13 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 				+ treeNode.name);
 		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 		zTree.selectNode(treeNode);
-		return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+		var b=confirm("确认删除[" + treeNode.name + "]权限吗？");
+		if(b){
+			$.post("del","id="+treeNode.id,function(data){
+				b=data=="success";
+			},"text");
+		}
+		return b;
 	}
 	function onRemove(e, treeId, treeNode) {
 		showLog("[ " + getTime() + " onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; "
@@ -218,7 +221,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 					zTree.addNodes(treeNode, {
 						id : data,
 						pId : treeNode.id,
-						name : "new node" + (newCount++)
+						name : ""
 					});
 				},"text");			
 				return false;

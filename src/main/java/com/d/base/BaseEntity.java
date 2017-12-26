@@ -3,6 +3,7 @@ package com.d.base;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.d.util.SqlProvider.DeleteMark;
 import com.d.util.SqlProvider.Id;
 import com.d.util.SqlProvider.Transient;
 
@@ -20,6 +21,7 @@ public class BaseEntity<T> implements Serializable {
 	@Id
 	private Integer id;
 	private Date createTime;
+	@DeleteMark
 	private Integer delFlag;
 	@Transient
 	private Boolean newRecord;

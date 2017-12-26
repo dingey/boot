@@ -62,9 +62,9 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 
 	public int save(T entity) {
 		if (entity.isNewRecord()) {
-			return mapper.insert(entity);
+			return mapper.insertSelective(entity);
 		} else {
-			return mapper.update(entity);
+			return mapper.updateSelective(entity);
 		}
 	}
 

@@ -8,6 +8,15 @@ public class Permission extends BaseEntity<Permission> {
 	private String url;
 	private String permission;
 	private Integer parentId;
+	private Integer sequence;
+
+	public Integer getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
 
 	public String getName() {
 		return name;

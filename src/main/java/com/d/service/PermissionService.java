@@ -16,4 +16,21 @@ public class PermissionService extends BaseService<PermissionMapper, Permission>
 	public List<Permission> listByRoleId(Integer roleId) {
 		return mapper.listByRoleId(roleId);
 	}
+
+	@Override
+	public List<Permission> findAll() {
+		return mapper.listNormal();
+	}
+
+	public Integer updateOriginal(int parentId, int index) {
+		return mapper.updateOriginal(parentId, index);
+	}
+
+	public Integer updateTarget(int parentId, int index) {
+		return mapper.updateTarget(parentId, index);
+	}
+	
+	public Integer countByParentId(int parentId){
+		return mapper.countByParentId(parentId);
+	}
 }

@@ -75,6 +75,7 @@ public class PermissionController {
 	public Object add(int pid) {
 		Permission p = new Permission();
 		p.setParentId(pid);
+		p.setSequence(permissionService.countByParentId(pid));
 		permissionService.save(p);
 		return p.getId();
 	}
@@ -83,6 +84,25 @@ public class PermissionController {
 	@PostMapping(path = "/admin/permission/save")
 	public String save(Permission permission) {
 		permissionService.save(permission);
+		return "success";
+	}
+
+	@ResponseBody
+	@PostMapping(path = "/admin/permission/del")
+	public String del(int id) {
+		permissionService.delete(id);
+		return "success";
+	}
+
+	@ResponseBody
+	@PostMapping(path = "/admin/permission/sort")
+	public String sort(int id, int pid, int index) {
+		Permission p = permissionService.get(id);
+		permissionService.updateOriginal(pid, p.getSequence());
+		permissionService.updateTarget(pid, index);
+		p.setParentId(pid);
+		p.setSequence(index);
+		permissionService.save(p);
 		return "success";
 	}
 }
