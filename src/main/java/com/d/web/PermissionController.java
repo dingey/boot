@@ -47,7 +47,7 @@ public class PermissionController {
 				String[] value = handlerMethod.getMethodAnnotation(RequiresPermissions.class).value();
 				boolean exists = false;
 				for (Permission p : list) {
-					if (p.getPermission().equals(value[0])) {
+					if (value != null && value.length > 0 && value[0].equals(p.getPermission())) {
 						exists = true;
 						break;
 					}
@@ -59,8 +59,8 @@ public class PermissionController {
 		}
 		if (permission != null) {
 			mappings.add(permission.getPermission());
-		}else{
-			permission=new Permission();
+		} else {
+			permission = new Permission();
 			permission.setId(id);
 		}
 		model.addAttribute("permission", permission);
@@ -71,8 +71,18 @@ public class PermissionController {
 	}
 
 	@ResponseBody
+	@GetMapping(path = "/admin/permission/add")
+	public Object add(int pid) {
+		Permission p = new Permission();
+		p.setParentId(pid);
+		permissionService.save(p);
+		return p.getId();
+	}
+
+	@ResponseBody
 	@PostMapping(path = "/admin/permission/save")
 	public String save(Permission permission) {
+		permissionService.save(permission);
 		return "success";
 	}
 }

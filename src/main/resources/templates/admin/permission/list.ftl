@@ -63,7 +63,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 		}
 	};
 
-	var zNodes = [ {id : 1,pId : 0,name : "1随意拖拽 1",open : true}];
+	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : true}<#if (t_index!=(list?size-1))>,</#if></#list>];
 	//拖拽
 	function beforeDrag(treeId, treeNodes) {
 		for (var i = 0, l = treeNodes.length; i < l; i++) {
@@ -214,11 +214,13 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 		if (btn)
 			btn.bind("click", function() {
 				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				zTree.addNodes(treeNode, {
-					id : (100 + newCount),
-					pId : treeNode.id,
-					name : "new node" + (newCount++)
-				});
+				$.get("add","pid="+treeNode.id,function(data){
+					zTree.addNodes(treeNode, {
+						id : data,
+						pId : treeNode.id,
+						name : "new node" + (newCount++)
+					});
+				},"text");			
 				return false;
 			});
 	};

@@ -49,7 +49,7 @@ public class BaseEntity<T> implements Serializable {
 	}
 
 	public boolean isNewRecord() {
-		return this.newRecord == null || this.newRecord || this.getId() <= 0;
+		return this.getId() == null || this.getId() <= 0 || (this.newRecord != null && this.newRecord);
 	}
 
 	public void setNewRecord(boolean newRecord) {

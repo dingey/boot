@@ -29,6 +29,7 @@ public class ExceptionHandler {
 		} catch (IOException ex) {
 			e.printStackTrace();
 		}
+		e.printStackTrace();
 		return mav;
 	}
 }

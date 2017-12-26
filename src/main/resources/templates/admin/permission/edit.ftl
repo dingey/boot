@@ -2,6 +2,11 @@
 "../base/spring.ftl" as spring/> <@layout.standard title="首页"
 cssMap={"":"https://dingey.github.io/demo/ztree/zTreeStyle.css"}
 jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
+<style>
+.ztree li span.btn {
+    background-position: -145px -1px;
+}
+</style>
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
 	aria-labelledby="mySmallModalLabel">
 	<div class="modal-dialog modal-sm" role="document">
@@ -16,6 +21,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 			<div class="modal-body" id="modal-body">
 				<form id="form">
 					<input type="hidden" id="id" name="id" value="${(permission.id)!}">
+					<input type="hidden" id="pid" name="parentId" value="${(permission.parentId)!}">
 					<div class="form-group">
 						<label for="title" class="control-label">权限中文名:</label> <input
 							class="form-control" id="name" name="name" value="${(permission.name)!}">
@@ -23,12 +29,19 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 					<div class="form-group">
 						<label for="id" class="control-label">权限英文名:</label> <select
 							class="form-control" name="permission">
-							<option value="">无</option> <#if mappings?exists> <#list mappings
-							as mapping>
-							<option value="${mapping}"<#if
-								(permission?exists&&permission.permission?exists&&mapping==permission.permission)>selected</#if>>${mapping}</option>
-							</#list> </#if>
+							<option value="">无</option> 
+							<#if mappings?exists> 
+							<#list mappings as mapping>
+								<option value="${mapping!}"<#if
+								(permission?exists&&permission.permission?exists&&mapping==permission.permission)>selected</#if>>${mapping!}
+								</option>
+							</#list> 
+							</#if>
 						</select>
+					</div>
+					<div class="form-group">
+						<label for="title" class="control-label">url:</label> <input
+							class="form-control" id="url" name="url" value="${(permission.url)!}">
 					</div>
 				</form>
 			</div>
