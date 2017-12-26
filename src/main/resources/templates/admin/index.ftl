@@ -132,7 +132,7 @@ jsMap={"":"//dingey.github.io/demo/adminlte/dist/js/app.min.js,//dingey.github.i
         </li>
         <li><a href=""><i class="fa fa-fw fa-gears"></i> <span>设置</span></a>
          <ul class="treeview-menu">
-            <li><a href="permission"><i class="fa fa-fw fa-key"></i>权限设置</a></li>
+            <li><a href="/admin/permission/list"><i class="fa fa-fw fa-key"></i>权限设置</a></li>
          </ul>
         </li>
         <li class="header">LABELS</li>

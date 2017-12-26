@@ -8,8 +8,10 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.d.interceptor.MyShiroRealm;
 
@@ -18,6 +20,16 @@ import com.d.interceptor.MyShiroRealm;
  */
 @Configuration
 public class ShiroConfiguration {
+	@Bean
+	public FilterRegistrationBean delegatingFilterProxy(){
+	    FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+	    DelegatingFilterProxy proxy = new DelegatingFilterProxy();
+	    proxy.setTargetFilterLifecycle(true);
+	    proxy.setTargetBeanName("shiroFilter");
+	    filterRegistrationBean.setFilter(proxy);
+	    return filterRegistrationBean;
+	}
+	
 	@Bean
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		System.out.println("ShiroConfiguration.shiroFilter()");
