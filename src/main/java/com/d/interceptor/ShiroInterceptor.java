@@ -21,7 +21,6 @@ public class ShiroInterceptor implements HandlerInterceptor {
 			throws Exception {
 		HandlerMethod handler2 = (HandlerMethod) handler;
 		RequiresPermissions checkPermission = handler2.getMethodAnnotation(RequiresPermissions.class);
-		long time = new java.util.Date().getTime();
 		boolean isPermissioin = false;
 		Subject currentUser = SecurityUtils.getSubject();
 		// 没有获得注解 及不需要权限-- 则直接运行

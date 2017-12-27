@@ -2,7 +2,7 @@ package com.baidu.ueditor.define;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@SuppressWarnings("all")
 public class MIMEType {
 
 	public static final Map<String, String> types = new HashMap<String, String>(){{

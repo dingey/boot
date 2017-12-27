@@ -2,7 +2,7 @@ package com.baidu.ueditor.define;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@SuppressWarnings("all")
 public final class AppInfo {
 	
 	public static final int SUCCESS = 0;

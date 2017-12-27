@@ -2,7 +2,7 @@ package com.baidu.ueditor.define;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@SuppressWarnings("all")
 public class FileType {
 
 	public static final String JPG = "JPG";

@@ -23,6 +23,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+@SuppressWarnings("all")
 public class BinaryUploader {
 
 	public static final State save(HttpServletRequest request, Map<String, Object> conf) {
@@ -104,7 +105,8 @@ public class BinaryUploader {
 	}
 
 	private static void createThumb(String path) throws IOException {
-		//Thumbnails.of(path).outputFormat("jpg").size(800, 2000).toFile(path + "_800.jpg");
+		// Thumbnails.of(path).outputFormat("jpg").size(800, 2000).toFile(path +
+		// "_800.jpg");
 	}
 
 	private static boolean validType(String type, String[] allowTypes) {
