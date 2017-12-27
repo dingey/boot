@@ -63,7 +63,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 		}
 	};
 
-	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : true}<#if (t_index!=(list?size-1))>,</#if></#list>];
+	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : false}<#if (t_index!=(list?size-1))>,</#if></#list>];
 	//拖拽
 	function beforeDrag(treeId, treeNodes) {
 		for (var i = 0, l = treeNodes.length; i < l; i++) {
