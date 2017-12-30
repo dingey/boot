@@ -98,7 +98,7 @@ public class PermissionController {
 	@PostMapping(path = "/admin/permission/sort")
 	public String sort(int id, int pid, int index) {
 		Permission p = permissionService.get(id);
-		permissionService.updateOriginal(pid, p.getSequence());
+		permissionService.updateOriginal(p.getParentId(), p.getSequence());
 		permissionService.updateTarget(pid, index);
 		p.setParentId(pid);
 		p.setSequence(index);
