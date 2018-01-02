@@ -57,7 +57,7 @@ public class SqlProvider {
 			new RuntimeException("get insert sql is exceptoin:" + e);
 		}
 		for (int i = 0; i < columns.size(); i++) {
-			insertSql.append(columns.get(i));
+			insertSql.append("`").append(columns.get(i)).append("`");
 			if (i != columns.size() - 1)
 				insertSql.append(",");
 		}
@@ -105,7 +105,7 @@ public class SqlProvider {
 						|| field.isAnnotationPresent(IgnoreUpdate.class)) {
 					continue;
 				}
-				updateSql.append(camel2Underline(field.getName())).append("=#{").append(field.getName()).append("},");
+				updateSql.append("`").append(camel2Underline(field.getName())).append("`=#{").append(field.getName()).append("},");
 			}
 		} catch (Exception e) {
 			new RuntimeException("get update sql is exceptoin:" + e);

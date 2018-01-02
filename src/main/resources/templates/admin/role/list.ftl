@@ -1,4 +1,4 @@
-<#import "../base/admin_layout.ftl" as layout /> <#import "../base/spring.ftl" as spring/> <@layout.standard title="角色" cssMap={"":"https://dingey.github.io/demo/ztree/zTreeStyle.css"} jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
+<#import "../base/admin_layout.ftl" as layout /> <#import "../base/spring.ftl" as spring/> <@layout.standard title="角色" cssMap={"":"https://dingey.github.io/demo/ztree/zTreeStyle.css"} jsMap={"":"https://dingey.github.io/demo/common/common.js,https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-12">
@@ -36,10 +36,41 @@
 		</div>
 	</div>
 </div>
+<#include "/admin/role/edit.ftl"/>
 <script>
 	function pageTo(num){
 		$("input[name=pageNum]").val(num);
-		$("#c").load("list #c_",$("form").serialize());
+		$("#c").load("list #c_",$("form:eq(0)").serialize());
 	}
+	function edit(id){
+		$("div.modal-dialog").load("edit div.modal-content","id="+id,function(){
+			initValid();
+			var zNodes=JSON.parse($("p.hide").html().trim());
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			$(".modal").modal({backdrop: 'static', keyboard: false});
+		});
+	}
+	function initValid(){
+		$("input,textarea").not(':disabled').each(function () {
+	        validHelp(this);
+	    }).change(function () {
+	        validHelp(this);
+	    });
+	}
+	$(function () {
+		initValid();
+	});
+</script>
+<script>
+var setting = {
+		check : {
+			enable : true
+		},
+		data : {
+			simpleData : {
+				enable : true
+			}
+		}
+};
 </script>
 </@layout.standard>
