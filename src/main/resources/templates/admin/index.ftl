@@ -13,7 +13,7 @@ iframe {
 }
 
 #tabs_body {
-	height: 760px;
+	height: 100%;min-height:800px;
 }
 </style>
 <!-- Site wrapper -->
@@ -188,10 +188,10 @@ iframe {
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
-		<section class="content-header"></section>
+		<!--<section class="content-header"></section>-->
 
 		<!-- Main content -->
-		<section class="content">
+		<section class="content" style="padding-bottom: 0px;height: 855px;">
 
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs" id="tabs_head">
