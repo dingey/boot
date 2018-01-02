@@ -28,7 +28,7 @@
 							<ul id="treeDemo" class="ztree"></ul>
 						</div>
 						<p class="hide">
-						[{"id" : 1,"pId" : 0,"name" : "主页","open" : false}, 
+						[{"id" : 1,"pId" : 0,"name" : "主页","open" : true,"checked":true,"chkDisabled":true}, 
 						{"id" : 2,"pId" : 1,"name" : "设置","open" : false,"chkDisabled":true}, 
 						{"id" : 3,"pId" : 1,"name" : "用户展示测试超长名称超级长","open" : false}]</p>
 					</div>
