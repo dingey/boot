@@ -5,6 +5,10 @@
 			<form class="form-inline" id="form">
 				<input type="hidden" name="pageNum">
 				<input type="hidden" name="pageSize">
+				<input type="text" class="form-control" name="name">
+				<a class="btn btn-primary" onclick="pageTo(1)">查询</a>
+				<button type="reset" class="btn btn-default">重置</button>
+				<a class="btn btn-primary pull-right" onclick="edit(0)">新增</a>
 			</form>
 		</div>
 	</div>

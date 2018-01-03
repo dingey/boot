@@ -21,9 +21,9 @@ public class RoleController extends BaseController {
 	private RoleService roleService;
 
 	@GetMapping(path = "/admin/role/list")
-	public String list(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize,
-			Model model) {
-		PageInfo<Role> pageInfo = roleService.findAllPage(pageNum, pageSize);
+	public String list(String name, @RequestParam(defaultValue = "1") int pageNum,
+			@RequestParam(defaultValue = "10") int pageSize, Model model) {
+		PageInfo<Role> pageInfo = roleService.pageByName(name, pageNum, pageSize);
 		model.addAttribute("pageInfo", pageInfo);
 		return "/admin/role/list";
 	}
@@ -37,7 +37,7 @@ public class RoleController extends BaseController {
 	@ResponseBody
 	@PostMapping(path = "/admin/role/save")
 	public String save(Role role) {
-		int i=roleService.save(role);
-		return i>0?"success":"fail";
+		int i = roleService.save(role);
+		return i > 0 ? "success" : "fail";
 	}
 }

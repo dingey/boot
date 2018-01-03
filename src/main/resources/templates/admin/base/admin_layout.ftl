@@ -26,6 +26,16 @@
   </#list>
   </#if>
 </#list>
+<style>
+form.form-inline>.input-group, form.form-inline>label, form.form-inline>select,
+	form.form-inline>input, form.form-inline>a, form.form-inline>button {
+	margin-bottom: 10px;
+}
+span.help-block{margin-bottom: 0px;}
+.form-group {
+    margin-bottom: 10px;
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <#nested/>
