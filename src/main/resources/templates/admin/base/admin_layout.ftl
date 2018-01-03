@@ -19,6 +19,7 @@
 </#list>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://dingey.github.io/demo/layer/layer.js"></script>
 <#list jsMap?keys as key>
   <#if key==""&&jsMap[key]!="">
   <#list jsMap[key]?split(",") as val>
