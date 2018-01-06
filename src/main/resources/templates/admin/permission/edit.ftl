@@ -1,7 +1,7 @@
 <#import "../base/admin_layout.ftl" as layout /> <#import
 "../base/spring.ftl" as spring/> <@layout.standard title="首页"
-cssMap={"":"https://dingey.github.io/demo/ztree/zTreeStyle.css"}
-jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
+cssMap={"":"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css,https://dingey.github.io/demo/ztree/zTreeStyle.css"}
+jsMap={"":"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js,https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 <style>
 .ztree li span.btn {
     background-position: -145px -1px;
@@ -28,7 +28,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 					</div>
 					<div class="form-group">
 						<label for="id" class="control-label">权限英文名:</label> <select
-							class="form-control" name="permission">
+							class="form-control" name="permission" style="width: 100%;">
 							<option value="">无</option> 
 							<#if mappings?exists> 
 							<#list mappings as mapping>
@@ -41,7 +41,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 					</div>
 					<div class="form-group">
 						<label for="title" class="control-label">url:</label>
-							<select class="form-control" name="url">
+							<select class="form-control" name="url" style="width: 100%;">
 							<option value="">无</option> 
 							<#if urls?exists> 
 							<#list urls as url>
@@ -64,7 +64,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 <script>
 	function save() {
 		$.post("save", $("form").serialize(), function(data) {
-			$(".bs-example-modal-sm").modal('hide');
+			$(".modal").modal('hide');
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			var node = zTree.getNodeByParam("id", $("#id").val(), null);
 			if(node!=null){

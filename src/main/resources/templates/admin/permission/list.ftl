@@ -28,6 +28,7 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 </div>
 <#include "/admin/permission/edit.ftl"/>
 <script>
+$.fn.modal.Constructor.prototype.enforceFocus = function () {};
 	var setting = {
 		view : {
 			addHoverDom : addHoverDom,
@@ -143,7 +144,8 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 		zTree.selectNode(treeNode);
 		setTimeout(function() {
 			$("#modal-body").load("edit?id="+treeNode.id+" #form",function(){
-				$(".bs-example-modal-sm").modal({backdrop: 'static', keyboard: false});
+				$(".modal").modal({backdrop: 'static', keyboard: false});
+				$('select.form-control').select2();
 			});
 		}, 0);
 		return false;
