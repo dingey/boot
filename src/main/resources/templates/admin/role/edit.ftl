@@ -28,7 +28,7 @@
 							<ul id="treeDemo" class="ztree"></ul>
 						</div>
 						<p class="hide">
-						<#if (list??)>[<#list list as t>{"id" : ${t.id!},"pId" : ${t.parentId!"0"},"name" : "${t.name!}","open" : false,"chkDisabled":<#if (t.parentId==0)>true<#else>false</#if><#list perms as per><#if (pers.id==t.id)>,"checked":true</#if></#list>}<#if (t_index!=(list?size-1))>,</#if></#list>]</#if>
+						<#if (list??)>[<#list list as t>{"id" : ${t.id!},"pId" : ${t.parentId!"0"},"name" : "${t.name!}","open" : false,"chkDisabled":<#if (t.parentId==0)>true<#else>false</#if><#list perms as per><#if (per.id==t.id)>,"checked":true</#if></#list>}<#if (t_index!=(list?size-1))>,</#if></#list>]</#if>
 						</p>
 					</div>
 				</form>
