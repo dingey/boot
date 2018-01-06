@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.d.entity.Role;
+import com.d.service.PermissionService;
 import com.d.service.RoleService;
 import com.github.pagehelper.PageInfo;
 
@@ -17,6 +18,8 @@ import com.github.pagehelper.PageInfo;
  */
 @Controller
 public class RoleController extends BaseController {
+	@Autowired
+	private PermissionService permissionService;
 	@Autowired
 	private RoleService roleService;
 
@@ -31,6 +34,8 @@ public class RoleController extends BaseController {
 	@GetMapping(path = "/admin/role/edit")
 	public String edit(int id, Model model) {
 		model.addAttribute("role", roleService.get(id));
+		model.addAttribute("list", permissionService.findAll());
+		model.addAttribute("perms", permissionService.listByRoleId(id));
 		return "/admin/role/edit";
 	}
 

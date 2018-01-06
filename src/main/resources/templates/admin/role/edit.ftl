@@ -28,9 +28,8 @@
 							<ul id="treeDemo" class="ztree"></ul>
 						</div>
 						<p class="hide">
-						[{"id" : 1,"pId" : 0,"name" : "主页","open" : true,"checked":true,"chkDisabled":true}, 
-						{"id" : 2,"pId" : 1,"name" : "设置","open" : false,"chkDisabled":true}, 
-						{"id" : 3,"pId" : 1,"name" : "用户展示测试超长名称超级长","open" : false}]</p>
+						<#if (list??)>[<#list list as t>{"id" : ${t.id!},"pId" : ${t.parentId!"0"},"name" : "${t.name!}","open" : false,"chkDisabled":<#if (t.parentId==0)>true<#else>false</#if><#list perms as per><#if (pers.id==t.id)>,"checked":true</#if></#list>}<#if (t_index!=(list?size-1))>,</#if></#list>]</#if>
+						</p>
 					</div>
 				</form>
 			</div>
