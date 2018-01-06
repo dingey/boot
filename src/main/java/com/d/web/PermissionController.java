@@ -1,6 +1,8 @@
 package com.d.web;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -8,8 +10,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -41,6 +46,7 @@ public class PermissionController {
 		Permission permission = permissionService.get(id);
 		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 		List<String> mappings = new ArrayList<>();
+		HashSet<String> urls = new HashSet<>();
 		for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
 			HandlerMethod handlerMethod = m.getValue();
 			if (handlerMethod.hasMethodAnnotation(RequiresPermissions.class)) {
@@ -56,6 +62,21 @@ public class PermissionController {
 					mappings.add(value[0]);
 				}
 			}
+			if (handlerMethod.hasMethodAnnotation(RequestMapping.class)) {
+				urls.addAll(Arrays.asList(handlerMethod.getMethodAnnotation(RequestMapping.class).path()));
+			}
+			if (handlerMethod.hasMethodAnnotation(GetMapping.class)) {
+				urls.addAll(Arrays.asList(handlerMethod.getMethodAnnotation(GetMapping.class).path()));
+			}
+			if (handlerMethod.hasMethodAnnotation(PostMapping.class)) {
+				urls.addAll(Arrays.asList(handlerMethod.getMethodAnnotation(PostMapping.class).path()));
+			}
+			if (handlerMethod.hasMethodAnnotation(PutMapping.class)) {
+				urls.addAll(Arrays.asList(handlerMethod.getMethodAnnotation(PutMapping.class).path()));
+			}
+			if (handlerMethod.hasMethodAnnotation(DeleteMapping.class)) {
+				urls.addAll(Arrays.asList(handlerMethod.getMethodAnnotation(DeleteMapping.class).path()));
+			}
 		}
 		if (permission != null) {
 			mappings.add(permission.getPermission());
@@ -63,6 +84,7 @@ public class PermissionController {
 			permission = new Permission();
 			permission.setId(id);
 		}
+		model.addAttribute("urls", urls);
 		model.addAttribute("permission", permission);
 		model.addAttribute("mappings", mappings);
 		model.addAttribute("list", list);

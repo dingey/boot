@@ -40,8 +40,17 @@ jsMap={"":"https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="title" class="control-label">url:</label> <input
-							class="form-control" id="url" name="url" value="${(permission.url)!}">
+						<label for="title" class="control-label">url:</label>
+							<select class="form-control" name="url">
+							<option value="">无</option> 
+							<#if urls?exists> 
+							<#list urls as url>
+								<option value="${url!}"<#if
+								(permission?exists&&permission.url?exists&&url==permission.url)>selected</#if>>${url!}
+								</option>
+							</#list> 
+							</#if>
+						</select>
 					</div>
 				</form>
 			</div>
