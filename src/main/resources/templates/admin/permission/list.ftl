@@ -64,7 +64,7 @@ $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 		}
 	};
 
-	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : false,"chkDisabled":<#if (t.parentId==0)>true<#else>false</#if>}<#if (t_index!=(list?size-1))>,</#if></#list>];
+	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : false<#if (t.parentId==0)>,drag:false<#else></#if>}<#if (t_index!=(list?size-1))>,</#if></#list>];
 	//拖拽
 	function beforeDrag(treeId, treeNodes) {
 		for (var i = 0, l = treeNodes.length; i < l; i++) {

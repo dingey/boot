@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.d.dto.RoleDTO;
 import com.d.entity.Role;
 import com.d.service.PermissionService;
 import com.d.service.RoleService;
@@ -41,8 +42,8 @@ public class RoleController extends BaseController {
 
 	@ResponseBody
 	@PostMapping(path = "/admin/role/save")
-	public String save(Role role) {
-		int i = roleService.save(role);
+	public String save(RoleDTO role) {
+		int i = roleService.saveRole(role);
 		return i > 0 ? "success" : "fail";
 	}
 }
