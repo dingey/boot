@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import com.d.entity.Permission;
+import com.d.enums.PermissionTypeEnum;
 import com.d.service.PermissionService;
 
 /**
@@ -35,14 +36,14 @@ public class PermissionController {
 
 	@GetMapping(path = "/admin/permission/list")
 	public String list(Model model) {
-		List<Permission> list = permissionService.findAll();
+		List<Permission> list = permissionService.listAll();
 		model.addAttribute("list", list);
 		return "/admin/permission/list";
 	}
 
 	@GetMapping(path = "/admin/permission/edit")
 	public String edit(Integer id, Model model) {
-		List<Permission> list = permissionService.findAll();
+		List<Permission> list = permissionService.listAll();
 		Permission permission = permissionService.get(id);
 		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 		List<String> mappings = new ArrayList<>();
@@ -79,11 +80,14 @@ public class PermissionController {
 			}
 		}
 		if (permission != null) {
-			mappings.add(permission.getPermission());
+			if (!permission.getPermission().isEmpty()) {
+				mappings.add(permission.getPermission());
+			}
 		} else {
 			permission = new Permission();
 			permission.setId(id);
 		}
+		model.addAttribute("types", PermissionTypeEnum.values());
 		model.addAttribute("urls", urls);
 		model.addAttribute("permission", permission);
 		model.addAttribute("mappings", mappings);

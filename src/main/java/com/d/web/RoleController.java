@@ -35,7 +35,7 @@ public class RoleController extends BaseController {
 	@GetMapping(path = "/admin/role/edit")
 	public String edit(int id, Model model) {
 		model.addAttribute("role", roleService.get(id));
-		model.addAttribute("list", permissionService.findAll());
+		model.addAttribute("list", permissionService.listAll());
 		model.addAttribute("perms", permissionService.listByRoleId(id));
 		return "/admin/role/edit";
 	}

@@ -9,14 +9,9 @@ public class Permission extends BaseEntity<Permission> {
 	private String permission;
 	private Integer parentId;
 	private Integer sequence;
-
-	public Integer getSequence() {
-		return sequence;
-	}
-
-	public void setSequence(Integer sequence) {
-		this.sequence = sequence;
-	}
+	private String icon;
+	private Integer type;
+	private Integer authc;
 
 	public String getName() {
 		return name;
@@ -48,6 +43,38 @@ public class Permission extends BaseEntity<Permission> {
 
 	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
+	}
+
+	public Integer getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getAuthc() {
+		return authc;
+	}
+
+	public void setAuthc(Integer authc) {
+		this.authc = authc;
 	}
 
 }

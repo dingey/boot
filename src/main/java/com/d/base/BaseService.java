@@ -31,17 +31,17 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 		return mapper.get(t);
 	}
 
-	public List<T> findAll() {
+	public List<T> listAll() {
 		return mapper.findAll(getEntity());
 	}
 
-	public PageInfo<T> findAllPage(int pageNum, int pageSize) {
+	public PageInfo<T> pageAll(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		List<T> datas = findAll();
+		List<T> datas = listAll();
 		return new PageInfo<>(datas);
 	}
 
-	public List<T> findByIds(Iterable<Long> ids) {
+	public List<T> listByIds(Iterable<Long> ids) {
 		StringBuilder sql = new StringBuilder("SELECT * FROM ");
 		sql.append(SqlProvider.camel2Underline(getEntityClass().getSimpleName()));
 		sql.append(" WHERE ").append(SqlProvider.camel2Underline(getEntityId().getName())).append(" IN(");

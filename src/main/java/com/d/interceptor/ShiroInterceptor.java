@@ -37,13 +37,10 @@ public class ShiroInterceptor implements HandlerInterceptor {
 			isPermissioin = true;
 		}
 
-		//System.out.println("拦截到了mvc方法:" + handler2.getMethod() + "方法所用时间：" + time + "到" + new java.util.Date().getTime());
 		if (isPermissioin) {
-			// 有执行方法或权限不拦截
 			return true;
 		} else {
-			// 跑出无权限异常
-			throw new AuthorizationException();
+			throw new AuthorizationException("无访问权限");
 		}
 	}
 

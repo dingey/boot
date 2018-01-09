@@ -18,7 +18,7 @@ public class PermissionService extends BaseService<PermissionMapper, Permission>
 	}
 
 	@Override
-	public List<Permission> findAll() {
+	public List<Permission> listAll() {
 		return mapper.listNormal();
 	}
 
@@ -36,5 +36,9 @@ public class PermissionService extends BaseService<PermissionMapper, Permission>
 	
 	public List<Permission> listByRoleId(int roleId){
 		return mapper.getByRoleId(roleId);
+	}
+	
+	public List<Permission> listByUserId(Integer userId){
+		return mapper.listByUserId(userId);		
 	}
 }

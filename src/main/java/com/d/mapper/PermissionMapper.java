@@ -27,4 +27,7 @@ public interface PermissionMapper extends BaseMapper<Permission> {
 	
 	@Select("SELECT * FROM permission WHERE id in(SELECT permission_id from role_permission WHERE role_id=#{roleId} AND del_flag=0) AND del_flag=0 ORDER BY parent_id ASC,sequence ASC")
 	List<Permission> getByRoleId(int roleId);
+	
+	@Select("SELECT * FROM permission WHERE del_flag=0 AND id in(SELECT permission_id FROM role_permission WHERE del_flag=0 AND role_id in(SELECT role_id from user_role WHERE user_id=#{userId} AND del_flag=0))")
+	List<Permission> listByUserId(Integer userId);
 }

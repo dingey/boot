@@ -1,4 +1,4 @@
-<#macro standard title="" keywords="" description="" jsMap={} cssMap={}>
+<#macro standard title="" keywords="" description="" bodyclass="" jsMap={} cssMap={}>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -38,7 +38,7 @@ span.help-block{margin-bottom: 0px;}
 }
 </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="${bodyclass!}">
     <#nested/>
 </body>
 </html>

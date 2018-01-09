@@ -144,8 +144,9 @@ $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 		zTree.selectNode(treeNode);
 		setTimeout(function() {
 			$("#modal-body").load("edit?id="+treeNode.id+" #form",function(){
-				$(".modal").modal({backdrop: 'static', keyboard: false});
+				$(".modal-md").modal({backdrop: 'static', keyboard: false});
 				$('select.form-control').select2();
+				initIcon();
 			});
 		}, 0);
 		return false;
