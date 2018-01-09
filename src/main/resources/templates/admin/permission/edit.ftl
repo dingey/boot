@@ -3,6 +3,16 @@
 .ztree li span.btn {
 	background-position: -145px -1px;
 }
+
+.select2-container .select2-selection--single,
+	.select2-container--default .select2-selection--single .select2-selection__arrow,
+	.select2-container--default .select2-selection--single .select2-selection__rendered
+	{
+	height: 34px;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 34px;
+}
 </style>
 <div class="modal fade modal-md">
 	<div class="modal-dialog" role="document">
@@ -37,7 +47,7 @@
 					<div class="form-group">
 						<label for="title" class="col-sm-3 control-label">url:</label>
 						<div class="col-sm-8">
-							<select class="form-control" name="url" style="width: 100%;">
+							<select class="form-control select2" name="url" style="width: 100%;">
 								<option value="">无</option>
 								<#if urls?exists> <#list urls as url>
 								<option value="${url!}"<#if (permission?exists&&permission.url?exists&&url==permission.url)>selected</#if>>${url!}</option>
@@ -49,10 +59,12 @@
 						<label class="col-sm-3 control-label">访问方式：</label>
 						<div class="col-sm-9">
 							<label class="radio-inline">
-								<input type="radio" name="authc" <#if (permission??&&permission.authc??&&permission.authc==0)>checked<#elseif (!permission??||!permission.authc??)>checked</#if> value="0">匿名访问
+								<input type="radio" name="authc"
+								<#if (permission??&&permission.authc??&&permission.authc==0)>checked<#elseif (!permission??||!permission.authc??)>checked</#if> value="0">匿名访问
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="authc" <#if (permission??&&permission.authc??&&permission.authc==1)>checked</#if> value="1">权限验证
+								<input type="radio" name="authc"
+								<#if (permission??&&permission.authc??&&permission.authc==1)>checked</#if> value="1">权限验证
 							</label>
 						</div>
 					</div>
@@ -69,8 +81,8 @@
 					<div class="form-group icon <#if (permission??&&permission.type??&&permission.type==0)>hide</#if>">
 						<label for="title" class="col-sm-3 control-label">图标:</label>
 						<div class="col-sm-1">
-							<p style="cursor:pointer;" id="iconbtn" onclick="$('.bs-example-modal-lg').modal('show');" class="form-control-static"><#if (permission??&&permission.icon?has_content)>${permission.icon}<#else>无</#if></p>						
-						</div>
+							<p style="cursor: pointer;" id="iconbtn" onclick="$('.bs-example-modal-lg').modal('show');" class="form-control-static"><#if (permission??&&permission.icon?has_content)>${permission.icon}<#else>无</#if></p>
+						</div>		
 						<div class="col-sm-2">
 							<textarea name="icon" style="display: none;">${(permission.icon)!}</textarea>
 							<a class="btn btn-default" onclick="$('textarea[name=icon]').val('');$('#iconbtn').html('无');">清除图标</a>
@@ -87,12 +99,12 @@
 </div>
 <#include "/admin/permission/icon.ftl"/>
 <script>
-	function initIcon(){
-		$("select[name=type]").change(function(){
+	function initIcon() {
+		$("select[name=type]").change(function() {
 			console.log($(this).val())
-			if($(this).val()!=0){
+			if ($(this).val() != 0) {
 				$("div.icon").removeClass("hide");
-			}else{
+			} else {
 				$("div.icon").addClass("hide");
 			}
 		});

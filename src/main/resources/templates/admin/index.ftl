@@ -97,7 +97,7 @@ iframe {
 		<section class="sidebar">
 			<!-- sidebar menu: : style can be found in sidebar.less -->
 			<ul class="sidebar-menu">
-				<li class="header"><@spring.message "main-navigation"/></li>
+<!-- 				<li class="header"><@spring.message "main-navigation"/></li> -->
 				<#list list as nav>
 				<#list nav.children as menu>
 				<li data-value="${nav.name!}">
@@ -116,22 +116,22 @@ iframe {
 				</li>
 				</#list>
 				</#list>
-				<li class="header">标签</li>
-				<li>
-					<a href="#">
-						<i class="fa fa-circle-o text-red"></i> <span>重要</span>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<i class="fa fa-circle-o text-yellow"></i> <span>警告</span>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<i class="fa fa-circle-o text-aqua"></i> <span>信息</span>
-					</a>
-				</li>
+<!-- 				<li class="header">标签</li> -->
+<!-- 				<li> -->
+<!-- 					<a href="#"> -->
+<!-- 						<i class="fa fa-circle-o text-red"></i> <span>重要</span> -->
+<!-- 					</a> -->
+<!-- 				</li> -->
+<!-- 				<li> -->
+<!-- 					<a href="#"> -->
+<!-- 						<i class="fa fa-circle-o text-yellow"></i> <span>警告</span> -->
+<!-- 					</a> -->
+<!-- 				</li> -->
+<!-- 				<li> -->
+<!-- 					<a href="#"> -->
+<!-- 						<i class="fa fa-circle-o text-aqua"></i> <span>信息</span> -->
+<!-- 					</a> -->
+<!-- 				</li> -->
 			</ul>
 		</section>
 		<!-- /.sidebar -->
@@ -189,33 +189,19 @@ iframe {
 <!-- ./wrapper -->
 <script>
 	$(function() {
-		$("#navbar-collapse>ul>li>a")
-				.click(
-						function() {
-							var n = $(this).html();
-							$("ul.sidebar-menu>li")
-									.each(
-											function() {
-												if (n != ""
-														&& n != undefined
-														&& !$(this).hasClass(
-																"header")
-														&& $(this).attr(
-																"data-value") != ""
-														&& $(this).attr(
-																"data-value") != undefined) {
-													if ($(this).attr(
-															"data-value") == n) {
-														$(this).removeClass(
-																"hide");
-													} else {
-														$(this)
-																.addClass(
-																		"hide");
-													}
-												}
-											});
-						});
+		$("#navbar-collapse>ul>li>a").click(function() {
+			var n = $(this).text();
+			$("ul.sidebar-menu>li").each(function() {
+				if (n != ""&& n != undefined&& !$(this).hasClass("header")&& $(this).attr("data-value") != ""&& $(this).attr("data-value") != undefined) {
+					if ($(this).attr("data-value") == n) {
+						$(this).removeClass("hide");
+					} else {
+						$(this).addClass("hide");
+					}
+				}
+			});
+		});
+		$("#navbar-collapse>ul>li>a:eq(0)").click();
 	});
 </script>
 <script>

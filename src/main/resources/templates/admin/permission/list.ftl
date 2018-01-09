@@ -145,7 +145,7 @@ $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 		setTimeout(function() {
 			$("#modal-body").load("edit?id="+treeNode.id+" #form",function(){
 				$(".modal-md").modal({backdrop: 'static', keyboard: false});
-				$('select.form-control').select2();
+				$('select.select2').select2();
 				initIcon();
 			});
 		}, 0);
