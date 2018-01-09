@@ -1,10 +1,14 @@
 package com.d.web;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.d.entity.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -89,5 +93,10 @@ public class BaseController {
 				}
 			}
 		}
+	}
+
+	public User getUser() {
+		Subject subject = SecurityUtils.getSubject();
+		return (User) subject.getSession().getAttribute("user");
 	}
 }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.d.entity.User;
-import com.d.service.PermissionService;
 import com.d.service.UserService;
 
 /**
@@ -19,22 +18,15 @@ import com.d.service.UserService;
  */
 @Controller
 public class LoginController extends BaseController {
-	@Autowired
-	private PermissionService permissionService;
+
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(path = {"/","/admin/login"})
+	@GetMapping(path = "/admin/login")
 	public String login() {
 		return "/admin/login";
 	}
 
-	/**
-	 * 验证用户名和密码
-	 * 
-	 * @param String username,String password
-	 * @return
-	 */
 	@PostMapping(value = "/admin/login")
 	@ResponseBody
 	public String checkLogin(String username, String password, @RequestParam(defaultValue = "false") boolean remeber) {
@@ -45,14 +37,11 @@ public class LoginController extends BaseController {
 			token.setRememberMe(true);
 			currentUser.login(token);// 验证角色和权限
 			User user = userService.getByUsername(username);
-			currentUser.getSession(true).setAttribute("permissions", permissionService.listByUserId(user.getId()));
+			currentUser.getSession(true).setAttribute("user", user);
 		}
 		return "success";
 	}
 
-	/**
-	 * 退出登录
-	 */
 	@PostMapping(value = "/admin/logout")
 	@ResponseBody
 	public String logout() {

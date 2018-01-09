@@ -24,13 +24,16 @@ public interface PermissionMapper extends BaseMapper<Permission> {
 
 	@Select("select count(0) from permission where parent_id=#{parentId} and del_flag=0")
 	Integer countByParentId(int parentId);
-	
+
 	@Select("SELECT * FROM permission WHERE id in(SELECT permission_id from role_permission WHERE role_id=#{roleId} AND del_flag=0) AND del_flag=0 ORDER BY parent_id ASC,sequence ASC")
 	List<Permission> getByRoleId(int roleId);
-	
+
 	@Select("SELECT * FROM permission WHERE del_flag=0 AND id in(SELECT permission_id FROM role_permission WHERE del_flag=0 AND role_id in(SELECT role_id from user_role WHERE user_id=#{userId} AND del_flag=0))")
 	List<Permission> listByUserId(Integer userId);
-	
+
+	@Select("SELECT * FROM permission WHERE del_flag=0 and type!=0 AND parent_id!=id AND parent_id=#{parentId} AND id in(SELECT permission_id FROM role_permission WHERE del_flag=0 AND role_id in(SELECT role_id from user_role WHERE user_id=#{userId} AND del_flag=0))")
+	List<Permission> listByParentIdAndUserId(@Param("parentId") Integer parentId, @Param("userId") Integer userId);
+
 	@Select("select * from permission where del_flag=0 and authc=1 order by parent_id asc,`sequence` asc")
 	List<Permission> listAuthc();
 }

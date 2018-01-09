@@ -1,6 +1,7 @@
 package com.d.web;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.d.dto.PermissionDTO;
 import com.d.entity.User;
+import com.d.service.PermissionService;
 
 /**
  * @author d
@@ -18,9 +21,13 @@ import com.d.entity.User;
 public class IndexController extends BaseController {
 	@Resource
 	private MessageSource messageSource;
+	@Resource
+	private PermissionService permissionService;
 
-	@RequestMapping(path = {"/admin/index"})
+	@RequestMapping(path = "/admin/index")
 	public String index(Model m) {
+		List<PermissionDTO> listDto = permissionService.listDto(getUser().getId());
+		m.addAttribute("list", listDto);
 		return "admin/index";
 	}
 

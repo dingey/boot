@@ -37,12 +37,11 @@ iframe {
 			</a>
 			<div class="collapse navbar-collapse pull-left" id="navbar-collapse">
 				<ul class="nav navbar-nav">
+					<#list list as n>
 					<li data-type="primary">
-						<a class="btn">首页</a>
+						<a class="btn">${n.icon!}${n.name!}</a>
 					</li>
-					<li data-type="primary">
-						<a class="btn">设置</a>
-					</li>
+					</#list>
 				</ul>
 			</div>
 			<div class="navbar-custom-menu">
@@ -99,72 +98,24 @@ iframe {
 			<!-- sidebar menu: : style can be found in sidebar.less -->
 			<ul class="sidebar-menu">
 				<li class="header"><@spring.message "main-navigation"/></li>
-				<li class="treeview" data-value="首页">
-					<a href="#">
-						<i class="fa fa-share"></i> <span>多级菜单</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-					<ul class="treeview-menu">
-						<li>
-							<a href="#">
-								<i class="fa fa-circle-o"></i> 一级
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<i class="fa fa-circle-o"></i> 一级 <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<li>
-									<a href="#">
-										<i class="fa fa-circle-o"></i> 二级
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<i class="fa fa-circle-o"></i> 二级 <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i>
-										</span>
-									</a>
-									<ul class="treeview-menu">
-										<li>
-											<a href="#">
-												<i class="fa fa-circle-o"></i> 三级
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<i class="fa fa-circle-o"></i> 三级
-											</a>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="#">
-								<i class="fa fa-circle-o"></i> 一级
-							</a>
-						</li>
-					</ul>
-				</li>
-				<li data-value="设置">
+				<#list list as nav>
+				<#list nav.children as menu>
+				<li data-value="${nav.name!}">
 					<a href="">
-						<i class="fa fa-fw fa-gears"></i> <span>设置</span>
+						${menu.icon!}<span>${menu.name!}</span>
 					</a>
 					<ul class="treeview-menu">
+						<#list menu.children as item>
 						<li>
-							<a href="/admin/role/list">
-								<i class="fa fa-fw fa-users"></i> 角色设置
+							<a href="${item.url!}">
+								${item.icon!}${item.name!}
 							</a>
 						</li>
-						<li>
-							<a href="/admin/permission/list">
-								<i class="fa fa-fw fa-key"></i> 权限设置
-							</a>
-						</li>
+						</#list>
 					</ul>
 				</li>
+				</#list>
+				</#list>
 				<li class="header">标签</li>
 				<li>
 					<a href="#">
