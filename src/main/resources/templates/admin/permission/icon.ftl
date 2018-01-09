@@ -3573,10 +3573,10 @@
 			$('.bs-example-modal-lg').modal('hide');
 			if($(this).find("i").length>0){
 				$("textarea[name=icon]").val($(this).find("i").prop("outerHTML"));
-				$("#iconbtn").html($(this).find("i").prop("outerHTML")+"设置图标");
+				$("#iconbtn").html($(this).find("i").prop("outerHTML"));
 			}else if($(this).find("span").length>0){
 				$("textarea[name=icon]").val($(this).find("span:eq(0)").prop("outerHTML"));
-				$("#iconbtn").html($(this).find("span:eq(0)").prop("outerHTML")+"设置图标");
+				$("#iconbtn").html($(this).find("span:eq(0)").prop("outerHTML"));
 			}
 		});
 	})

@@ -68,9 +68,12 @@
 					</div>
 					<div class="form-group icon <#if (permission??&&permission.type??&&permission.type==0)>hide</#if>">
 						<label for="title" class="col-sm-3 control-label">图标:</label>
-						<div class="col-sm-8">
+						<div class="col-sm-1">
+							<p style="cursor:pointer;" id="iconbtn" onclick="$('.bs-example-modal-lg').modal('show');" class="form-control-static"><#if (permission??&&permission.icon?has_content)>${permission.icon}<#else>无</#if></p>						
+						</div>
+						<div class="col-sm-2">
 							<textarea name="icon" style="display: none;">${(permission.icon)!}</textarea>
-							<a class="btn" id="iconbtn" onclick="$('.bs-example-modal-lg').modal('show');">${(permission.icon)!}设置图标</a>
+							<a class="btn btn-default" onclick="$('textarea[name=icon]').val('');$('#iconbtn').html('无');">清除图标</a>
 						</div>
 					</div>
 				</form>
