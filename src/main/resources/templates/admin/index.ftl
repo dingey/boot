@@ -79,7 +79,7 @@ iframe {
 									<a href="#" class="btn btn-default btn-flat">简介</a>
 								</div>
 								<div class="pull-right">
-									<a href="#" class="btn btn-default btn-flat"><@spring.message "sign-out"/></a>
+									<a href="/admin/logout" class="btn btn-default btn-flat"><@spring.message "sign-out"/></a>
 								</div>
 							</li>
 						</ul>

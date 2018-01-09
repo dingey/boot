@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.d.entity.User;
 import com.d.service.UserService;
 
@@ -22,13 +20,12 @@ public class LoginController extends BaseController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(path = "/admin/login")
+	@GetMapping(path = {"","/admin/login"})
 	public String login() {
 		return "/admin/login";
 	}
 
 	@PostMapping(value = "/admin/login")
-	@ResponseBody
 	public String checkLogin(String username, String password, @RequestParam(defaultValue = "false") boolean remeber) {
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		Subject currentUser = SecurityUtils.getSubject();
@@ -39,14 +36,13 @@ public class LoginController extends BaseController {
 			User user = userService.getByUsername(username);
 			currentUser.getSession(true).setAttribute("user", user);
 		}
-		return "success";
+		return "redirect:/admin/index";
 	}
 
-	@PostMapping(value = "/admin/logout")
-	@ResponseBody
+	@GetMapping(value = "/admin/logout")
 	public String logout() {
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.logout();
-		return "success";
+		return "redirect:/admin/login";
 	}
 }

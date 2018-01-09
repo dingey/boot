@@ -10,7 +10,7 @@ jsMap={"":"https://dingey.github.io/demo/adminlte/dist/js/app.min.js,https://din
   <div class="login-box-body">
     <p class="login-box-msg">登录信息</p>
 
-    <form method="post">
+    <form action="/admin/login" method="post">
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name="username" placeholder="用户名">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
