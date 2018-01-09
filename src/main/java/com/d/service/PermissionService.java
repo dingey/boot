@@ -41,4 +41,8 @@ public class PermissionService extends BaseService<PermissionMapper, Permission>
 	public List<Permission> listByUserId(Integer userId){
 		return mapper.listByUserId(userId);		
 	}
+	
+	public List<Permission> listAuthc() {
+		return mapper.listAuthc();
+	}
 }
