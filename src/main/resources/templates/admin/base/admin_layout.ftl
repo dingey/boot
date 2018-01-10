@@ -20,13 +20,6 @@
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://dingey.github.io/demo/layer/layer.js"></script>
-<#list jsMap?keys as key>
-  <#if key==""&&jsMap[key]!="">
-  <#list jsMap[key]?split(",") as val>
-    <script src="${val}"></script>
-  </#list>
-  </#if>
-</#list>
 <style>
 form.form-inline>.input-group, form.form-inline>label, form.form-inline>select,
 	form.form-inline>input, form.form-inline>a, form.form-inline>button {
@@ -40,6 +33,13 @@ span.help-block{margin-bottom: 0px;}
 </head>
 <body class="${bodyclass!}">
     <#nested/>
+<#list jsMap?keys as key>
+  <#if key==""&&jsMap[key]!="">
+  <#list jsMap[key]?split(",") as val>
+    <script src="${val}"></script>
+  </#list>
+  </#if>
+</#list>
 </body>
 </html>
 </#macro>

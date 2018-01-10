@@ -1,4 +1,4 @@
-<#import "base/admin_layout.ftl" as layout /> <#import "base/spring.ftl" as spring/> <@layout.standard title="首页" bodyclass="hold-transition skin-blue sidebar-mini" cssMap={"":"//dingey.github.io/demo/adminlte/dist/css/AdminLTE.min.css,//dingey.github.io/demo/adminlte/dist/css/skins/all-skins.min.css"} jsMap={"":"//dingey.github.io/demo/adminlte/dist/js/app.min.js,//dingey.github.io/demo/adminlte/dist/js/demo.js"}>
+<#import "base/admin_layout.ftl" as layout /> <#import "base/spring.ftl" as spring/> <@layout.standard title="首页" bodyclass="hold-transition skin-blue sidebar-mini" cssMap={"":"https://dingey.github.io/demo/adminlte/dist/css/AdminLTE.min.css,https://dingey.github.io/demo/adminlte/dist/css/skins/all-skins.min.css"} jsMap={"":"https://dingey.github.io/demo/adminlte/dist/js/app.min.js,https://dingey.github.io/demo/adminlte/dist/js/demo.js,https://dingey.github.io/demo/adminlte/dist/js/index.js"}>
 <style>
 iframe {
 	border: 0px;
@@ -22,7 +22,7 @@ iframe {
 
 	<header class="main-header">
 		<!-- Logo -->
-		<a href="index2.html" class="logo">
+		<a href="#" class="logo">
 			<!-- mini logo for sidebar mini 50x50 pixels -->
 			<span class="logo-mini">boot</span>
 			<!-- logo for regular state and mobile devices -->
@@ -84,6 +84,9 @@ iframe {
 							</li>
 						</ul>
 					</li>
+					<li>
+            			<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          			</li>
 				</ul>
 			</div>
 		</nav>
@@ -181,7 +184,197 @@ iframe {
 		</div>
 		<strong>Copyright &copy.</strong> All rights reserved.
 	</footer>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
 
+      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Home tab content -->
+      <div class="tab-pane" id="control-sidebar-home-tab">
+        <h3 class="control-sidebar-heading">Recent Activity</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                <p>Will be 23 on April 24th</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-user bg-yellow"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
+                <p>New phone +1(800)555-1234</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+
+                <p>nora@example.com</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+
+                <p>Execution time 5 seconds</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+        <h3 class="control-sidebar-heading">Tasks Progress</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Custom Template Design
+                <span class="label label-danger pull-right">70%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Update Resume
+                <span class="label label-success pull-right">95%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Laravel Integration
+                <span class="label label-warning pull-right">50%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Back End Framework
+                <span class="label label-primary pull-right">68%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+      </div>
+      <!-- /.tab-pane -->
+      <!-- Stats tab content -->
+      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+      <!-- /.tab-pane -->
+      <!-- Settings tab content -->
+      <div class="tab-pane" id="control-sidebar-settings-tab">
+        <form method="post">
+          <h3 class="control-sidebar-heading">General Settings</h3>
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Report panel usage
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Some information about this general settings option
+            </p>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Allow mail redirect
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Other sets of options are available
+            </p>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Expose author name in posts
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Allow the user to show his name in blog posts
+            </p>
+          </div>
+          <!-- /.form-group -->
+
+          <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Show me as online
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Turn off notifications
+              <input type="checkbox" class="pull-right">
+            </label>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Delete chat history
+              <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+            </label>
+          </div>
+          <!-- /.form-group -->
+        </form>
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
 	<!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
 	<div class="control-sidebar-bg"></div>
@@ -203,85 +396,5 @@ iframe {
 		});
 		$("#navbar-collapse>ul>li>a:eq(0)").click();
 	});
-</script>
-<script>
-	function println(s) {
-		console.log(s);
-	}
-	var count = $("#tabs_head>li").length;
-	println(count);
-	function getCount() {
-		count++;
-		return count;
-	}
-	function bindClick() {
-		$(".treeview a,.sidebar-menu a")
-				.click(
-						function(e) {
-							e.preventDefault();
-							//println($(this).attr("url"));
-							if ($(this).find("a").length < 1
-									&& $(this).attr("href") != ""
-									&& $(this).attr("href") != "#"
-									&& !checkExists($(this).attr("href"))) {
-								var b = false;
-								var obj = this;
-								$("#tabs_head>li").removeClass("active");
-								$("#tabs_body>div").removeClass("active");
-								var i = getCount();
-								var li = "<li class=\"active\" id=\"li_tab_" + i + "\"><a href=\"#tab_" + i + "\" data-toggle=\"tab\">"
-										+ $(this).text()
-										+ "<i class=\"fa fa-fw fa-close\" onclick=\"closeTab('"
-										+ i + "')\"></i></a></li>";
-								var con = "<div class=\"tab-pane active\" id=\"tab_" + i + "\"><iframe src=\""
-										+ $(this).attr("href")
-										+ "\"></iframe></div>";
-								$("#tabs_head").append(li);
-								$("#tabs_body").append(con);
-							}
-						});
-	}
-	function checkExists(url) {
-		var exists = false;
-		$("#tabs_head>li").each(function() {
-			var tb = $(this).attr("id") + "";
-			tb = tb.substring(3);
-			var url2 = $("#" + tb).children().attr("src");
-			if (url2 != undefined && url2 == url) {
-				$("#tabs_head>li").removeClass("active");
-				$("#tabs_body>div").removeClass("active");
-				$(this).addClass("active");
-				$("#" + tb).addClass("active");
-				exists = true;
-			}
-		});
-		return exists;
-	}
-	function closeTab(id) {
-		if ($("#li_tab_" + id).hasClass("active")) {
-			var obj = $("#li_tab_" + id).next();
-			if (obj.length == 0) {
-				obj = $("#li_tab_" + id).prev();
-				if (obj.length > 0 && !$(obj).hasClass("pull-right")) {
-					$(obj).find("a").click();
-				}
-			} else {
-				$(obj).find("a").click();
-			}
-		}
-		$("#li_tab_" + id).remove();
-		$("#tab_" + id).remove();
-	}
-	function closeTabs() {
-		$("#tabs_body").empty();
-		$("#tabs_head>li").each(function() {
-			if (!$(this).hasClass("pull-right")) {
-				$(this).remove();
-			}
-		})
-	}
-	$(function() {
-		bindClick();
-	})
 </script>
 </@layout.standard>
