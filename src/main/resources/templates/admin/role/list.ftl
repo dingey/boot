@@ -1,12 +1,13 @@
-<#import "../base/admin_layout.ftl" as layout /> <#import "../base/spring.ftl" as spring/> <@layout.standard title="角色" cssMap={"":"https://dingey.github.io/demo/ztree/zTreeStyle.css"} jsMap={"":"https://dingey.github.io/demo/common/common.js,https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
+<#import "../base/admin_layout.ftl" as layout /> <#import "../base/spring.ftl" as spring/> <@layout.standard title="角色"
+cssMap={"":"https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.css"}
+jsMap={"":"https://dingey.github.io/demo/common/common.js,https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.js"}>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-12">
 			<form class="form-inline" id="form">
-				<input type="hidden" name="pageNum">
-				<input type="hidden" name="pageSize">
 				<input type="text" class="form-control" name="name">
-				<a class="btn btn-primary" onclick="pageTo(1)">查询</a>
+                <input type="text" class="date form-control" name="date">
+				<button type="submit" class="btn btn-primary">查询</button>
 				<button type="reset" class="btn btn-default">重置</button>
 				<a class="btn btn-primary pull-right" onclick="edit(0)">新增</a>
 			</form>
@@ -62,7 +63,7 @@
 	    });
 	}
 	$(function () {
-		initValid();
+		initValid();$('.date').datetimepicker({clearBtn: 1, todayBtn: 1, autoclose: 1});
 	});
 </script>
 <script>
