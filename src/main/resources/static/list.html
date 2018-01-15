@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>列表</title>
+    <link href="https://dingey.github.io/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="https://dingey.github.io/demo/summernote/summernote.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+    <br/>
+    <div class="row">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>状态：</label>
+                <select name="status" class="form-control">
+                    <option selected="" value="0">未开始</option>
+                    <option value="1">进行中</option>
+                    <option value="2">已结束</option>
+                </select>
+                <label>标题</label>
+                <input type="text" name="title" class="form-control" placeholder="标题">
+                <input class="form-control date" name="date" placeholder="日期"/>
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+            <a href="edit.html" class="btn btn-primary">edit</a>
+            <a onclick="edit()" class="btn btn-primary pull-right">新增</a>
+        </form>
+    </div>
+    <br/>
+    <div class="row" id="data-container">
+        <div class="col-md-12" id="data-content">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th class="index">主键</th>
+                    <th>序号</th>
+                    <th>标题</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="id">1</td>
+                    <td class="index">11</td>
+                    <td>Slaughterhouse-Five</td>
+                    <td><a onclick="edit(1)" class="btn btn-primary btn-xs">编辑</a></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="id">2</td>
+                    <td class="index">12</td>
+                    <td>Player Piano</td>
+                    <td><a onclick="edit(2)" class="btn btn-primary btn-xs">编辑</a></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="id">3</td>
+                    <td class="index">13</td>
+                    <td>Cat's Cradle</td>
+                    <td><a onclick="edit(3)" class="btn btn-primary btn-xs">编辑</a></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="id">4</td>
+                    <td class="index">14</td>
+                    <td>Breakfast of Champions</td>
+                    <td><a onclick="edit(4)" class="btn btn-primary btn-xs">编辑</a></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="id">5</td>
+                    <td class="index">15</td>
+                    <td>God Bless You Mr. Rosewater</td>
+                    <td><a onclick="edit(5)" class="btn btn-primary btn-xs">编辑</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="col-xs-12" style="float: right">
+                <a href="#" onclick="downCSv()" class="btn btn-primary">下载csv</a>
+                <a href="#" onclick="page('1')">上一页</a>
+                <a href="#" onclick="page('2')">下一页</a>
+                ,当前第 1 页 ， 共 20 项 2 页，每页
+                <select style="height: 32px;" id="pgSize" onchange="changePgSize()">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select> 项 到第 <input type="text"
+                                      style="width:48px;height: 32px;" id="pgNum"> 页
+                <a class="btn btn-default" onclick="page($('#pgNum').val(),$('#pgSize').val())">GO</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">模态框</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="id" class="control-label">主键:</label>
+                        <input type="text" class="form-control" id="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="control-label">标题:</label>
+                        <textarea class="form-control" id="title"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" onclick="save()">保存</a>
+                <a class="btn btn-default" data-dismiss="modal">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://dingey.github.io/js/jquery.min.js"></script>
+<script src="https://dingey.github.io/js/bootstrap.min.js"></script>
+<script src="https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="https://dingey.github.io/js/jquery-ui.js"></script>
+<script>
+    function page(num, size) {
+        if (num == undefined) {
+            num = 1;
+        }
+        if (size == undefined) {
+            size = 10;
+        }
+        var url = $("form:eq(0)").attr("action");
+
+    }
+    $(function () {
+        var search = window.location.search;
+        if (search.indexOf("?") != -1) {
+            var str = search.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                $("[name='" + strs[i].split("=")[0] + "']").val(decodeURIComponent(strs[i].split("=")[1].replace(/\+/g,"%20")));
+            }
+        }
+    });
+</script>
+<script>
+    function edit(index) {
+        if (index != undefined) {
+            var id_td;
+            $("tbody").find("td[class=id]").each(function () {
+                if ($(this).html() == index) {
+                    id_td = $(this);
+                }
+            });
+            var id = $(id_td).html();
+            var title = $(id_td).next().next().html();
+            $("#id").val(id);
+            $("#title").val(title);
+        } else {
+            $("#id").val($("tbody").find("tr").length + 1);
+            $("#title").val("");
+        }
+        $(".bs-example-modal-sm").modal({backdrop: 'static', keyboard: false});
+    }
+    function save() {
+        var exsits = false;
+        $("tbody").find("tr").each(function () {
+            var tr = this;
+            if ($(tr).find("td").eq(1).html() == $("#id").val()) {
+                $(tr).find("td").eq(3).html($("#title").val());
+                exsits = true;
+                return false;
+            }
+        });
+        if (!exsits) {
+            var len = $("tbody").find("tr").length;
+            var last = $("tbody").find("tr").eq(len - 1).clone();
+            $(last).find("a").attr("onclick", "edit(" + (len + 1) + ")");
+            $(last).find("td").eq(1).html(len + 1);
+            $(last).find("td").eq(2).html(parseInt($(last).find("td").eq(2).html()) + 1);
+            $(last).find("td").eq(3).html($("#title").val());
+            $("tbody").find("tr").eq(len - 1).after(last);
+        }
+        $(".bs-example-modal-sm").modal('hide');
+    }
+</script>
+<script>
+    $(function () {
+        $("table>thead>tr>th>input[type='checkbox']").click(
+                function () {
+                    $("table>tbody>tr>td>input[type='checkbox']").prop(
+                            "checked", $(this).prop("checked"));
+                }
+        );
+        $('.date').datetimepicker({clearBtn: 1, todayBtn: 1, autoclose: 1});
+    });
+</script>
+<script>
+    function downCSv(name) {
+        if (name == undefined) {
+            name = document.title;
+        }
+        var csv = "";
+        $("table>thead>tr>th").each(function () {
+            if ($(this).find("input").length == 0) {
+                csv = csv + $(this).text() + ",";
+            }
+        });
+        csv = csv + "\n";
+        $("table>tbody>tr>td>input[type='checkbox']").each(function () {
+            if ($(this).prop("checked")) {
+                var tr1 = $(this).parent().parent();
+                $(tr1).find("td").each(function () {
+                    if ($(this).find("input").length == 0) {
+                        csv = csv + "" + $(this).text().replace(/^\s+|\s+$/g, "").replace(/\n/g, "").replace(/\r/g, "") + ",";
+                    }
+                });
+                csv = csv + "\n";
+            }
+        });
+        //console.log(csv);
+        // 创建隐藏的可下载链接
+        var eleLink = document.createElement('a');
+        eleLink.download = name + ".csv";
+        eleLink.style.display = 'none';
+        // 字符内容转变成blob地址
+        var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        eleLink.href = URL.createObjectURL(blob);
+        // 触发点击
+        document.body.appendChild(eleLink);
+        eleLink.click();
+        // 然后移除
+        document.body.removeChild(eleLink);
+    }
+    ;
+</script>
+<script>
+    <!-- 表格拖动行-->
+    var oriPosition, tdId, targetPosition, startIndex = 0;
+    var fixHelperModified = function (e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function (index) {
+                    $(this).width($originals.eq(index).width())
+                });
+                return $helper;
+            },
+            updateIndex = function (e, ui) {
+                $('td.index', ui.item.parent()).each(function (i) {
+                    $(this).html(i + startIndex);
+                });
+                updateTargetPosition();
+                updatePosition();
+            };
+    $("table>tbody").sortable({
+        helper: fixHelperModified,
+        stop: updateIndex,
+        start: function (event, ui) {
+            startIndex = $("table>tbody").find("tr").eq(0).find("td.index").text();
+            startIndex = parseInt(startIndex);
+            tdId = $(ui.item[0]).find("td.id").text();
+            oriPosition = $(ui.item[0]).find("td.index").text();
+        }
+    }).disableSelection();
+    function updatePosition() {
+        $("td.id").each(function (i) {
+            if ($(this).text() == tdId) {
+                targetPosition = $(this).next().text();
+            }
+        });
+        //console.log(oriPosition+"移动到"+targetPosition);
+    }
+    function updateTargetPosition() {
+        $("#sort>tbody").find("td.id").each(function () {
+            if ($(this).text() == tdId) {
+                targetPosition = $(this).next().text();
+            }
+        })
+        //console.log("update:"+targetPosition);
+    }
+</script>
+</body>
+</html>
