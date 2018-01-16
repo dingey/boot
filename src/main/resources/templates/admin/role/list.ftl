@@ -1,6 +1,6 @@
 <#import "../base/admin_layout.ftl" as layout /> <#import "../base/spring.ftl" as spring/> <@layout.standard title="角色"
-cssMap={"":"https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.css"}
-jsMap={"":"https://dingey.github.io/demo/common/common.js,https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.js"}>
+cssMap={"":"https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.css,https://dingey.github.io/demo/ztree/zTreeStyle.css"}
+jsMap={"":"https://dingey.github.io/demo/common/common.js,https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.js,https://dingey.github.io/demo/ztree/jquery.ztree.all.js"}>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-12">
