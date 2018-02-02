@@ -33,7 +33,7 @@ public class SqlProvider {
 	}
 
 	public String getInsertSql(Object bean, boolean selective) {
-		String tableName = camel2Underline(bean.getClass().getSimpleName());
+		String tableName = table(bean);
 		StringBuilder insertSql = new StringBuilder();
 		List<String> props = new ArrayList<>();
 		List<String> columns = new ArrayList<>();
@@ -85,7 +85,7 @@ public class SqlProvider {
 	}
 
 	public String getUpdateSql(Object bean, boolean selective) {
-		String tableName = camel2Underline(bean.getClass().getSimpleName());
+		String tableName = table(bean);
 		StringBuilder updateSql = new StringBuilder();
 		updateSql.append("UPDATE ").append(tableName).append(" SET ");
 		String id = "id";
@@ -105,7 +105,8 @@ public class SqlProvider {
 						|| field.isAnnotationPresent(IgnoreUpdate.class)) {
 					continue;
 				}
-				updateSql.append("`").append(camel2Underline(field.getName())).append("`=#{").append(field.getName()).append("},");
+				updateSql.append("`").append(camel2Underline(field.getName())).append("`=#{").append(field.getName())
+						.append("},");
 			}
 		} catch (Exception e) {
 			new RuntimeException("get update sql is exceptoin:" + e);
@@ -119,7 +120,7 @@ public class SqlProvider {
 		return getCachedSql(bean, "delete", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
-				String tableName = camel2Underline(bean.getClass().getSimpleName());
+				String tableName = table(bean);
 				List<Field> fields = getCachedModelFields(bean.getClass());
 				StringBuilder deleteSql = new StringBuilder();
 				deleteSql.append(" DELETE FROM ").append(tableName).append(" WHERE ");
@@ -144,7 +145,7 @@ public class SqlProvider {
 		return getCachedSql(bean, "deleteMark", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
-				String tableName = camel2Underline(bean.getClass().getSimpleName());
+				String tableName = table(bean);
 				List<Field> fields = getFields(bean.getClass());
 				StringBuilder deleteSql = new StringBuilder();
 				deleteSql.append(" UPDATE ").append(tableName).append(" SET ");
@@ -171,7 +172,11 @@ public class SqlProvider {
 		return getCachedSql(bean, "get", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
-				String tableName = camel2Underline(bean.getClass().getSimpleName());
+				String tableName = table(bean);
+				if (bean.getClass().isAnnotationPresent(Table.class)
+						&& !bean.getClass().getAnnotation(Table.class).value().isEmpty()) {
+					tableName = bean.getClass().getAnnotation(Table.class).value();
+				}
 				List<Field> fields = getFields(bean.getClass());
 				StringBuilder getSql = new StringBuilder();
 				getSql.append("SELECT * FROM ").append(tableName).append(" WHERE ");
@@ -180,10 +185,10 @@ public class SqlProvider {
 						Field field = fields.get(i);
 						if (field.isAnnotationPresent(Id.class)) {
 							getSql.append(camel2Underline(field.getName())).append("=#{").append(field.getName())
-									.append("}");
-							break;
+									.append("} and");
 						}
 					}
+					getSql.delete(getSql.toString().length() - 3, getSql.toString().length());
 				} catch (Exception e) {
 					new RuntimeException("get delete sql is exceptoin:" + e);
 				}
@@ -192,11 +197,11 @@ public class SqlProvider {
 		});
 	}
 
-	public String findAll(Object bean) {
-		return getCachedSql(bean, "findAll", new Func<Object>() {
+	public String listAll(Object bean) {
+		return getCachedSql(bean, "listAll", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
-				String tableName = camel2Underline(bean.getClass().getSimpleName());
+				String tableName = table(bean);
 				StringBuilder getSql = new StringBuilder();
 				getSql.append("SELECT * FROM ").append(tableName);
 				return getSql.toString();
@@ -208,7 +213,7 @@ public class SqlProvider {
 		return getCachedSql(bean, "countAll", new Func<Object>() {
 			@Override
 			public String apply(Object t) {
-				String tableName = camel2Underline(bean.getClass().getSimpleName());
+				String tableName = table(bean);
 				StringBuilder getSql = new StringBuilder();
 				getSql.append("SELECT count(0) FROM ").append(tableName);
 				return getSql.toString();
@@ -274,6 +279,15 @@ public class SqlProvider {
 			}
 		}
 		return sb.toString();
+	}
+
+	static String table(Object bean) {
+		if (bean.getClass().isAnnotationPresent(Table.class)
+				&& !bean.getClass().getAnnotation(Table.class).value().isEmpty()) {
+			return bean.getClass().getAnnotation(Table.class).value();
+		} else {
+			return camel2Underline(bean.getClass().getSimpleName());
+		}
 	}
 
 	public static String camel2Underline(String line) {
