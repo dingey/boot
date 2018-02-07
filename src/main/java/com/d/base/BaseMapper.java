@@ -36,7 +36,7 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = SqlProvider.class, method = "get")
 	T get(T t);
 
-	@SelectProvider(type = SqlProvider.class, method = "findAll")
+	@SelectProvider(type = SqlProvider.class, method = "listAll")
 	List<T> findAll(T t);
 
 	@Select("${sql}")

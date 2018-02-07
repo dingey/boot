@@ -1,0 +1,78 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>列表</title>
+<link href="https://dingey.github.io/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+<style>
+.w70 {
+	width: 70px !important;
+}
+
+.columns-right>button.btn {
+	height: 34px !important;
+}
+
+body {
+	height: 640px;
+}
+</style>
+<body>
+	<div class="container">
+		<div id="toolbar">
+			<div class="form-inline" role="form">
+				<div class="form-group">
+					<span>Offset: </span>
+					<input name="offset" class="form-control w70" type="number" value="0">
+				</div>
+				<div class="form-group">
+					<span>Limit: </span>
+					<input name="limit" class="form-control w70" type="number" value="5">
+				</div>
+				<div class="form-group">
+					<input name="search" class="form-control" type="text" placeholder="Search">
+				</div>
+				<button type="submit" class="btn btn-default">OK</button>
+			</div>
+		</div>
+		<table data-toolbar="#toolbar" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-query-params="queryParams" data-toggle="table" data-pagination="true" data-reorderable-columns="true" data-show-export="true" data-url="/table.data">
+			<thead>
+				<tr>
+					<th data-field="id">ID</th>
+					<th data-field="name" data-sortable="true">名称</th>
+					<th data-field="price" data-sortable="true">价格</th>
+				</tr>
+			</thead>
+		</table>
+
+	</div>
+	<script src="https://dingey.github.io/js/jquery.min.js"></script>
+	<script src="https://dingey.github.io/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script>
+		var $table = $('table'), $ok = $('button[type=submit]');
+
+		$(function() {
+			$ok.click(function() {
+				$table.bootstrapTable('refresh');
+			});
+		});
+
+		function queryParams() {
+			var params = {};
+			$('#toolbar').find('input[name]').each(function() {
+				params[$(this).attr('name')] = $(this).val();
+			});
+			return params;
+		}
+
+		function responseHandler(res) {
+			return res.rows;
+		}
+	</script>
+</body>
+</html>
