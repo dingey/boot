@@ -20,14 +20,14 @@ public class LoginController extends BaseController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(path = {"","/admin/login"})
+	@GetMapping(path = { "", "/admin/login" })
 	public String login() {
 		return "/admin/login";
 	}
 
 	@PostMapping(value = "/admin/login")
 	public String checkLogin(String username, String password, @RequestParam(defaultValue = "false") boolean remeber) {
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password, remeber);
 		Subject currentUser = SecurityUtils.getSubject();
 		if (!currentUser.isAuthenticated()) {
 			// 使用shiro来验证

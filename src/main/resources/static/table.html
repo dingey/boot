@@ -14,30 +14,20 @@
 .columns-right>button.btn {
 	height: 34px !important;
 }
-
-body {
-	height: 640px;
-}
+body{height: 600px;}
 </style>
 <body>
 	<div class="container">
 		<div id="toolbar">
 			<div class="form-inline" role="form">
 				<div class="form-group">
-					<span>Offset: </span>
-					<input name="offset" class="form-control w70" type="number" value="0">
-				</div>
-				<div class="form-group">
-					<span>Limit: </span>
-					<input name="limit" class="form-control w70" type="number" value="5">
-				</div>
-				<div class="form-group">
-					<input name="search" class="form-control" type="text" placeholder="Search">
+					<span>name: </span>
+					<input name="name" class="form-control" type="text">
 				</div>
 				<button type="submit" class="btn btn-default">OK</button>
 			</div>
 		</div>
-		<table data-toolbar="#toolbar" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-query-params="queryParams" data-toggle="table" data-pagination="true" data-reorderable-columns="true" data-show-export="true" data-url="/table.data">
+		<table data-toolbar="#toolbar" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-query-params="queryParams" data-response-handler="responseHandler" data-toggle="table" data-pagination="true" data-reorderable-columns="true" data-show-export="true" data-url="/table.data">
 			<thead>
 				<tr>
 					<th data-field="id">ID</th>
@@ -67,6 +57,8 @@ body {
 			$('#toolbar').find('input[name]').each(function() {
 				params[$(this).attr('name')] = $(this).val();
 			});
+			params["pageSize"] = params.limit;
+			params["pageNum"] = params.pageNumber;
 			return params;
 		}
 
