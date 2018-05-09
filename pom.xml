@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.d</groupId>
@@ -13,6 +14,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
 		<spring.boot.version>1.5.7.RELEASE</spring.boot.version>
+		<spring.boot.mybatis.version>1.3.1</spring.boot.mybatis.version>
+		<spring.boot.redis.version>1.4.7.RELEASE</spring.boot.redis.version>
+		<pagehelper.version>4.1.4</pagehelper.version>
+		<springfox.version>2.6.1</springfox.version>
 		<mybatis.version>1.3.1</mybatis.version>
 		<mysql.version>5.1.44</mysql.version>
 	</properties>
@@ -45,6 +50,16 @@
 			<version>${mybatis.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<version>${spring.boot.redis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
@@ -64,7 +79,7 @@
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
-			<version>4.2.1</version>
+			<version>${pagehelper.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
