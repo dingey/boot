@@ -54,9 +54,4 @@ public class DataSource1Config {
 			@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
-
-	@Bean(name = "mybatisCrud")
-	public MybatisCrud getMybatisCrud(@Qualifier("test1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
-		return new MybatisCrud(sqlSessionFactory);
-	}
 }

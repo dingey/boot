@@ -18,7 +18,7 @@
 		<jackson.version>2.8.10</jackson.version>
 		<junit.version>4.12</junit.version>
 		<maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
-		<pagehelper.version>4.1.4</pagehelper.version>
+		<pagehelper.version>4.2.1</pagehelper.version>
 		<spring.boot.version>1.5.7.RELEASE</spring.boot.version>
 		<spring.boot.dubbo.version>1.0.0</spring.boot.dubbo.version>
 		<spring.boot.redis.version>1.4.7.RELEASE</spring.boot.redis.version>
