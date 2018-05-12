@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50716
+Source Server Version : 50721
 Source Host           : localhost:3306
 Source Database       : boot
 
 Target Server Type    : MYSQL
-Target Server Version : 50716
+Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-01-16 09:34:00
+Date: 2018-05-12 22:45:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -51,7 +51,7 @@ INSERT INTO `permission` VALUES ('11', '权限新增', '/admin/permission/add', 
 INSERT INTO `permission` VALUES ('12', '权限保存', '/admin/permission/save', '', '5', '4', '', '0', '', '2018-01-09 16:26:19', '\0');
 INSERT INTO `permission` VALUES ('19', '用户', '', '', '0', '1', '', '1', '', '2018-01-09 19:31:22', '\0');
 INSERT INTO `permission` VALUES ('20', '用户管理', '', '', '19', '0', '<i class=\"fa fa-fw fa-users\"></i>', '2', '', '2018-01-09 19:35:18', '\0');
-INSERT INTO `permission` VALUES ('21', '用户列表', '/user/list', '', '20', '0', '<i class=\"fa fa-fw fa-user\"></i>', '3', '', '2018-01-09 19:35:47', '\0');
+INSERT INTO `permission` VALUES ('21', '用户列表', '/admin/user/list', '', '20', '0', '<i class=\"fa fa-fw fa-user\"></i>', '3', '', '2018-05-11 21:39:57', '\0');
 
 -- ----------------------------
 -- Table structure for role
@@ -64,25 +64,12 @@ CREATE TABLE `role` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `del_flag` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
 INSERT INTO `role` VALUES ('1', 'admin', '管理员', '2017-12-30 16:56:09', '\0');
-INSERT INTO `role` VALUES ('2', '2', '二号', '2018-01-08 20:14:53', '\0');
-INSERT INTO `role` VALUES ('3', '3', '333', '2017-12-30 17:04:57', '\0');
-INSERT INTO `role` VALUES ('4', '4', '4', '2017-12-30 17:05:04', '\0');
-INSERT INTO `role` VALUES ('5', '5', '5', '2017-12-30 17:16:27', '\0');
-INSERT INTO `role` VALUES ('6', '6', '6', '2017-12-30 17:16:36', '\0');
-INSERT INTO `role` VALUES ('7', '7', '7', '2017-12-30 17:16:46', '\0');
-INSERT INTO `role` VALUES ('8', '8', '8', '2017-12-30 17:16:57', '\0');
-INSERT INTO `role` VALUES ('9', '9', '9', '2017-12-30 17:17:10', '\0');
-INSERT INTO `role` VALUES ('10', '10', '10', '2018-01-03 09:43:16', '\0');
-INSERT INTO `role` VALUES ('11', '11', '11', '2018-01-02 20:54:11', '\0');
-INSERT INTO `role` VALUES ('12', '12', '122', '2018-01-03 10:18:56', '\0');
-INSERT INTO `role` VALUES ('13', '12', '12', '2018-01-03 10:18:56', '\0');
-INSERT INTO `role` VALUES ('14', '14', '14', '2018-01-03 15:39:26', '\0');
 
 -- ----------------------------
 -- Table structure for role_permission
@@ -100,23 +87,6 @@ CREATE TABLE `role_permission` (
 -- ----------------------------
 -- Records of role_permission
 -- ----------------------------
-INSERT INTO `role_permission` VALUES ('1', '1', '1', '2018-01-08 20:55:41', '');
-INSERT INTO `role_permission` VALUES ('2', '2', '2', '2018-01-08 20:38:05', '\0');
-INSERT INTO `role_permission` VALUES ('3', '2', '4', '2018-01-08 20:38:05', '\0');
-INSERT INTO `role_permission` VALUES ('4', '2', '5', '2018-01-08 20:44:07', '');
-INSERT INTO `role_permission` VALUES ('5', '2', '3', '2018-01-08 20:44:07', '');
-INSERT INTO `role_permission` VALUES ('6', '2', '6', '2018-01-08 20:44:07', '');
-INSERT INTO `role_permission` VALUES ('7', '2', '7', '2018-01-08 20:44:07', '');
-INSERT INTO `role_permission` VALUES ('8', '1', '2', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('9', '1', '5', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('10', '1', '4', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('11', '1', '3', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('12', '1', '6', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('13', '1', '7', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('14', '1', '8', '2018-01-08 20:55:41', '\0');
-INSERT INTO `role_permission` VALUES ('15', '1', '19', '2018-01-09 19:31:33', '\0');
-INSERT INTO `role_permission` VALUES ('16', '1', '20', '2018-01-09 19:33:58', '\0');
-INSERT INTO `role_permission` VALUES ('17', '1', '21', '2018-01-09 19:36:08', '\0');
 
 -- ----------------------------
 -- Table structure for user
@@ -124,20 +94,20 @@ INSERT INTO `role_permission` VALUES ('17', '1', '21', '2018-01-09 19:36:08', '\
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(32) DEFAULT NULL,
-  `name` varchar(32) DEFAULT NULL,
-  `password` varchar(32) DEFAULT NULL,
-  `salt` varchar(64) DEFAULT NULL,
-  `state` tinyint(4) unsigned DEFAULT NULL,
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
-  `del_flag` bit(1) DEFAULT NULL,
+  `username` varchar(32) NOT NULL DEFAULT '',
+  `name` varchar(32) NOT NULL DEFAULT '',
+  `password` varchar(32) NOT NULL DEFAULT '',
+  `salt` varchar(64) NOT NULL DEFAULT '',
+  `state` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `del_flag` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', '3fbc5eeb9bf722a3414fd95c64e1957c', 'a5574c1c57975a527270eee616b2b589', '0', '2017-12-19 11:21:54', null);
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', '3fbc5eeb9bf722a3414fd95c64e1957c', 'a5574c1c57975a527270eee616b2b589', '0', '2017-12-19 11:21:54', '\0');
 
 -- ----------------------------
 -- Table structure for user_role
@@ -145,10 +115,10 @@ INSERT INTO `user` VALUES ('1', 'admin', 'admin', '3fbc5eeb9bf722a3414fd95c64e19
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
-  `role_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `role_id` int(11) unsigned NOT NULL DEFAULT '0',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `del_flag` bit(1) NOT NULL,
+  `del_flag` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 

@@ -29,7 +29,7 @@ jsMap={"":"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.
 					</div>
 					<div class="form-group">
 						<label for="id" class="col-sm-3 control-label">角色</label>
-						<div class="col-sm-8">
+						<div class="col-sm-6">
 							<select class="form-control select2" name="roleIds" style="width: 100%;" multiple>
 								<#if roles?exists> 
 								<#list roles as role>
