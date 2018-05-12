@@ -51,6 +51,7 @@ jsMap={"":"https://dingey.github.io/demo/common/common.js,https://dingey.github.
 	function edit(id){
 		$("div.modal-dialog").load("edit div.modal-content","id="+id,function(){
 			$(".modal").modal({backdrop: 'static', keyboard: false});
+			$('select.select2').select2();
 		});
 	}
 </script>
