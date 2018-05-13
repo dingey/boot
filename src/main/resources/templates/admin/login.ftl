@@ -29,7 +29,7 @@ jsMap={"":"https://dingey.github.io/demo/adminlte/dist/js/app.min.js,https://din
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+          <button type="button" class="btn btn-primary btn-block btn-flat">登录</button>
         </div>
         <!-- /.col -->
       </div>
@@ -55,6 +55,15 @@ jsMap={"":"https://dingey.github.io/demo/adminlte/dist/js/app.min.js,https://din
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' // optional
+    });
+    $(".btn-flat").click(function(){
+    	$.post("/admin/login",$("form").serialize(),function(data){
+    		if(data.code==0){
+    			window.location.href="/admin/index";
+    		}else{
+    			alert(data.message);
+    		}
+    	},"json");
     });
   });
 </script>

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-05-12 22:45:03
+Date: 2018-05-13 13:52:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -82,11 +82,25 @@ CREATE TABLE `role_permission` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `del_flag` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role_permission
 -- ----------------------------
+INSERT INTO `role_permission` VALUES ('18', '1', '2', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('19', '1', '3', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('20', '1', '4', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('21', '1', '6', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('22', '1', '7', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('23', '1', '5', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('24', '1', '8', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('25', '1', '9', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('26', '1', '10', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('27', '1', '11', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('28', '1', '12', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('29', '1', '19', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('30', '1', '20', '2018-05-13 13:51:09', '\0');
+INSERT INTO `role_permission` VALUES ('31', '1', '21', '2018-05-13 13:51:09', '\0');
 
 -- ----------------------------
 -- Table structure for user
@@ -107,7 +121,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', '3fbc5eeb9bf722a3414fd95c64e1957c', 'a5574c1c57975a527270eee616b2b589', '0', '2017-12-19 11:21:54', '\0');
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', '360390a2e6cb3c6efd6134e8bcd06973', '5079f448ca8855f0c1c6d8929b57b88e', '0', '2017-12-19 11:21:54', '\0');
 
 -- ----------------------------
 -- Table structure for user_role
