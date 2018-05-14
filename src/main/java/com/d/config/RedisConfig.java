@@ -1,4 +1,4 @@
-package com.d.conf;
+package com.d.config;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;

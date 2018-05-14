@@ -1,4 +1,4 @@
-package com.d.conf;
+package com.d.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import com.d.service.PermissionService;
  * @author d
  */
 @Configuration
-public class ShiroConfiguration {
+public class ShiroConfig {
 	@Autowired
 	private PermissionService permissionService;
 

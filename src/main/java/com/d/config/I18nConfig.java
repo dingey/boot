@@ -1,4 +1,4 @@
-package com.d.conf;
+package com.d.config;
 
 import java.util.Locale;
 
