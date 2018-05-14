@@ -26,12 +26,18 @@
 		<springfox.version>2.6.1</springfox.version>
 		<org.apache.shiro>1.4.0</org.apache.shiro>
 		<mysql.version>5.1.44</mysql.version>
+		<httpclient.version>4.5.5</httpclient.version>
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.dingey</groupId>
 			<artifactId>kit</artifactId>
-			<version>1.1</version>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
