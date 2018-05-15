@@ -9,6 +9,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -20,9 +21,14 @@ import com.github.pagehelper.PageHelper;
 @Configuration
 @MapperScan(basePackages = "com.d.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class MybatisConfig {
+	@Value("${mybatis.configuration.map-underscore-to-camel-case}")
+	private boolean mapUnderscoreToCamelCase;
+	@Value("${mybatis.type-aliases-package}")
+	private String typeAliasesPackage;
+
 	@Bean
 	public PageHelper pageHelper() {
-		System.out.println("MyBatisConfiguration.pageHelper()");
+		System.out.println("com.github.pagehelper.PageHelper init.");
 		PageHelper pageHelper = new PageHelper();
 		Properties p = new Properties();
 		p.setProperty("offsetAsPageNum", "true");
@@ -39,8 +45,9 @@ public class MybatisConfig {
 		bean.setDataSource(dataSource);
 		bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
 		org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
-		conf.setMapUnderscoreToCamelCase(true);
+		conf.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);
 		bean.setConfiguration(conf);
+		bean.setTypeAliasesPackage(typeAliasesPackage);
 		return bean.getObject();
 	}
 
