@@ -3,19 +3,13 @@
  */
 package com.d.handler;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -24,89 +18,92 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.d.util.Result;
+
+import org.springframework.http.HttpStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	@ExceptionHandler(value = Exception.class)
-	public ModelAndView defaultErrorHandler(HttpServletRequest req, HttpServletResponse response, Exception e)
-			throws Exception {
-		ModelAndView mav = new ModelAndView();
-		response.setStatus(HttpStatus.OK.value());
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding("UTF-8");
-		response.setHeader("Cache-Control", "no-cache, must-revalidate");
-		try {
-			response.getWriter().write(e.getMessage());
-		} catch (IOException ex) {
-			e.printStackTrace();
-		}
-		e.printStackTrace();
-		return mav;
+	Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = Throwable.class)
+	public Object defaultErrorHandler(Throwable e) {
+		logger.error(e.getMessage(), e);
+		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = BindException.class)
 	public Object bind(HttpServletRequest req, BindException bindException) throws Exception {
-		List<String> errs = new ArrayList<>();
+		StringBuilder errs = new StringBuilder();
 		for (FieldError e : bindException.getFieldErrors()) {
 			if (e.getDefaultMessage().indexOf("NumberFormatException") > 0) {
-				errs.add(e.getRejectedValue() + "不是数字格式(" + e.getField() + ")");
+				errs.append(e.getRejectedValue() + "不是数字格式(" + e.getField() + ")");
 			} else {
-				errs.add(e.getRejectedValue() + "异常(" + e.getField() + ")");
+				errs.append(e.getRejectedValue() + "异常(" + e.getField() + ")");
 			}
 		}
-		return errs;
+		return Result.fail(errs.toString());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = MissingServletRequestParameterException.class)
-	public Object missingException(HttpServletRequest req, MissingServletRequestParameterException exception)
-			throws Exception {
-		return exception.getLocalizedMessage();
+	public Object missingException(HttpServletRequest req, MissingServletRequestParameterException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail(e.getLocalizedMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = HttpMessageNotReadableException.class)
-	public Object notReadableException(HttpServletRequest req, HttpMessageNotReadableException exception)
-			throws Exception {
-		return "请求参数不能为空";
+	public Object notReadableException(HttpServletRequest req, HttpMessageNotReadableException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail("请求参数不能为空");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
-	public Object methodNotSupportedException(HttpServletRequest req, HttpRequestMethodNotSupportedException exception)
+	public Object methodNotSupportedException(HttpServletRequest req, HttpRequestMethodNotSupportedException e)
 			throws Exception {
-		return exception.getMethod() + "方法不支持";
+		logger.error(e.getMessage(), e);
+		return Result.fail(e.getMethod() + "方法不支持");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IllegalStateException.class)
-	public Object illegalStateException(HttpServletRequest req, IllegalStateException exception) throws Exception {
-		return exception.getLocalizedMessage();
+	public Object illegalStateException(HttpServletRequest req, IllegalStateException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail(e.getLocalizedMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = UnavailableSecurityManagerException.class)
-	public Object handler(HttpServletRequest req, UnavailableSecurityManagerException exception) throws Exception {
-		return "未登录，请先登录";
+	public Object handler(HttpServletRequest req, UnavailableSecurityManagerException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail("未登录，请先登录");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = UnknownAccountException.class)
-	public Object handler(HttpServletRequest req, UnknownAccountException exception) throws Exception {
-		return "未知的用户名";
+	public Object handler(HttpServletRequest req, UnknownAccountException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail("未知的用户名");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IncorrectCredentialsException.class)
-	public Object handler(HttpServletRequest req, IncorrectCredentialsException exception) throws Exception {
-		return "密码错误";
+	public Object handler(HttpServletRequest req, IncorrectCredentialsException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail("密码错误");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = ExcessiveAttemptsException.class)
-	public Object handler(HttpServletRequest req, ExcessiveAttemptsException exception) throws Exception {
-		return "错误登录过多";
+	public Object handler(HttpServletRequest req, ExcessiveAttemptsException e) throws Exception {
+		logger.error(e.getMessage(), e);
+		return Result.fail("错误登录过多");
 	}
 }
