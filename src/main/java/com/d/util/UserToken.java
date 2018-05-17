@@ -22,6 +22,14 @@ public class UserToken {
 		this.expired = expired;
 	}
 
+	public boolean expired() {
+		return expired != null && expired > 0 && expired < System.currentTimeMillis() / 1000;
+	}
+
+	public boolean valid() {
+		return id != null && !expired();
+	}
+
 	public String tokenStringAES() {
 		StringBuilder s = new StringBuilder();
 		s.append(id).append(";").append(expired);
@@ -29,10 +37,13 @@ public class UserToken {
 	}
 
 	public static UserToken fromTokenStringAES(String tokenStr) {
-		String[] ss = AESUtil.decrypt(tokenStr).split(";");
 		UserToken ut = new UserToken();
-		ut.setId(Long.valueOf(ss[0]));
-		ut.setExpired(Long.valueOf(ss[1]));
+		try {
+			String[] ss = AESUtil.decrypt(tokenStr).split(";");
+			ut.setId(Long.valueOf(ss[0]));
+			ut.setExpired(Long.valueOf(ss[1]));
+		} catch (Exception e) {
+		}
 		return ut;
 	}
 
@@ -43,10 +54,13 @@ public class UserToken {
 	}
 
 	public static UserToken fromTokenStringDES(String tokenStr) {
-		String[] ss = DesUtil.decrypt(tokenStr).split(";");
 		UserToken ut = new UserToken();
-		ut.setId(Long.valueOf(ss[0]));
-		ut.setExpired(Long.valueOf(ss[1]));
+		try {
+			String[] ss = DesUtil.decrypt(tokenStr).split(";");
+			ut.setId(Long.valueOf(ss[0]));
+			ut.setExpired(Long.valueOf(ss[1]));
+		} catch (Exception e) {
+		}
 		return ut;
 	}
 
