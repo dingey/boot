@@ -1,9 +1,17 @@
 package com.d.aop;
 
+import java.lang.reflect.Parameter;
+import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -20,21 +28,38 @@ public class ValidAspect {
 
 	@Around("access()")
 	public <T> Object around(ProceedingJoinPoint pjp) throws Throwable {
-		for (Object a : pjp.getArgs()) {
-			if (a instanceof BindingResult) {
-				BindingResult r = (BindingResult) a;
-				if (r.getErrorCount() > 0) {
-					StringBuilder s = new StringBuilder();
-					for (ObjectError e : r.getAllErrors()) {
-						if (e instanceof FieldError) {
-							FieldError fe = (FieldError) e;
-							s.append(fe.getField()).append(fe.getDefaultMessage()).append(";");
-						} else {
-							s.append(e.getCode()).append(e.getDefaultMessage()).append(";");
+		MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
+		Parameter[] parameters = methodSignature.getMethod().getParameters();
+		String[] parameterNames = methodSignature.getParameterNames();
+		if (Objects.nonNull(parameterNames)) {
+			StringBuilder s = new StringBuilder();
+			for (int i = 0; i < parameterNames.length; i++) {
+				Object value = pjp.getArgs()[i];
+				if (value != null && value instanceof BindingResult) {
+					BindingResult r = (BindingResult) value;
+					if (r.getErrorCount() > 0) {
+						for (ObjectError e : r.getAllErrors()) {
+							if (e instanceof FieldError) {
+								FieldError fe = (FieldError) e;
+								s.append(fe.getField()).append(fe.getDefaultMessage()).append(";");
+							} else {
+								s.append(e.getCode()).append(e.getDefaultMessage()).append(";");
+							}
 						}
+						return Result.fail(s.toString());
 					}
-					return Result.fail(s.toString());
+				} else {
+					if (parameters[i].isAnnotationPresent(NotNull.class) && value == null) {
+						s.append(parameterNames[i]).append("不能为空；");
+					} else if ((parameters[i].isAnnotationPresent(NotEmpty.class)
+							|| parameters[i].isAnnotationPresent(NotBlank.class))
+							&& (value == null || String.valueOf(value).isEmpty())) {
+						s.append(parameterNames[i]).append("不能为空字符；");
+					}
 				}
+			}
+			if (s.length() > 0) {
+				throw new IllegalArgumentException(s.toString());
 			}
 		}
 		return pjp.proceed();

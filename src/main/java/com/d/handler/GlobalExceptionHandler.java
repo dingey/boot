@@ -79,12 +79,19 @@ public class GlobalExceptionHandler {
 	}
 
 	@ResponseBody
+	@ExceptionHandler(value = IllegalArgumentException.class)
+	public Object handle(IllegalArgumentException e) {
+		logger.error(e.getMessage(), e);
+		return Result.fail(e.getMessage());
+	}
+
+	@ResponseBody
 	@ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
 	public Object handle(MethodArgumentTypeMismatchException e) {
 		logger.error(e.getMessage(), e);
 		Throwable cause = e.getRootCause();
 		if (cause instanceof NumberFormatException) {
-			return Result.fail(e.getName() + "值\"" + e.getValue() + "\"必须是数字类型.");
+			return Result.fail(e.getName() + "值'" + e.getValue() + "'必须是数字类型.");
 		}
 		return Result.fail(e.getName() + " : " + e.getValue() + " " + e.getMessage());
 	}
