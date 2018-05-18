@@ -53,42 +53,42 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ExceptionHandler(value = MissingServletRequestParameterException.class)
 	public Object handle(MissingServletRequestParameterException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = HttpMessageNotReadableException.class)
 	public Object handle(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
 	public Object handle(HttpRequestMethodNotSupportedException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail(e.getMethod() + "方法不支持");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IllegalStateException.class)
 	public Object handle(IllegalStateException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IllegalArgumentException.class)
 	public Object handle(IllegalArgumentException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
 	public Object handle(MethodArgumentTypeMismatchException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		Throwable cause = e.getRootCause();
 		if (cause instanceof NumberFormatException) {
 			return Result.fail(e.getName() + "值'" + e.getValue() + "'必须是数字类型.");
@@ -99,35 +99,35 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ExceptionHandler(value = NumberFormatException.class)
 	public Object handle(NumberFormatException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = UnavailableSecurityManagerException.class)
 	public Object handler(UnavailableSecurityManagerException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail("未登录，请先登录");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = UnknownAccountException.class)
 	public Object handler(UnknownAccountException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail("未知的用户名");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IncorrectCredentialsException.class)
 	public Object handler(IncorrectCredentialsException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail("密码错误");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = ExcessiveAttemptsException.class)
 	public Object handler(ExcessiveAttemptsException e) {
-		logger.error(e.getMessage(), e);
+		logger.debug(e.getMessage(), e);
 		return Result.fail("错误登录过多");
 	}
 }
