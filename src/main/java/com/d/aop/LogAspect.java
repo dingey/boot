@@ -2,12 +2,15 @@ package com.d.aop;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Objects;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +18,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.d.util.JsonUtil;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @Component
 @Aspect
 public class LogAspect {
+	Logger logger = LoggerFactory.getLogger(LogAspect.class);
+
 	@Pointcut(value = "execution(* com.d.web..*.*(..))")
 	public void controller() {
 	}
@@ -27,8 +38,40 @@ public class LogAspect {
 		MethodSignature signature = (MethodSignature) point.getSignature();
 		String requestPath = getRequestPath(signature.getMethod());
 
-		String info = String.format("path:%s | %s", requestPath, getMethodInfo(point));
-		System.out.println(info);
+		String info1 = String.format("请求:%s | %s", getSwagger(signature.getMethod()), getSwaggerMethodInfo(point));
+		String info2 = String.format("path:%s | %s", requestPath, getMethodInfo(point));
+		logger.info(info1);
+		logger.info(info2);
+	}
+
+	private String getSwagger(Method method) {
+		StringBuilder s = new StringBuilder();
+		if (method.getDeclaringClass().isAnnotationPresent(Api.class)) {
+			s.append("【").append(method.getDeclaringClass().getAnnotation(Api.class).value()).append("】-");
+		}
+		if (method.isAnnotationPresent(ApiOperation.class)) {
+			s.append("【").append(method.getAnnotation(ApiOperation.class).value()).append("】");
+		}
+		return s.toString();
+	}
+
+	private String getSwaggerMethodInfo(JoinPoint point) {
+		StringBuilder s = new StringBuilder("参数：");
+		MethodSignature ms = (MethodSignature) point.getSignature();
+		Parameter[] parameters = ms.getMethod().getParameters();
+		String[] parameterNames = ((MethodSignature) point.getSignature()).getParameterNames();
+		if (Objects.nonNull(parameterNames)) {
+			for (int i = 0; i < parameterNames.length; i++) {
+				String value = JsonUtil.toJson(point.getArgs()[i]);
+				if (parameters[i].isAnnotationPresent(ApiParam.class)) {
+					s.append(parameters[i].getAnnotation(ApiParam.class).value()).append(":").append(value)
+							.append("; ");
+				} else {
+					s.append(parameterNames[i] + ":" + value + "; ");
+				}
+			}
+		}
+		return s.toString();
 	}
 
 	private String getRequestPath(Method method) {
@@ -61,7 +104,7 @@ public class LogAspect {
 		if (Objects.nonNull(parameterNames)) {
 			sb = new StringBuilder();
 			for (int i = 0; i < parameterNames.length; i++) {
-				String value = point.getArgs()[i] != null ? point.getArgs()[i].toString() : "null";
+				String value = JsonUtil.toJson(point.getArgs()[i]);
 				sb.append(parameterNames[i] + ":" + value + "; ");
 			}
 		}
