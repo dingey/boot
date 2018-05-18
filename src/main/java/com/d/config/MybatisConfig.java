@@ -9,6 +9,8 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,7 @@ import com.github.pagehelper.PageHelper;
 @Configuration
 @MapperScan(basePackages = "com.d.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class MybatisConfig {
+	Logger logger = LoggerFactory.getLogger(MybatisConfig.class);
 	@Value("${mybatis.configuration.map-underscore-to-camel-case}")
 	private boolean mapUnderscoreToCamelCase;
 	@Value("${mybatis.type-aliases-package}")
@@ -29,7 +32,7 @@ public class MybatisConfig {
 
 	@Bean
 	public PageHelper pageHelper() {
-		System.out.println("com.github.pagehelper.PageHelper init.");
+		logger.info("com.github.pagehelper.PageHelper init.");
 		PageHelper pageHelper = new PageHelper();
 		Properties p = new Properties();
 		p.setProperty("offsetAsPageNum", "true");
