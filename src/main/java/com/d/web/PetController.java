@@ -16,26 +16,26 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-@Api("宠物")
+@Api(description = "宠物")
 @RestController
 public class PetController {
-	@ApiOperation("列表")
+	@ApiOperation(value = "列表", notes = "查询宠物列表")
 	@GetMapping(path = "/pet/list")
 	public Object list(@ApiParam("页码") @RequestParam(defaultValue = "1") int page,
 			@ApiParam("每页大小") @RequestParam(defaultValue = "5") int size) {
 		return Arrays.asList(new Pet(1, "alice"));
 	}
 
-	@ApiOperation("列表")
+	@ApiOperation("编辑")
 	@GetMapping(path = "/pet/edit")
-	public Object edit(@ApiParam("主键") @RequestParam(defaultValue = "1") int id, HttpSession session,
+	public Object edit(@ApiParam("宠物id") @RequestParam(defaultValue = "1") int id, HttpSession session,
 			HttpServletRequest req, HttpServletResponse resp, Model model) {
 		return new Pet(1, "alice");
 	}
 
 	@ApiOperation("删除")
 	@GetMapping(path = "/pet/del")
-	public Object del(@ApiParam("主键") @RequestParam(defaultValue = "1") int id) {
+	public Object del(@ApiParam("宠物id") @RequestParam(defaultValue = "1") int id) {
 		return Result.success();
 	}
 
