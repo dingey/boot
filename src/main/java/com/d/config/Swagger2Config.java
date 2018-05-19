@@ -22,8 +22,7 @@ public class Swagger2Config {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("boot APIs").description("spring demo project.")
-				.termsOfServiceUrl("http://dingey.github.io").contact(new Contact("d", null, null)).version("1.0")
-				.build();
+		return new ApiInfoBuilder().title("接口列表").description("示例接口列表").contact(new Contact("d", null, null))
+				.version("1.0").build();
 	}
 }

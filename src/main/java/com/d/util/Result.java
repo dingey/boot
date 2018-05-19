@@ -1,8 +1,15 @@
 package com.d.util;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel("返回信息")
 public class Result {
+	@ApiModelProperty("编码：0成功；其他失败；")
 	private Integer code = 0;
+	@ApiModelProperty("失败时返回的说明")
 	private String message = null;
+	@ApiModelProperty("成功时返回的数据")
 	private Object data = null;
 
 	public Result(Integer code, String message, Object data) {
