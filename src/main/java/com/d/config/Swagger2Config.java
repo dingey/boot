@@ -1,7 +1,12 @@
 package com.d.config;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.ui.Model;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -17,8 +22,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class Swagger2Config {
 	@Bean
 	public Docket createRestApi() {
-		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
-				.apis(RequestHandlerSelectors.basePackage("com.d.web")).paths(PathSelectors.any()).build();
+		return new Docket(DocumentationType.SWAGGER_2)
+				.ignoredParameterTypes(HttpServletRequest.class, HttpServletResponse.class, HttpSession.class,
+						Model.class)
+				.apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.basePackage("com.d.web"))
+				.paths("prod".equals(System.getenv("spring.profiles.active")) ? PathSelectors.none()
+						: PathSelectors.any())
+				.build();
 	}
 
 	private ApiInfo apiInfo() {
