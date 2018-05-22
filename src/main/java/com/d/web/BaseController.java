@@ -2,9 +2,6 @@ package com.d.web;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -13,50 +10,18 @@ import com.d.entity.User;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.beans.PropertyEditorSupport;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author d
  */
 public class BaseController {
 
-	@InitBinder
-	public void init(WebDataBinder binder) {
-		binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-			@Override
-			public void setAsText(String text) throws IllegalArgumentException {
-				if (StringUtils.isEmpty(text)) {
-					setValue(null);
-				} else {
-					try {
-						setValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(text));
-					} catch (ParseException ex) {
-						try {
-							setValue(new SimpleDateFormat("yyyy-MM-dd").parse(text));
-						} catch (ParseException ex1) {
-							setValue(null);
-						}
-					}
-				}
-			}
-
-			@Override
-			public String getAsText() {
-				Date value = (Date) getValue();
-				return ((value != null) ? new SimpleDateFormat("yyyy-MM-dd HH:mm").format(value) : "");
-			}
-		});
-	}
-
-	HttpServletRequest getRequest() {
+	public HttpServletRequest getRequest() {
 		ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		return attrs.getRequest();
 	}
 
-	HttpServletResponse getResponse() {
+	public HttpServletResponse getResponse() {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getResponse();
 		return response;
