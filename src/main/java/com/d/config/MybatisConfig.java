@@ -2,6 +2,7 @@ package com.d.config;
 
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -30,9 +31,15 @@ public class MybatisConfig {
 	@Value("${mybatis.type-aliases-package}")
 	private String typeAliasesPackage;
 
+	@PostConstruct
+	public void initMethod() {
+		logger.info("分页插件初始化成功。");
+		logger.info("mybatis初始化成功。");
+	}
+
 	@Bean
 	public PageHelper pageHelper() {
-		logger.info("com.github.pagehelper.PageHelper init.");
+		logger.info("分页插件初始化成功。");
 		PageHelper pageHelper = new PageHelper();
 		Properties p = new Properties();
 		p.setProperty("offsetAsPageNum", "true");

@@ -2,13 +2,11 @@ package com.d;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-@ComponentScan(excludeFilters = { @Filter(type = FilterType.REGEX, pattern = "com.d.base.*") })
-@ServletComponentScan
+@EnableCaching
+@EnableScheduling
 @SpringBootApplication
 public class Application {
 

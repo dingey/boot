@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d.service.PetService;
 import com.d.util.Result;
 
 import io.swagger.annotations.Api;
@@ -23,6 +25,9 @@ import io.swagger.annotations.ApiParam;
 @Api(tags = "宠物", description = "宠物接口")
 @RestController
 public class PetController {
+	@Autowired
+	private PetService petService;
+
 	@ApiOperation(value = "列表", notes = "查询宠物列表")
 	@GetMapping(path = "/pet/list")
 	public Object list(@ApiParam("页码") @RequestParam(defaultValue = "1") int page,
@@ -34,7 +39,7 @@ public class PetController {
 	@GetMapping(path = "/pet/edit")
 	public Object edit(@ApiParam("宠物id") @RequestParam(defaultValue = "1") int id, HttpSession session,
 			HttpServletRequest req, HttpServletResponse resp, Model model) {
-		return new Pet(1, "alice");
+		return petService.get(id);
 	}
 
 	@ApiOperation(value = "删除", notes = "宠物删除", response = Result.class)

@@ -1,9 +1,12 @@
 package com.d.config;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -22,6 +25,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Profile({ "dev", "test" })
 public class Swagger2Config {
+	Logger logger = LoggerFactory.getLogger(Swagger2Config.class);
+
+	@PostConstruct
+	public void initMethod() {
+		logger.info("swagger2初始化成功。");
+	}
+
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)

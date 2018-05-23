@@ -4,6 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +33,7 @@ import io.swagger.annotations.ApiParam;
 
 @Component
 @Aspect
-@Profile({"dev","test"})
+@Profile({ "dev", "test" })
 public class LogAspect {
 	Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
@@ -39,17 +45,18 @@ public class LogAspect {
 	public void controller(JoinPoint point) {
 		MethodSignature signature = (MethodSignature) point.getSignature();
 		String requestPath = getRequestPath(signature.getMethod());
-
-		String info1 = String.format("请求:%s | %s", getSwagger(signature.getMethod()), getSwaggerMethodInfo(point));
-		String info2 = String.format("path:%s | %s", requestPath, getMethodInfo(point));
-		logger.info(info1);
-		logger.info(info2);
+		Method method = signature.getMethod();
+		if (method.isAnnotationPresent(ApiOperation.class)) {
+			logger.info("请求:{} | {}。", getSwagger(signature.getMethod()), getSwaggerMethodInfo(point));
+		} else {
+			logger.info("path:{} | {}", requestPath, getMethodInfo(point));
+		}
 	}
 
 	private String getSwagger(Method method) {
 		StringBuilder s = new StringBuilder();
 		if (method.getDeclaringClass().isAnnotationPresent(Api.class)) {
-			s.append("【").append(method.getDeclaringClass().getAnnotation(Api.class).value()).append("】-");
+			s.append("【").append(method.getDeclaringClass().getAnnotation(Api.class).tags()[0]).append("】-");
 		}
 		if (method.isAnnotationPresent(ApiOperation.class)) {
 			s.append("【").append(method.getAnnotation(ApiOperation.class).value()).append("】");
@@ -64,9 +71,14 @@ public class LogAspect {
 		String[] parameterNames = ((MethodSignature) point.getSignature()).getParameterNames();
 		if (Objects.nonNull(parameterNames)) {
 			for (int i = 0; i < parameterNames.length; i++) {
+				if (point.getArgs()[i] instanceof HttpServletRequest
+						|| point.getArgs()[i] instanceof HttpServletResponse
+						|| point.getArgs()[i] instanceof HttpSession || point.getArgs()[i] instanceof Model) {
+					continue;
+				}
 				String value = JsonUtil.toJson(point.getArgs()[i]);
 				if (parameters[i].isAnnotationPresent(ApiParam.class)) {
-					s.append(parameters[i].getAnnotation(ApiParam.class).value()).append(":").append(value)
+					s.append(parameterNames[i]).append(":").append(value)
 							.append("; ");
 				} else {
 					s.append(parameterNames[i] + ":" + value + "; ");
@@ -106,12 +118,17 @@ public class LogAspect {
 		if (Objects.nonNull(parameterNames)) {
 			sb = new StringBuilder();
 			for (int i = 0; i < parameterNames.length; i++) {
+				if (point.getArgs()[i] instanceof HttpServletRequest
+						|| point.getArgs()[i] instanceof HttpServletResponse
+						|| point.getArgs()[i] instanceof HttpSession || point.getArgs()[i] instanceof Model) {
+					continue;
+				}
 				String value = JsonUtil.toJson(point.getArgs()[i]);
 				sb.append(parameterNames[i] + ":" + value + "; ");
 			}
 		}
 		sb = sb == null ? new StringBuilder() : sb;
-		String info = String.format("class:%s | method:%s | args:%s", className, methodName, sb.toString());
+		String info = String.format("class:%s | method:%s | args{%s}", className, methodName, sb.toString());
 		return info;
 	}
 }

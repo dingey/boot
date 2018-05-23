@@ -2,8 +2,12 @@ package com.d.config;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cache.Cache;
@@ -54,6 +58,22 @@ public class RedisConfig extends CachingConfigurerSupport {
 	@Value("${spring.redis.expired}")
 	private long expired;
 
+	private boolean available = true;
+
+	@Autowired
+	private RedisTemplate<String, String> srt;
+
+	@PostConstruct
+	public void initMethod() {
+		try {
+			srt.opsForValue().get("echo");
+			logger.info("缓存redis初始化成功。");
+		} catch (Exception e) {
+			available = false;
+			logger.info("缓存redis初始化失败,原因【{}】。", e.getMessage());
+		}
+	}
+
 	/**
 	 * 注解@Cache key生成规则
 	 */
@@ -78,8 +98,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	@Bean
 	public CacheManager cacheManager(RedisTemplate<?, ?> redisTemplate) {
 		RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
-		// 设置缓存过期时间
-		redisCacheManager.setDefaultExpiration(expired);// 秒
+		redisCacheManager.setDefaultExpiration(expired);// 设置缓存过期时间秒
 		return redisCacheManager;
 	}
 
@@ -108,10 +127,8 @@ public class RedisConfig extends CachingConfigurerSupport {
 		factory.setHostName(host);
 		factory.setPort(port);
 		factory.setPassword(password);
-		// 存储的库
-		factory.setDatabase(database);
-		// 设置连接超时时间
-		factory.setTimeout(timeout);
+		factory.setDatabase(database);// 存储的库
+		factory.setTimeout(timeout);// 设置连接超时时间
 		factory.setUsePool(true);
 		factory.setPoolConfig(jedisPoolConfig());
 		return factory;
@@ -128,7 +145,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		jedisPoolConfig.setMaxIdle(maxIdle);
 		jedisPoolConfig.setMinIdle(minIdle);
-		// jedisPoolConfig.set ...
 		return jedisPoolConfig;
 	}
 
@@ -144,22 +160,26 @@ public class RedisConfig extends CachingConfigurerSupport {
 		CacheErrorHandler cacheErrorHandler = new CacheErrorHandler() {
 			@Override
 			public void handleCacheGetError(RuntimeException e, Cache cache, Object key) {
-				logger.error("redis异常：key=[{}]", key, e);
+				if (available)
+					logger.error("redis异常：key=[{}]", key, e);
 			}
 
 			@Override
 			public void handleCachePutError(RuntimeException e, Cache cache, Object key, Object value) {
-				logger.error("redis异常：key=[{}]", key, e);
+				if (available)
+					logger.error("redis异常：key=[{}]", key, e);
 			}
 
 			@Override
 			public void handleCacheEvictError(RuntimeException e, Cache cache, Object key) {
-				logger.error("redis异常：key=[{}]", key, e);
+				if (available)
+					logger.error("redis异常：key=[{}]", key, e);
 			}
 
 			@Override
 			public void handleCacheClearError(RuntimeException e, Cache cache) {
-				logger.error("redis异常：", e);
+				if (available)
+					logger.error("redis异常：", e);
 			}
 		};
 		return cacheErrorHandler;
