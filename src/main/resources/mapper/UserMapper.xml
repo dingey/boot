@@ -8,4 +8,12 @@
 		SELECT * FROM user where
 		id=#{id}
 	</select>
+	<select id="listByName" resultType="com.d.entity.User">
+		SELECT * FROM user 
+		WHERE 
+		name like "%"#{name}"%" 
+		AND name like concat(concat('%',#{name}),'%')
+		AND name like '%${name}%' 
+		AND name like CONCAT('%','${name}','%')
+	</select>
 </mapper>
