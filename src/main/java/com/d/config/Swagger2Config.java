@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.ui.Model;
 
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -19,6 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@Profile({ "dev", "test" })
 public class Swagger2Config {
 	@Bean
 	public Docket createRestApi() {
@@ -26,9 +28,7 @@ public class Swagger2Config {
 				.ignoredParameterTypes(HttpServletRequest.class, HttpServletResponse.class, HttpSession.class,
 						Model.class)
 				.apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.basePackage("com.d.web"))
-				.paths("prod".equals(System.getenv("spring.profiles.active")) ? PathSelectors.none()
-						: PathSelectors.any())
-				.build();
+				.paths(PathSelectors.any()).build();
 	}
 
 	private ApiInfo apiInfo() {
