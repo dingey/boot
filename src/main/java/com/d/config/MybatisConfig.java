@@ -39,7 +39,6 @@ public class MybatisConfig {
 
 	@Bean
 	public PageHelper pageHelper() {
-		logger.info("分页插件初始化成功。");
 		PageHelper pageHelper = new PageHelper();
 		Properties p = new Properties();
 		p.setProperty("offsetAsPageNum", "true");
