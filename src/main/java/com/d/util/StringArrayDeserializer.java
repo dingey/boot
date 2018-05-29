@@ -36,7 +36,7 @@ public class StringArrayDeserializer extends JsonDeserializer<String> {
 
 	public static void main(String[] args) {
 		String json = "{\"id\":1,\"name\":[\"abc\",\"efg\"]}";
-		StringArraySerializer.Man man = JsonUtil.fromJson(json, StringArraySerializer.Man.class);
+		StringArraySerializer.Man man = JsonUtil.build().fromJson(json, StringArraySerializer.Man.class);
 		System.out.println(man.getName());
 	}
 }

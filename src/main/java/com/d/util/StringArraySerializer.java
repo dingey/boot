@@ -51,7 +51,7 @@ public class StringArraySerializer extends JsonSerializer<String> {
 		Man m = new Man();
 		m.setId(1);
 		m.setName("abc,efg");
-		String json = JsonUtil.toJson(m);
+		String json = JsonUtil.build().toJson(m);
 		System.out.println(json);
 	}
 }
