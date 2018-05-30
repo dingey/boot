@@ -27,6 +27,7 @@
 		<org.apache.shiro>1.4.0</org.apache.shiro>
 		<mysql.version>5.1.44</mysql.version>
 		<httpclient.version>4.5.5</httpclient.version>
+		<kit.version>1.4-SNAPSHOT</kit.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,7 +38,7 @@
 		<dependency>
 			<groupId>com.github.dingey</groupId>
 			<artifactId>kit</artifactId>
-			<version>1.2</version>
+			<version>${kit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
