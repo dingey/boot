@@ -17,7 +17,7 @@ import com.d.util.Result;
 public class PayController {
 	Logger logger = LoggerFactory.getLogger(PayController.class);
 
-	@Autowired
+	//@Autowired
 	IPay iPay;
 
 	@GetMapping(path = "/pay/create/{type}")
