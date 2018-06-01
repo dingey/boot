@@ -20,7 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpClient {
-	private final static Logger logger = LoggerFactory.getLogger(HttpClient.class);
+	private final static Logger logger = LoggerFactory
+			.getLogger(HttpClient.class);
 
 	public static String get(String url) {
 		return get(url, null);
@@ -67,7 +68,8 @@ public class HttpClient {
 		HttpPost httpPost = new HttpPost(url);
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		for (Object key : param.keySet()) {
-			nvps.add(new BasicNameValuePair(String.valueOf(key), String.valueOf(param.get(key))));
+			nvps.add(new BasicNameValuePair(String.valueOf(key),
+					String.valueOf(param.get(key))));
 		}
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
@@ -93,10 +95,10 @@ public class HttpClient {
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setHeader("Content-Type", contentType);
 		try {
-			httpPost.setEntity(new StringEntity(str));
+			httpPost.setEntity(new StringEntity(str, "utf-8"));
 			response = httpclient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
-			return EntityUtils.toString(entity);
+			return EntityUtils.toString(entity, "utf-8");
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} finally {
@@ -111,7 +113,7 @@ public class HttpClient {
 	}
 
 	public static String postStr(String url, String str) {
-		return post(url, str, "text/plain");
+		return post(url, str, "text/plain;charset=UTF-8");
 	}
 
 	public static String postJson(String url, String json) {
