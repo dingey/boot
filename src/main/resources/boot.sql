@@ -1,20 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : localhost
-Source Server Version : 50721
-Source Host           : localhost:3306
-Source Database       : boot
-
-Target Server Type    : MYSQL
-Target Server Version : 50721
-File Encoding         : 65001
-
-Date: 2018-05-13 13:52:02
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
-
 -- ----------------------------
 -- Table structure for permission
 -- ----------------------------
@@ -140,3 +123,26 @@ CREATE TABLE `user_role` (
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('1', '1', '1', '2018-01-09 17:52:32', '\0');
+
+-- ----------------------------
+-- Table structure for pay_info
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_info`;
+CREATE TABLE `pay_info` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `title` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的标题',
+  `pay_no` varchar(64) NOT NULL DEFAULT '' COMMENT '支付单号：支付机构返回的交易号',
+  `content` varchar(128) NOT NULL DEFAULT '' COMMENT '支付的内容',
+  `amount` int(11) NOT NULL DEFAULT '0' COMMENT '支付金额：分',
+  `channel` tinyint(4) NOT NULL DEFAULT '0' COMMENT '支付渠道：0支付宝；1微信；2银联',
+  `request` varchar(512) NOT NULL DEFAULT '' COMMENT '发送请求的内容',
+  `response` varchar(512) NOT NULL DEFAULT '' COMMENT '响应内容',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '支付状态：0待支付;1支付成功;2支付失败;',
+  `jump_url` varchar(255) NOT NULL DEFAULT '' COMMENT '前台回跳地址',
+  `notify_url` varchar(255) NOT NULL DEFAULT '' COMMENT '异步通知地址',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `del_flag` bit(1) NOT NULL DEFAULT b'0' COMMENT '删除:0正常;1删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='支付信息';
