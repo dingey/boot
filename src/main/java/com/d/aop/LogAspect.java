@@ -76,10 +76,9 @@ public class LogAspect {
 						|| point.getArgs()[i] instanceof HttpSession || point.getArgs()[i] instanceof Model) {
 					continue;
 				}
-				String value = JsonUtil.toJson(point.getArgs()[i]);
+				String value = JsonUtil.build().toJson(point.getArgs()[i]);
 				if (parameters[i].isAnnotationPresent(ApiParam.class)) {
-					s.append(parameterNames[i]).append(":").append(value)
-							.append("; ");
+					s.append(parameterNames[i]).append(":").append(value).append("; ");
 				} else {
 					s.append(parameterNames[i] + ":" + value + "; ");
 				}
@@ -123,7 +122,7 @@ public class LogAspect {
 						|| point.getArgs()[i] instanceof HttpSession || point.getArgs()[i] instanceof Model) {
 					continue;
 				}
-				String value = JsonUtil.toJson(point.getArgs()[i]);
+				String value = JsonUtil.build().toJson(point.getArgs()[i]);
 				sb.append(parameterNames[i] + ":" + value + "; ");
 			}
 		}
