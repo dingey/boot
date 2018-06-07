@@ -27,7 +27,7 @@
 		<org.apache.shiro>1.4.0</org.apache.shiro>
 		<mysql.version>5.1.44</mysql.version>
 		<httpclient.version>4.5.5</httpclient.version>
-		<kit.version>1.4-SNAPSHOT</kit.version>
+		<kit.version>1.4</kit.version>
 	</properties>
 	<dependencies>
 		<dependency>
