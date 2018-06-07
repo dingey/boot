@@ -1,80 +1,42 @@
 package com.d.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import com.di.kit.SqlProvider.DeleteMark;
-import com.di.kit.SqlProvider.Id;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import com.d.base.BaseEntity;
 
 /**
  * 支付信息
  * 
  * @author MvcGenerator by d
- * @date 2018-06-05 23:05
+ * @date 2018-06-07 15:14
  */
-public class PayInfo implements Serializable {
-	private static final long serialVersionUID = 1004016448609189888L;
-	@Id
-	private Integer id;
-	/**
-	 * 用户id
-	 */
+@ApiModel("支付信息")
+public class PayInfo extends BaseEntity<PayInfo> {
+	private static final long serialVersionUID = 1004622533539921920L;
+	@ApiModelProperty("用户id")
 	private Integer userId;
-	/**
-	 * 支付的标题
-	 */
+	@ApiModelProperty("支付的标题")
 	private String title;
-	/**
-	 * 支付单号：支付机构返回的交易号
-	 */
+	@ApiModelProperty("支付单号：支付机构返回的交易号")
 	private String payNo;
-	/**
-	 * 支付的内容
-	 */
+	@ApiModelProperty("支付的内容")
 	private String content;
-	/**
-	 * 支付金额：分
-	 */
+	@ApiModelProperty("支付金额：分")
 	private Integer amount;
-	/**
-	 * 支付渠道：0支付宝；1微信；2银联
-	 */
-	private Byte channel;
-	/**
-	 * 发送请求的内容
-	 */
+	@ApiModelProperty("支付渠道：0支付宝；1微信；2银联")
+	private int channel;
+	@ApiModelProperty("发送请求的内容")
 	private String request;
-	/**
-	 * 响应内容
-	 */
+	@ApiModelProperty("响应内容")
 	private String response;
-	/**
-	 * 支付状态：0待支付;1支付成功;2支付失败;
-	 */
-	private Byte status;
-	/**
-	 * 前台回跳地址
-	 */
+	@ApiModelProperty("支付状态：0待支付;1支付成功;2支付失败;")
+	private int status;
+	@ApiModelProperty("前台回跳地址")
 	private String jumpUrl;
-	/**
-	 * 异步通知地址
-	 */
+	@ApiModelProperty("异步通知地址")
 	private String notifyUrl;
-	/**
-	 * 更新时间
-	 */
+	@ApiModelProperty("更新时间")
 	private java.util.Date updateTime;
-	private Date createTime;
-	@DeleteMark
-	private Integer delFlag;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public Integer getUserId() {
 		return userId;
@@ -116,11 +78,11 @@ public class PayInfo implements Serializable {
 		this.amount = amount;
 	}
 
-	public Byte getChannel() {
+	public int getChannel() {
 		return channel;
 	}
 
-	public void setChannel(Byte channel) {
+	public void setChannel(int channel) {
 		this.channel = channel;
 	}
 
@@ -140,11 +102,11 @@ public class PayInfo implements Serializable {
 		this.response = response;
 	}
 
-	public Byte getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(Byte status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
@@ -171,21 +133,4 @@ public class PayInfo implements Serializable {
 	public void setUpdateTime(java.util.Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Integer getDelFlag() {
-		return delFlag;
-	}
-
-	public void setDelFlag(Integer delFlag) {
-		this.delFlag = delFlag;
-	}
-
 }
