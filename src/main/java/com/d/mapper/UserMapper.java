@@ -3,7 +3,7 @@ package com.d.mapper;
 import com.d.base.BaseMapper;
 import com.d.entity.User;
 import com.d.enums.UserSexEnum;
-import com.d.util.SqlProvider;
+import com.di.kit.SqlProvider;
 
 import org.apache.ibatis.annotations.*;
 

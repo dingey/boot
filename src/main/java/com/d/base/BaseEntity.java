@@ -3,9 +3,9 @@ package com.d.base;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.d.util.SqlProvider.DeleteMark;
-import com.d.util.SqlProvider.Id;
-import com.d.util.SqlProvider.Transient;
+import com.di.kit.SqlProvider.DeleteMark;
+import com.di.kit.SqlProvider.Id;
+import com.di.kit.SqlProvider.Transient;
 
 /**
  * @author di

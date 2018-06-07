@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.d.entity.Role;
 import com.d.entity.RolePermission;
-import com.d.util.SqlProvider.Transient;
+import com.di.kit.SqlProvider.Transient;
 
 /**
  * @author d

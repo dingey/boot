@@ -15,11 +15,12 @@ public class PayInfoTest extends ApplicationTests {
 
 	@Override
 	public void test() {
+		// listByIds();
+		// get();
 	}
 
 	void listByIds() {
-		List<PayInfo> ps = payInfoMapper.listByIds(PayInfo.class,
-				Arrays.asList(1, 2));
+		List<PayInfo> ps = payInfoMapper.listByIds(PayInfo.class, Arrays.asList(1, 2));
 		System.out.println(JsonUtil.toJson(ps));
 	}
 

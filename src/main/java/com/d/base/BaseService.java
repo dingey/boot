@@ -6,8 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.d.util.SqlProvider;
-import com.d.util.SqlProvider.Id;
+import com.di.kit.SqlProvider;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -17,12 +16,11 @@ import com.github.pagehelper.PageInfo;
 public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<T>> {
 	@Autowired
 	protected D mapper;
-	private T entity;
 	private Class<T> entityClass;
 	private Field entityId;
 
 	public T get(Integer id) {
-		T t = getEntity();
+		T t = newEntity();
 		t.setId(id);
 		return this.get(t);
 	}
@@ -32,7 +30,7 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 	}
 
 	public List<T> listAll() {
-		return mapper.findAll(getEntity());
+		return mapper.listAll(getEntityClass());
 	}
 
 	public PageInfo<T> pageAll(int pageNum, int pageSize) {
@@ -41,23 +39,12 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 		return new PageInfo<>(datas);
 	}
 
-	public List<T> listByIds(Iterable<Long> ids) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM ");
-		sql.append(SqlProvider.camel2Underline(getEntityClass().getSimpleName()));
-		sql.append(" WHERE ").append(SqlProvider.camel2Underline(getEntityId().getName())).append(" IN(");
-		if (ids == null || !ids.iterator().hasNext()) {
-			sql.append(0).append(",");
-		} else {
-			for (Long id : ids) {
-				sql.append(id).append(",");
-			}
-		}
-		sql.deleteCharAt(sql.length() - 1).append(")");
-		return mapper.findBySql(sql.toString());
+	public List<T> listByIds(Iterable<Integer> ids) {
+		return mapper.listByIds(getEntityClass(), ids);
 	}
 
 	public int countAll() {
-		return mapper.countAll(getEntity());
+		return mapper.countAll(getEntityClass());
 	}
 
 	public int save(T entity) {
@@ -69,7 +56,7 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 	}
 
 	public int delete(Integer id) {
-		T t = getEntity();
+		T t = newEntity();
 		t.setId(id);
 		return mapper.delete(t);
 	}
@@ -78,17 +65,13 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 		return mapper.delete(entity);
 	}
 
-	private T getEntity() {
-		if (entity != null) {
-			return entity;
-		} else {
-			try {
-				this.entity = this.getEntityClass().newInstance();
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
+	private T newEntity() {
+		try {
+			return this.getEntityClass().newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		return entity;
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -100,14 +83,10 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
 		return entityClass;
 	}
 
+	@SuppressWarnings("unused")
 	private Field getEntityId() {
 		if (entityId == null) {
-			for (Field f : SqlProvider.getFields(getEntityClass())) {
-				if (f.isAnnotationPresent(Id.class)) {
-					entityId = f;
-					break;
-				}
-			}
+			entityId = SqlProvider.id(getEntityClass());
 		}
 		return entityId;
 	}

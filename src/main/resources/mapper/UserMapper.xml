@@ -4,10 +4,6 @@
 	<select id="getAll" resultType="User">
 		SELECT * FROM user
 	</select>
-	<select id="getById" resultType="com.d.entity.User">
-		SELECT * FROM user where
-		id=#{id}
-	</select>
 	<select id="listByName" resultType="com.d.entity.User">
 		SELECT * FROM user 
 		WHERE 

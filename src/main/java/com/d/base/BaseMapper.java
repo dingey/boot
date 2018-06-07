@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import com.d.util.SqlProvider;
+import com.di.kit.SqlProvider;
 
 /**
  * @author di
@@ -36,17 +34,17 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = SqlProvider.class, method = "get")
 	T get(T t);
 
-	@SelectProvider(type = SqlProvider.class, method = "listAll")
-	List<T> findAll(T t);
+	@SelectProvider(type = SqlProvider.class, method = "getById")
+	T getById(Class<T> t, Serializable id);
 
-	@Select("${sql}")
-	List<T> findBySql(@Param("sql") String sql);
+	@SelectProvider(type = SqlProvider.class, method = "listAll")
+	List<T> listAll(Class<T> t);
 
 	@SelectProvider(type = SqlProvider.class, method = "countAll")
-	int countAll(T t);
+	int countAll(Class<T> t);
 
-	@Select("${sql}")
-	int countBySql(@Param("sql") String sql);
-	
+	@SelectProvider(type = SqlProvider.class, method = "listByIds")
+	List<T> listByIds(Class<T> t, Iterable<Integer> ids);
+
 	T getById(Serializable id);
 }
