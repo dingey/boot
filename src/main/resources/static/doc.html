@@ -1,0 +1,240 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title id="title">接口列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css"
+	href="webjars/layui/css/layui.css">
+<link rel="stylesheet" type="text/css" href="webjars/css/global.css">
+<link rel="stylesheet" type="text/css"
+	href="webjars/css/jquery.json-viewer.css">
+<link id="layuicss-skinlayercss" rel="stylesheet"
+	href="http://localhost:8090/webjars/layui/css/modules/layer/default/layer.css?v=3.0.3303"
+	media="all">
+</head>
+<body>
+	<div class="layui-layout layui-layout-admin"
+		style="border-bottom: solid 3px #1aa094;">
+		<div class="layui-header header ">
+			<div class="layui-main">
+				<div class="admin-login-box logo">
+					<span>接口列表<small class="version">1.0</small></span>
+				</div>
+			</div>
+		</div>
+		<div class="layui-side layui-bg-black" id="admin-side">
+			<div class="layui-side-scroll" id="admin-navbar-side"
+				lay-filter="side">
+				<ul class="layui-nav layui-nav-tree beg-navbar">
+					<li class="layui-nav-item layui-nav-itemed"><a
+						href="javascript:;"><i class="fa fa-cogs" aria-hidden="true"
+							data-icon="fa-cogs"></i> <cite>宠物</cite><span
+							class="layui-nav-more"></span></a>
+						<dl class="layui-nav-child">
+							<dd title="get 宠物删除" class="layui-this">
+								<a href="javascript:;" name="a_path" path="/pet/del"
+									method="get" operationid="delUsingGET"><i
+									class="fa fa-navicon" data-icon="fa-navicon"></i><cite
+									class="hide">/pet/del</cite><cite class="get_font pl10">删除</cite></a>
+							</dd>
+							<dd title="get 宠物编辑信息" class="">
+								<a href="javascript:;" name="a_path" path="/pet/edit"
+									method="get" operationid="editUsingGET"><i
+									class="fa fa-navicon" data-icon="fa-navicon"></i><cite
+									class="hide">/pet/edit</cite><cite class="get_font pl10">编辑</cite></a>
+							</dd>
+							<dd title="get 查询宠物列表" class="">
+								<a href="javascript:;" name="a_path" path="/pet/list"
+									method="get" operationid="listUsingGET"><i
+									class="fa fa-navicon" data-icon="fa-navicon"></i><cite
+									class="hide">/pet/list</cite><cite class="get_font pl10">列表</cite></a>
+							</dd>
+							<dd title="get 查询宠物列表" class="">
+								<a href="javascript:;" name="a_path" path="/pet/query"
+									method="get" operationid="queryUsingGET"><i
+									class="fa fa-navicon" data-icon="fa-navicon"></i><cite
+									class="hide">/pet/query</cite><cite class="get_font pl10">列表</cite></a>
+							</dd>
+							<dd title="post 宠物保存" class="">
+								<a href="javascript:;" name="a_path" path="/pet/save"
+									method="post" operationid="saveUsingPOST"><i
+									class="fa fa-navicon" data-icon="fa-navicon"></i><cite
+									class="hide">/pet/save</cite><cite class="post_font pl10">保存</cite></a>
+							</dd>
+						</dl></li>
+					<span class="layui-nav-bar"
+						style="top: 22.5px; height: 0px; opacity: 0;"></span>
+				</ul>
+			</div>
+		</div>
+		<div class="layui-body site-content" id="path-body"
+			style="border-left: solid 2px #1AA094;">
+			<div class="layui-tab layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li class="layui-this"><span class="method get"
+						m_operationid="delUsingGET" path="/pet/del" method="get">get</span>/pet/del</li>
+					<li class="">Debug</li>
+				</ul>
+				<div class="layui-tab-content"
+					style="min-height: 150px; padding: 5px 0px 0px; height: 803px;">
+					<div class="layui-tab-item layui-show">
+						<table class="layui-table">
+							<colgroup>
+								<col width="150">
+								<col width="150">
+								<col width="150">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>Path</th>
+									<td colspan="3">/pet/del</td>
+								</tr>
+								<tr>
+									<th>Summary</th>
+									<td colspan="3">删除</td>
+								</tr>
+								<tr>
+									<th>Description</th>
+									<td colspan="3">宠物删除</td>
+								</tr>
+								<tr>
+									<th>Consumes</th>
+									<td></td>
+									<th>Produces</th>
+									<td>*/*</td>
+								</tr>
+							</tbody>
+						</table>
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend>参数</legend>
+						</fieldset>
+						<table class="layui-table">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Parameter Type</th>
+									<th>Data Type</th>
+									<th>Required</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>id</td>
+									<td>宠物id</td>
+									<td>query</td>
+									<td>integer</td>
+									<td><i class="layui-icon"></i></td>
+								</tr>
+							</tbody>
+						</table>
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend>响应</legend>
+						</fieldset>
+						<table class="layui-table">
+							<thead>
+								<tr>
+									<th>Properties</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody id="path-body-response-model">
+
+								<tr>
+									<td>code</td>
+									<td>integer</td>
+									<td>编码：0成功；其他失败；</td>
+								</tr>
+
+								<tr>
+									<td>data</td>
+									<td>object</td>
+									<td>成功时返回的数据</td>
+								</tr>
+
+								<tr>
+									<td>message</td>
+									<td>string</td>
+									<td>失败时返回的说明</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					<div class="layui-tab-item">
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend>Parameters</legend>
+						</fieldset>
+						<div class="method-type">
+							<lable>Parameter Type : </lable>
+							<input type="hidden" id="content_type_delUsingGET" value="form">
+							<button id="pt_form_delUsingGET" type="form"
+								operationid="delUsingGET" onclick="changeParameterType(this)"
+								class="layui-btn layui-btn-small layui-btn-normal layui-btn-radius">Form</button>
+							<button id="pt_json_delUsingGET" type="json"
+								operationid="delUsingGET" onclick="changeParameterType(this)"
+								class="layui-btn layui-btn-small layui-btn-primary layui-btn-radius">Json</button>
+						</div>
+						<textarea class="parameter-text hide" rows="10"
+							id="text_tp_delUsingGET"></textarea>
+						<table class="layui-table" id="table_tp_delUsingGET">
+							<colgroup>
+								<col width="150">
+								<col>
+								<col>
+								<col width="150">
+								<col width="150">
+								<col>
+							</colgroup>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Value</th>
+									<th>Description</th>
+									<th>Parameter Type</th>
+									<th>Data Type</th>
+									<th>Required</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr>
+									<td>id</td>
+									<td><input type="text" p_operationid="delUsingGET"
+										name="id" in="query" autocomplete="off" class="layui-input">
+
+									</td>
+									<td>宠物id</td>
+									<td>query</td>
+									<td>integer</td>
+									<td><i class="layui-icon"></i></td>
+								</tr>
+							</tbody>
+						</table>
+						<div>
+							<button class="layui-btn" name="btn_submit"
+								onclick="getData('delUsingGET')">Submit</button>
+						</div>
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend>Responses</legend>
+						</fieldset>
+						<div class="responseJson">
+							<pre id="json-response"></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="webjars/layui/layui.js"></script>
+<script src="webjars/js/jquery.js"></script>
+<script src="webjars/js/jsrender.min.js"></script>
+<script src="webjars/js/jquery.json-viewer.js"></script>
+</body>
+</html>
