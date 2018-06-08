@@ -2,6 +2,7 @@ package com.d.config;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.net.SocketTimeoutException;
 
 import javax.annotation.PostConstruct;
 
@@ -21,12 +22,14 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 @EnableCaching
 @SpringBootConfiguration
@@ -61,7 +64,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	private boolean available = true;
 
 	@Autowired
-	private RedisTemplate<String, String> srt;
+	private StringRedisTemplate srt;
 
 	@PostConstruct
 	public void initMethod() {
@@ -70,7 +73,14 @@ public class RedisConfig extends CachingConfigurerSupport {
 			logger.info("缓存redis初始化成功。");
 		} catch (Exception e) {
 			available = false;
-			logger.info("缓存redis初始化失败,原因【{}】。", e.getMessage());
+			Throwable cause = e.getCause().getCause();
+			if (cause instanceof SocketTimeoutException) {
+				logger.error("缓存redis初始化失败,原因【{}】。", "连接超时" + cause.getMessage());
+			} else if (cause instanceof JedisDataException) {
+				logger.error("缓存redis初始化失败,原因【{}】。", "密码错误" + cause.getMessage());
+			} else {
+				logger.error("缓存redis初始化失败,原因【{}】。", cause.getMessage());
+			}
 		}
 	}
 
@@ -81,7 +91,8 @@ public class RedisConfig extends CachingConfigurerSupport {
 	public KeyGenerator keyGenerator() {
 		return new KeyGenerator() {
 			@Override
-			public Object generate(Object target, Method method, Object... params) {
+			public Object generate(Object target, Method method,
+					Object... params) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(target.getClass().getName());
 				sb.append(method.getName());
@@ -97,21 +108,24 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 	@Bean
 	public CacheManager cacheManager(RedisTemplate<?, ?> redisTemplate) {
-		RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
+		RedisCacheManager redisCacheManager = new RedisCacheManager(
+				redisTemplate);
 		redisCacheManager.setDefaultExpiration(expired);// 设置缓存过期时间秒
 		return redisCacheManager;
 	}
 
-	@Bean
-	public RedisTemplate<Serializable, Serializable> redisTemplate(RedisConnectionFactory factory) {
+	// @Bean
+	public RedisTemplate<Serializable, Serializable> redisTemplate(
+			RedisConnectionFactory factory) {
 		RedisTemplate<Serializable, Serializable> redisTemplate = new RedisTemplate<Serializable, Serializable>();
-		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(
+				Object.class);
 		ObjectMapper om = new ObjectMapper();
 		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		serializer.setObjectMapper(om);
 		redisTemplate.setValueSerializer(serializer);
-		redisTemplate.setConnectionFactory(factory);
+		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		return redisTemplate;
 	}
 
@@ -121,7 +135,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	 * @Description:
 	 * @return
 	 */
-	@Bean
+	// @Bean
 	public JedisConnectionFactory redisConnectionFactory() {
 		JedisConnectionFactory factory = new JedisConnectionFactory();
 		factory.setHostName(host);
@@ -140,7 +154,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	 * @Description:
 	 * @return
 	 */
-	@Bean
+	// @Bean
 	public JedisPoolConfig jedisPoolConfig() {
 		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		jedisPoolConfig.setMaxIdle(maxIdle);
@@ -159,19 +173,22 @@ public class RedisConfig extends CachingConfigurerSupport {
 	public CacheErrorHandler errorHandler() {
 		CacheErrorHandler cacheErrorHandler = new CacheErrorHandler() {
 			@Override
-			public void handleCacheGetError(RuntimeException e, Cache cache, Object key) {
+			public void handleCacheGetError(RuntimeException e, Cache cache,
+					Object key) {
 				if (available)
 					logger.error("redis异常：key=[{}]", key, e);
 			}
 
 			@Override
-			public void handleCachePutError(RuntimeException e, Cache cache, Object key, Object value) {
+			public void handleCachePutError(RuntimeException e, Cache cache,
+					Object key, Object value) {
 				if (available)
 					logger.error("redis异常：key=[{}]", key, e);
 			}
 
 			@Override
-			public void handleCacheEvictError(RuntimeException e, Cache cache, Object key) {
+			public void handleCacheEvictError(RuntimeException e, Cache cache,
+					Object key) {
 				if (available)
 					logger.error("redis异常：key=[{}]", key, e);
 			}
