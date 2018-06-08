@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ui.Model;
 
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -37,7 +38,9 @@ public class Swagger2Config {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.ignoredParameterTypes(HttpServletRequest.class, HttpServletResponse.class, HttpSession.class,
 						Model.class)
-				.apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.basePackage("com.d.web"))
+				.apiInfo(apiInfo()).select()
+				//.apis(RequestHandlerSelectors.basePackage("com.d.web"))
+				.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
 				.paths(PathSelectors.any()).build();
 	}
 
