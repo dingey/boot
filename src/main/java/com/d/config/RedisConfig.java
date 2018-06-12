@@ -73,7 +73,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 			logger.info("缓存redis初始化成功。");
 		} catch (Exception e) {
 			available = false;
-			Throwable cause = e.getCause().getCause();
+			Throwable cause = e.getCause().getCause().getCause();
 			if (cause instanceof SocketTimeoutException) {
 				logger.error("缓存redis初始化失败,原因【{}】。", "连接超时" + cause.getMessage());
 			} else if (cause instanceof JedisDataException) {
