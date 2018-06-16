@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.d.service.PetService;
 import com.d.util.Result;
+import com.di.kit.JsonUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -115,6 +116,11 @@ public class PetController {
 			public void setName(String name) {
 				this.name = name;
 			}
+		}
+
+		@Override
+		public String toString() {
+			return JsonUtil.toJson(this);
 		}
 	}
 }

@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +39,7 @@ public class LockAspect {
 	@PostConstruct
 	public void init() {
 		registry = new RedisLockRegistry(connectionFactory, "lock_key");
+		logger.info("自定义redis锁初始化完毕。。。");
 	}
 
 	@Pointcut(value = "execution(* com.d.web..*.*(..))")
@@ -46,10 +50,10 @@ public class LockAspect {
 	public <T> Object around(ProceedingJoinPoint pjp) throws Throwable {
 		Method method = ((MethodSignature) pjp.getSignature()).getMethod();
 		if (method.isAnnotationPresent(LockMethod.class)) {
+			LockMethod lockMethod = method.getAnnotation(LockMethod.class);
 			String key = method.getDeclaringClass().getName() + "."
 					+ method.getName();
 			Lock lock = registry.obtain(key);
-			LockMethod lockMethod = method.getAnnotation(LockMethod.class);
 			if (lockMethod.singleton()) {
 				long now = System.currentTimeMillis() / 60000;
 				long last = now;
@@ -87,9 +91,36 @@ public class LockAspect {
 		return pjp.proceed();
 	}
 
+	String spelKey(ProceedingJoinPoint pjp) {
+		MethodSignature signature = (MethodSignature) pjp.getSignature();
+		LockMethod lockMethod = signature.getMethod()
+				.getAnnotation(LockMethod.class);
+		if (lockMethod.value().isEmpty() && lockMethod.key().isEmpty()) {
+			return signature.getMethod().getDeclaringClass().getName() + "."
+					+ signature.getMethod().getName();
+		}
+		String[] parameterNames = signature.getParameterNames();
+		Object[] args = pjp.getArgs();
+		ExpressionParser parser = new SpelExpressionParser();
+		StandardEvaluationContext context = new StandardEvaluationContext();
+		if (args.length > 0) {
+			for (int i = 0; i < args.length; i++) {
+				context.setVariable(parameterNames[i], args[i]);
+			}
+		}
+		String value = parser.parseExpression(lockMethod.key())
+				.getValue(context, String.class);
+		return value;
+	}
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.METHOD})
 	public static @interface LockMethod {
+		/* 是否单任务 */
 		boolean singleton() default false;
+		/* 锁的value值，支持spel表达式 */
+		String value() default "";
+		/* 锁的value值，支持spel表达式 */
+		String key() default "";
 	}
 }
