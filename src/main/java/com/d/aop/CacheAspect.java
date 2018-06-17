@@ -24,7 +24,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
-import com.di.kit.JsonUtil;
+import com.d.util.JsonUtil;
 
 @Component
 @Aspect
@@ -55,12 +55,13 @@ public class CacheAspect {
 						.currentTimeMillis()) {
 					// 未过期
 					String json = srt.opsForValue().get(key);
-					return JsonUtil.toObject(json, method.getReturnType());
+					return JsonUtil.singleton().fromJson(json,
+							method.getReturnType());
 				}
 			}
 			Object proceed = pjp.proceed();
 			cacheMap.put(key, System.currentTimeMillis());
-			srt.opsForValue().set(key, JsonUtil.toJson(proceed));
+			srt.opsForValue().set(key, JsonUtil.singleton().toJson(proceed));
 			return proceed;
 		}
 		return pjp.proceed();
@@ -74,7 +75,8 @@ public class CacheAspect {
 		Object[] args = pjp.getArgs();
 		if (cacheMethod.value().isEmpty() && cacheMethod.key().isEmpty()) {
 			return signature.getMethod().getDeclaringClass().getName() + "."
-					+ signature.getMethod().getName() + JsonUtil.toJson(args);
+					+ signature.getMethod().getName()
+					+ JsonUtil.singleton().toJson(args);
 		}
 		ExpressionParser parser = new SpelExpressionParser();
 		StandardEvaluationContext context = new StandardEvaluationContext();

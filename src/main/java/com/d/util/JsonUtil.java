@@ -18,7 +18,7 @@ import com.github.pagehelper.PageInfo;
 public class JsonUtil {
 	static Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 	ObjectMapper objectMapper = new ObjectMapper();
-
+	static JsonUtil instance = new JsonUtil();
 	public <T> T fromJson(String json, Class<T> valueType) {
 		try {
 			return objectMapper.readValue(json, valueType);
@@ -42,9 +42,11 @@ public class JsonUtil {
 		return fromJsonWrapper(json, ArrayList.class, valueType);
 	}
 
-	public <E, T> E fromJsonWrapper(String json, Class<E> e, Class<T> valueType) {
+	public <E, T> E fromJsonWrapper(String json, Class<E> e,
+			Class<T> valueType) {
 		try {
-			JavaType javaType = objectMapper.getTypeFactory().constructParametricType(e, valueType);
+			JavaType javaType = objectMapper.getTypeFactory()
+					.constructParametricType(e, valueType);
 			return objectMapper.readValue(json, javaType);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -68,14 +70,20 @@ public class JsonUtil {
 	}
 
 	public JsonUtil camelUnderline() {
-		objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+		objectMapper
+				.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 		return this;
 	}
-
+	
+	public static JsonUtil singleton() {
+		return instance;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		String json1 = "{\"list\":[{\"id\":1}]}";
-		PageInfo<Man> p = build().fromJsonWrapper(json1, PageInfo.class, Man.class);
+		PageInfo<Man> p = build().fromJsonWrapper(json1, PageInfo.class,
+				Man.class);
 		System.out.println(p.getList().size());
 
 		String json2 = "[{\"id\":1}]";
