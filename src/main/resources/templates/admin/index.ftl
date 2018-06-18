@@ -103,7 +103,7 @@ iframe {
 <!-- 				<li class="header"><@spring.message "main-navigation"/></li> -->
 				<#list list as nav>
 				<#list nav.children as menu>
-				<li data-value="${nav.name!}">
+				<li <#if (nav_index!=0)>class="hide"</#if> data-value="${nav.name!}">
 					<a href="">
 						${menu.icon!}<span>${menu.name!}</span>
 					</a>
@@ -394,7 +394,7 @@ iframe {
 				}
 			});
 		});
-		$("#navbar-collapse>ul>li>a:eq(0)").click();
+		//$("#navbar-collapse>ul>li>a:eq(0)").click();
 	});
 </script>
 </@layout.standard>

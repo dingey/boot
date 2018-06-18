@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>敏捷看板</title>
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://dingey.github.io/demo/layer/layer.js"></script>
+<style type="text/css">
+.list-group-item {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+</style>
+</head>
+<body>
+	<br />
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">待完成</div>
+			<div class="panel-body">
+				<form class="form-inline">
+					<select class="form-control input-sm">
+						<option>全部</option>
+						<option>我创建的</option>
+						<option>指派给我</option>
+					</select>
+					<button type="button" class="btn btn-sm btn-default">
+						<i class="fa fa-plus">添加新任务</i>
+					</button>
+				</form>
+			</div>
+			<div class="sortable-list list-group" id="completed">
+				<a href="#" class="list-group-item" id="task16">APP应用开发测试协调预计需要很多天很多部门协调配合超长的标题超长副标题测试多行的样式效果
+					<br /> <i class="fa fa-clock-o"></i> 2017.12.12 &emsp;<i
+					title="3条评论" class="fa fa-fw fa-commenting-o">3</i><span
+					class="label label-info pull-right" title="单击修改任务">待开始</span><i
+					class="fa fa-user pull-right">飞蓬&emsp;</i>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">进行中</div>
+			<div class="panel-body">
+				<form class="form-inline">
+					<select class="form-control input-sm">
+						<option>全部</option>
+						<option>我创建的</option>
+						<option>我处理的</option>
+					</select>
+					<div class="form-group input-group">
+						<input type="text" placeholder="输入任务标题"
+							class="input input-sm form-control"> <span
+							class="input-group-btn">
+							<button type="button" class="btn btn-sm btn-default">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+					</div>
+				</form>
+			</div>
+			<div class="sortable-list list-group" id="completed">
+				<a href="#" class="list-group-item">消息群发 <i
+					class="fa fa-user pull-right">飞蓬</i><br /> <i
+					class="fa fa-clock-o" title="预计时间"></i> 2017.12.12 &emsp;<i
+					title="3条评论" class="fa fa-fw fa-commenting-o">3</i><span
+					class="label label-primary pull-right" title="单击修改任务">正常</span>
+				</a> <a href="#" class="list-group-item">定时任务改造 <br /> <i
+					class="fa fa-clock-o"></i> 2017.12.12 <span
+					class="label label-warning pull-right" title="单击修改任务">延期</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">已完成</div>
+			<div class="panel-body">
+				<form class="form-inline">
+					<select class="form-control input-sm">
+						<option>全部</option>
+						<option>我创建的</option>
+						<option>我完成的</option>
+					</select> <select class="form-control input-sm">
+						<option>筛选时间</option>
+						<option>今天</option>
+						<option>一周内</option>
+						<option>一月内</option>
+					</select>
+					<div class="form-group input-group">
+						<input type="text" placeholder="输入任务标题"
+							class="input input-sm form-control"> <span
+							class="input-group-btn">
+							<button type="button" class="btn btn-sm btn-default">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+					</div>
+				</form>
+			</div>
+			<div class="sortable-list list-group" id="completed">
+				<a href="#" class="list-group-item" id="task16">需求评审 <br /> <i
+					class="fa fa-clock-o"></i> 2018.06.12 ~ 2018.06.13 <span
+					class="label label-default pull-right" title="单击修改任务">取消</span>
+
+				</a> <a href="#" class="list-group-item" id="task17">基础框架 <br>
+					<i class="fa fa-clock-o"></i> 2018.06.14 ~ 2018.06.15 <span
+					title="单击修改任务"><span class="label label-success pull-right">正常</span></span>
+				</a> <a href="#" class="list-group-item" id="task16">需求评审 <br /> <i
+					class="fa fa-clock-o"></i> 2018.06.12 ~ 2018.06.13 <span
+					class="label label-warning pull-right" title="单击修改任务">延期</span>
+
+				</a>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
