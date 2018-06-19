@@ -51,8 +51,7 @@ public class LockAspect {
 		Method method = ((MethodSignature) pjp.getSignature()).getMethod();
 		if (method.isAnnotationPresent(LockMethod.class)) {
 			LockMethod lockMethod = method.getAnnotation(LockMethod.class);
-			String key = method.getDeclaringClass().getName() + "."
-					+ method.getName();
+			String key = spelKey(pjp);
 			Lock lock = registry.obtain(key);
 			if (lockMethod.singleton()) {
 				long now = System.currentTimeMillis() / 60000;
