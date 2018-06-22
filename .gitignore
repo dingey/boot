@@ -4,3 +4,8 @@
 .project
 /.factorypath
 /boot.iml
+/.idea/
+/.idea/compiler.xml
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/libraries/Maven__ch_qos_logback_logback_core_1_1_11.xml
