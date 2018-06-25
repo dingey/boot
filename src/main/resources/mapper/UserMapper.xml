@@ -1,15 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.d.mapper.UserMapper">
-	<select id="getAll" resultType="User">
-		SELECT * FROM user
-	</select>
-	<select id="listByName" resultType="com.d.entity.User">
-		SELECT * FROM user 
-		WHERE 
-		name like "%"#{name}"%" 
-		AND name like concat(concat('%',#{name}),'%')
-		AND name like '%${name}%' 
-		AND name like CONCAT('%','${name}','%')
-	</select>
+    <select id="getAll" resultType="User">
+        SELECT * FROM user
+    </select>
+    <select id="listByName" resultType="com.d.entity.User">
+        SELECT * FROM user
+        WHERE
+        name like "%"#{name}"%"
+        AND name like concat(concat('%',#{name}),'%')
+        AND name like '%${name}%'
+        AND name like CONCAT('%','${name}','%')
+        AND name like CONCAT('%',#{name},'%')
+    </select>
+    <select id="query" resultType="User">
+        SELECT * FROM user
+        <where>
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="ids!=null and ids.size>0">
+                AND id IN
+                <foreach collection="ids" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="name!=null and name!=''">
+                AND name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="start!=null">
+                AND create_time &gt;= #{start}
+            </if>
+            <if test="end!=null">
+                AND create_time &lt;= #{end}
+            </if>
+            <if test="start!=null and end!=null">
+                <![CDATA[ AND create_time >= #{start} AND create_time <= #{end}]]>
+            </if>
+        </where>
+    </select>
+    <insert id="batchInsert">
+        INSERT INTO user (id,name) VALUES
+        <foreach collection="users" item="user" separator=",">
+            (#{user.id},#{user.name})
+        </foreach>
+    </insert>
+    <update id="batchUpdate">
+        <foreach collection="users" item="user" separator=";">
+            update user
+            <set>
+                <if test="user.name !=null">
+                    name = #{name},
+                </if>
+            </set>
+            WHERE id=#{user.id}
+        </foreach>
+    </update>
 </mapper>
