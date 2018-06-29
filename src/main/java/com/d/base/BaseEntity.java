@@ -10,6 +10,7 @@ import com.di.kit.SqlProvider.Transient;
 /**
  * @author di
  */
+@SuppressWarnings("unused")
 public class BaseEntity<T> implements Serializable {
 	/**
 	 * 

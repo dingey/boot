@@ -13,6 +13,7 @@ import com.di.kit.SqlProvider;
 /**
  * @author di
  */
+@SuppressWarnings("unused")
 public interface BaseMapper<T> {
 	@InsertProvider(type = SqlProvider.class, method = "insert")
 	@Options(useGeneratedKeys = true)
