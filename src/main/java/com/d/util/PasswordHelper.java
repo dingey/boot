@@ -12,7 +12,7 @@ import com.d.entity.User;
  */
 public class PasswordHelper {
 	private static RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
-	private static String algorithmName = "md5";
+	private static final String algorithmName = "md5";
 	private final static int hashIterations = 2;
 
 	public static void encryptPassword(User user) {

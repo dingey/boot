@@ -13,6 +13,7 @@ import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
 import com.d.util.UserToken;
 
+@SuppressWarnings("unused")
 public class TokenAuthenticationFilter extends FormAuthenticationFilter {
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
@@ -36,10 +37,9 @@ public class TokenAuthenticationFilter extends FormAuthenticationFilter {
 		return subject.isAuthenticated() || subject.isRemembered();
 	}
 
-	UserToken token(ServletRequest request) {
+	public UserToken token(ServletRequest request) {
 		HttpServletRequest req = (HttpServletRequest) request;
 		Cookie cookie = Stream.of(req.getCookies()).filter(c -> c.getName().equals("token")).findFirst().get();
-		UserToken token = UserToken.fromTokenStringAES(cookie.getValue());
-		return token;
+		return UserToken.fromTokenStringAES(cookie.getValue());
 	}
 }

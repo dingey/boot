@@ -25,53 +25,52 @@ import com.github.pagehelper.PageHelper;
 @Configuration
 @MapperScan(basePackages = "com.d.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class MybatisConfig {
-	Logger logger = LoggerFactory.getLogger(MybatisConfig.class);
-	@Value("${mybatis.configuration.map-underscore-to-camel-case}")
-	private boolean mapUnderscoreToCamelCase;
-	@Value("${mybatis.type-aliases-package}")
-	private String typeAliasesPackage;
+    private Logger logger = LoggerFactory.getLogger(MybatisConfig.class);
+    @Value("${mybatis.configuration.map-underscore-to-camel-case}")
+    private boolean mapUnderscoreToCamelCase;
+    @Value("${mybatis.type-aliases-package}")
+    private String typeAliasesPackage;
 
-	@PostConstruct
-	public void initMethod() {
-		logger.info("分页插件初始化成功。");
-		logger.info("mybatis初始化成功。");
-	}
+    @PostConstruct
+    public void initMethod() {
+        logger.info("分页插件初始化成功。");
+        logger.info("mybatis初始化成功。");
+    }
 
-	@Bean
-	public PageHelper pageHelper() {
-		PageHelper pageHelper = new PageHelper();
-		Properties p = new Properties();
-		p.setProperty("offsetAsPageNum", "true");
-		p.setProperty("rowBoundsWithCount", "true");
-		p.setProperty("reasonable", "true");
-		pageHelper.setProperties(p);
-		return pageHelper;
-	}
+    @Bean
+    public PageHelper pageHelper() {
+        PageHelper pageHelper = new PageHelper();
+        Properties p = new Properties();
+        p.setProperty("offsetAsPageNum", "true");
+        p.setProperty("rowBoundsWithCount", "true");
+        p.setProperty("reasonable", "true");
+        pageHelper.setProperties(p);
+        return pageHelper;
+    }
 
-	@Bean(name = "sqlSessionFactory")
-	@Primary
-	public SqlSessionFactory testSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
-		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-		bean.setDataSource(dataSource);
-		bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
-		org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
-		conf.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);
-		bean.setConfiguration(conf);
-		bean.setVfs(SpringBootVFS.class);
-		bean.setTypeAliasesPackage(typeAliasesPackage);
-		return bean.getObject();
-	}
+    @Bean(name = "sqlSessionFactory")
+    @Primary
+    public SqlSessionFactory testSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+        org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
+        conf.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);
+        bean.setConfiguration(conf);
+        bean.setVfs(SpringBootVFS.class);
+        bean.setTypeAliasesPackage(typeAliasesPackage);
+        return bean.getObject();
+    }
 
-	@Bean(name = "transactionManager")
-	@Primary
-	public DataSourceTransactionManager testTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
-		return new DataSourceTransactionManager(dataSource);
-	}
+    @Bean(name = "transactionManager")
+    @Primary
+    public DataSourceTransactionManager testTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
 
-	@Bean(name = "sqlSessionTemplate")
-	@Primary
-	public SqlSessionTemplate testSqlSessionTemplate(
-			@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
-		return new SqlSessionTemplate(sqlSessionFactory);
-	}
+    @Bean(name = "sqlSessionTemplate")
+    @Primary
+    public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+        return new SqlSessionTemplate(sqlSessionFactory);
+    }
 }

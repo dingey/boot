@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel("返回信息")
 @JsonSerialize(using = Result.ResultSerializer.class)
+@SuppressWarnings("all")
 public class Result {
 	@ApiModelProperty("编码：0成功；其他失败；")
 	@JsonInclude(Include.ALWAYS)
@@ -24,11 +25,11 @@ public class Result {
 
 	@ApiModelProperty("失败时返回的说明")
 	@JsonInclude(Include.NON_EMPTY)
-	private String message = null;
+	private String message;
 
 	@ApiModelProperty("成功时返回的数据")
 	@JsonInclude(Include.NON_NULL)
-	private Object data = null;
+	private Object data;
 
 	@ApiModelProperty(value = "中间map变量", hidden = true)
 	@JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -90,7 +91,7 @@ public class Result {
 		return success().put(key, value);
 	}
 
-	public static enum ErrCode {
+	public enum ErrCode {
 		BAD_REQUEST(400, "错误的请求"), //
 		UNAUTHORIZED(401, "未授权"), //
 		FORBIDDEN(403, " 服务器拒绝请求"), //

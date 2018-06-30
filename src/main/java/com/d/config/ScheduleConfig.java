@@ -14,8 +14,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @Configuration
 @Profile("prod")
 public class ScheduleConfig implements SchedulingConfigurer {
-	Logger logger = LoggerFactory.getLogger(SchedulingConfigurer.class);
-	int size = Runtime.getRuntime().availableProcessors();
+	private Logger logger = LoggerFactory.getLogger(SchedulingConfigurer.class);
+	private int size = Runtime.getRuntime().availableProcessors();
 
 	@PostConstruct
 	public void initMethod() {

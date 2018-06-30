@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -42,9 +42,9 @@ public class GlobalExceptionHandler {
 		StringBuilder errs = new StringBuilder();
 		for (FieldError e : bindException.getFieldErrors()) {
 			if (e.getDefaultMessage().indexOf("NumberFormatException") > 0) {
-				errs.append(e.getRejectedValue() + "不是数字格式(" + e.getField() + ")");
+				errs.append(e.getRejectedValue()).append("不是数字格式(").append(e.getField()).append(")");
 			} else {
-				errs.append(e.getRejectedValue() + "异常(" + e.getField() + ")");
+				errs.append(e.getRejectedValue()).append("异常(").append(e.getField()).append(")");
 			}
 		}
 		return Result.fail(errs.toString());

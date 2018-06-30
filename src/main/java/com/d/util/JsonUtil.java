@@ -2,12 +2,10 @@ package com.d.util;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.d.service.PetService;
-import com.d.service.UserService;
 import com.d.web.PetController;
 import com.di.kit.ClassUtil;
 import org.slf4j.Logger;
@@ -21,10 +19,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.pagehelper.PageInfo;
 
+@SuppressWarnings("all")
 public class JsonUtil {
-    static Logger logger = LoggerFactory.getLogger(JsonUtil.class);
-    ObjectMapper objectMapper = new ObjectMapper();
-    static JsonUtil instance = new JsonUtil();
+    private static Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private static JsonUtil instance = new JsonUtil();
 
     public <T> T fromJson(String json, Class<T> valueType) {
         try {
@@ -61,8 +60,7 @@ public class JsonUtil {
     }
 
     public static JsonUtil build() {
-        JsonUtil jsonUtil = new JsonUtil();
-        return jsonUtil;
+        return new JsonUtil();
     }
 
     public JsonUtil nullIgnore() {

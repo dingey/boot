@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 @Profile("dev")
 @Configuration
 public class AppConfig {
-    static Logger logger = LoggerFactory.getLogger(AppConfig.class);
+    private static Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
     static {
         logger.info("配置应用dev环境开始。。。");

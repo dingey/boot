@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.PostConstruct;
 
 import com.di.kit.ClassUtil;
@@ -18,7 +16,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.expression.ExpressionParser;
@@ -32,8 +29,7 @@ import com.d.util.JsonUtil;
 @Aspect
 @Profile({"test"})
 public class CacheAspect {
-    Logger logger = LoggerFactory.getLogger(CacheAspect.class);
-    ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<>();
+    private Logger logger = LoggerFactory.getLogger(CacheAspect.class);
     @Autowired
     private StringRedisTemplate srt;
 
@@ -47,13 +43,13 @@ public class CacheAspect {
     }
 
     @Around("around()")
-    public <T> Object around(ProceedingJoinPoint pjp) throws Throwable {
+    public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        if (method.isAnnotationPresent(CacheableMethod.class)) {
-            CacheableMethod cacheMethod = method.getAnnotation(CacheableMethod.class);
+        if (method.isAnnotationPresent(CacheMethod.class)) {
+            CacheMethod cacheMethod = method.getAnnotation(CacheMethod.class);
             String key = spelKey(pjp);
-            if (cacheMap.containsKey(key)) {
-                if ((cacheMap.get(key)) > System.currentTimeMillis()) {
+            if (srt.hasKey(key)) {
+                if ((srt.getExpire(key)) > System.currentTimeMillis()) {
                     // 未过期
                     String json = srt.opsForValue().get(key);
                     if (method.getReturnType().getTypeParameters().length == 0) {
@@ -64,20 +60,18 @@ public class CacheAspect {
                 }
             }
             Object proceed = pjp.proceed();
-            cacheMap.put(key, System.currentTimeMillis() + cacheMethod.expire());
-            srt.opsForValue().set(key, JsonUtil.singleton().toJson(proceed));
+            srt.opsForValue().set(key, JsonUtil.singleton().toJson(proceed), cacheMethod.expire());
             return proceed;
         } else if (method.isAnnotationPresent(CacheEvictMethod.class)) {
             String key = spelKey(pjp);
-            cacheMap.remove(key);
             srt.delete(key);
         }
         return pjp.proceed();
     }
 
-    String spelKey(ProceedingJoinPoint pjp) {
+    private String spelKey(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
-        CacheableMethod cacheMethod = signature.getMethod().getAnnotation(CacheableMethod.class);
+        CacheMethod cacheMethod = signature.getMethod().getAnnotation(CacheMethod.class);
         String[] parameterNames = signature.getParameterNames();
         Object[] args = pjp.getArgs();
         if (cacheMethod.value().isEmpty() && cacheMethod.key().isEmpty()) {
@@ -96,24 +90,24 @@ public class CacheAspect {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD})
-    public static @interface CacheableMethod {
-        /* 缓存名称 */
+    public @interface CacheMethod {
+        // 缓存名称
         String value() default "";
 
-        /* 缓存key值，支持spel表达式 */
+        // 缓存key值，支持spel表达式
         String key() default "";
 
-        /* 过期时间60S */
+        // 过期时间60S
         int expire() default 60000;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD})
-    public static @interface CacheEvictMethod {
-        /* 缓存名称 */
+    public @interface CacheEvictMethod {
+        // 缓存名称
         String value() default "";
 
-        /* 缓存key值，支持spel表达式 */
+        // 缓存key值，支持spel表达式
         String key() default "";
     }
 }

@@ -22,46 +22,44 @@ import com.d.util.Result;
 @Component
 @Aspect
 public class ValidAspect {
-	@Pointcut(value = "execution(* com.d.web..*.*(..))")
-	public void access() {
-	}
+    @Pointcut(value = "execution(* com.d.web..*.*(..))")
+    public void access() {
+    }
 
-	@Around("access()")
-	public <T> Object around(ProceedingJoinPoint pjp) throws Throwable {
-		MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
-		Parameter[] parameters = methodSignature.getMethod().getParameters();
-		String[] parameterNames = methodSignature.getParameterNames();
-		if (Objects.nonNull(parameterNames)) {
-			StringBuilder s = new StringBuilder();
-			for (int i = 0; i < parameterNames.length; i++) {
-				Object value = pjp.getArgs()[i];
-				if (value != null && value instanceof BindingResult) {
-					BindingResult r = (BindingResult) value;
-					if (r.getErrorCount() > 0) {
-						for (ObjectError e : r.getAllErrors()) {
-							if (e instanceof FieldError) {
-								FieldError fe = (FieldError) e;
-								s.append(fe.getField()).append(fe.getDefaultMessage()).append(";");
-							} else {
-								s.append(e.getCode()).append(e.getDefaultMessage()).append(";");
-							}
-						}
-						return Result.fail(s.toString());
-					}
-				} else {
-					if (parameters[i].isAnnotationPresent(NotNull.class) && value == null) {
-						s.append(parameterNames[i]).append("不能为空；");
-					} else if ((parameters[i].isAnnotationPresent(NotEmpty.class)
-							|| parameters[i].isAnnotationPresent(NotBlank.class))
-							&& (value == null || String.valueOf(value).isEmpty())) {
-						s.append(parameterNames[i]).append("不能为空字符；");
-					}
-				}
-			}
-			if (s.length() > 0) {
-				throw new IllegalArgumentException(s.toString());
-			}
-		}
-		return pjp.proceed();
-	}
+    @Around("access()")
+    public Object around(ProceedingJoinPoint pjp) throws Throwable {
+        MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
+        Parameter[] parameters = methodSignature.getMethod().getParameters();
+        String[] parameterNames = methodSignature.getParameterNames();
+        if (Objects.nonNull(parameterNames)) {
+            StringBuilder s = new StringBuilder();
+            for (int i = 0; i < parameterNames.length; i++) {
+                Object value = pjp.getArgs()[i];
+                if (value != null && value instanceof BindingResult) {
+                    BindingResult r = (BindingResult) value;
+                    if (r.getErrorCount() > 0) {
+                        for (ObjectError e : r.getAllErrors()) {
+                            if (e instanceof FieldError) {
+                                FieldError fe = (FieldError) e;
+                                s.append(fe.getField()).append(fe.getDefaultMessage()).append(";");
+                            } else {
+                                s.append(e.getCode()).append(e.getDefaultMessage()).append(";");
+                            }
+                        }
+                        return Result.fail(s.toString());
+                    }
+                } else {
+                    if (parameters[i].isAnnotationPresent(NotNull.class) && value == null) {
+                        s.append(parameterNames[i]).append("不能为空；");
+                    } else if ((parameters[i].isAnnotationPresent(NotEmpty.class) || parameters[i].isAnnotationPresent(NotBlank.class)) && (value == null || String.valueOf(value).isEmpty())) {
+                        s.append(parameterNames[i]).append("不能为空字符；");
+                    }
+                }
+            }
+            if (s.length() > 0) {
+                throw new IllegalArgumentException(s.toString());
+            }
+        }
+        return pjp.proceed();
+    }
 }
