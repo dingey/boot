@@ -1,14 +1,12 @@
 package com.d.base;
 
 import com.github.pagehelper.PageInfo;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public interface AbstractService<T extends BaseEntity<T>, S extends AbstractService> {
-    //@Cacheable(value = "cache", key = "#root.targetClass.name+#entity.id")
+
     T get(Integer id);
 
     List<T> listAll();
@@ -19,10 +17,8 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
 
     int countAll();
 
-    //@CacheEvict(value = "cache", key = "#root.targetClass.name+#entity.id")
     int save(T entity);
 
-    //@CacheEvict(value = "cache", key = "#root.targetClass.name+#id")
     int delete(Integer id);
 
     S proxy();
