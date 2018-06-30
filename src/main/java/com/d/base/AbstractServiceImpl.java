@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.lang.reflect.Field;
@@ -22,7 +23,6 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
     private Class<T> entityClass;
     private Field entityId;
 
-    @Cacheable(value = "cache", key = "#root.targetClass.name+#id")
     @Override
     public T get(Integer id) {
         logger.info("查询数据库【{}】", id);
@@ -31,6 +31,12 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
             t.setId(id);
         }
         return this.get(t);
+    }
+
+    @Cacheable(value = "cache", key = "#root.targetClass.name+#id")
+    @Override
+    public T getCache(Integer id) {
+        return get(id);
     }
 
     public T get(T t) {
@@ -59,7 +65,6 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
         return mapper.countAll(getEntityClass());
     }
 
-    @CacheEvict(value = "cache", key = "#root.targetClass.name+#entity.id")
     @Override
     public int save(T entity) {
         if (entity.isNewRecord()) {
@@ -69,7 +74,12 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
         }
     }
 
-    @CacheEvict(value = "cache", key = "#root.targetClass.name+#id")
+    @CachePut(value = "cache", key = "#root.targetClass.name+#entity.id", condition = "#entity.id>0")
+    @Override
+    public int saveCache(T entity) {
+        return save(entity);
+    }
+
     @Override
     public int delete(Integer id) {
         T t = newEntity();
@@ -77,6 +87,12 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
             t.setId(id);
         }
         return mapper.delete(t);
+    }
+
+    @CacheEvict(value = "cache", key = "#root.targetClass.name+#id")
+    @Override
+    public int deleteCache(Integer id) {
+        return delete(id);
     }
 
     @Override

@@ -18,18 +18,18 @@ public class LogController extends BaseController {
     @GetMapping(path = "/log/{id}")
     @ApiOperation(value = "查询", notes = "查询")
     public Log get(@PathVariable("id") @ApiParam(defaultValue = "1") Integer id) {
-        return logService.get(id);
+        return logService.getCache(id);
     }
 
     @DeleteMapping(path = "/log/{id}")
     @ApiOperation(value = "删除", notes = "删除日志")
     public Integer del(@PathVariable("id") @ApiParam(defaultValue = "1") Integer id) {
-        return logService.delete(id);
+        return logService.deleteCache(id);
     }
 
     @PostMapping(path = "/log")
     @ApiOperation(value = "保存", notes = "保存日志")
     public Integer save(Log log) {
-        return logService.save(log);
+        return logService.saveCache(log);
     }
 }

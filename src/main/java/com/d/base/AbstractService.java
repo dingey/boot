@@ -9,6 +9,8 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
 
     T get(Integer id);
 
+    T getCache(Integer id);
+
     List<T> listAll();
 
     PageInfo<T> pageAll(int pageNum, int pageSize);
@@ -19,7 +21,11 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
 
     int save(T entity);
 
+    int saveCache(T entity);
+
     int delete(Integer id);
+
+    int deleteCache(Integer id);
 
     S proxy();
 }
