@@ -14,13 +14,13 @@ public class Generator {
 
 	@Test
 	public void test() {
-		// gen();
+		 //gen();
 	}
 
 	void gen() {
 		MvcGenerater g = new MvcGenerater(url, username, password);
 		g.setEntityBaseClass(BaseEntity.class);
-		g.setTables("pay_info");
+		g.setTables("log");
 		g.setPersistence(PersistenceEnum.MYBATIS);
 		g.setBaseColumnList(true);
 		g.setGenerateCrud(false);
