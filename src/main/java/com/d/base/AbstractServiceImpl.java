@@ -111,8 +111,7 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
 
     private Class<T> getEntityClass() {
         if (this.entityClass == null) {
-            this.entityClass = (Class<T>) ((ParameterizedType) this.getClass()
-                    .getGenericSuperclass()).getActualTypeArguments()[1];
+            this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         }
         return entityClass;
     }
