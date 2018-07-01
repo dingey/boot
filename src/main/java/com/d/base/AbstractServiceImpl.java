@@ -25,7 +25,6 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
 
     @Override
     public T get(Integer id) {
-        logger.info("查询数据库【{}】", id);
         T t = newEntity();
         if (t != null) {
             t.setId(id);
@@ -36,6 +35,7 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
     @Cacheable(value = "cache", key = "#root.targetClass.name+#id")
     @Override
     public T getCache(Integer id) {
+        logger.info("查询数据库【{}】", id);
         return get(id);
     }
 
