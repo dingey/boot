@@ -44,6 +44,23 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
     }
 
     @Override
+    public List<T> list(T entity) {
+        return mapper.list(entity);
+    }
+
+    @Override
+    public Integer count(T entity) {
+        return mapper.count(entity);
+    }
+
+    @Override
+    public PageInfo<T> page(T entity, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<T> datas = list(entity);
+        return new PageInfo<>(datas);
+    }
+
+    @Override
     public List<T> listAll() {
         return mapper.listAll(getEntityClass());
     }

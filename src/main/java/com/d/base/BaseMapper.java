@@ -38,6 +38,12 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = SqlProvider.class, method = "getById")
 	T getById(Class<T> t, Serializable id);
 
+	@SelectProvider(type = SqlProvider.class, method = "list")
+	List<T> list(T t);
+
+	@SelectProvider(type = SqlProvider.class, method = "count")
+	Integer count(T t);
+
 	@SelectProvider(type = SqlProvider.class, method = "listAll")
 	List<T> listAll(Class<T> t);
 

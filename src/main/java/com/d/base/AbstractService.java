@@ -24,6 +24,32 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
     T getCache(Integer id);
 
     /**
+     * 查询
+     *
+     * @param entity 查询对象
+     * @return 和entity值不为空相等的所有记录
+     */
+    List<T> list(T entity);
+
+    /**
+     * 汇总
+     *
+     * @param entity 查询对象
+     * @return 和entity值不为空相等的记录总数
+     */
+    Integer count(T entity);
+
+    /**
+     * 分页查询
+     *
+     * @param entity   查询对象
+     * @param pageNum  页码
+     * @param pageSize 大小
+     * @return 分页数据
+     */
+    PageInfo<T> page(T entity, int pageNum, int pageSize);
+
+    /**
      * 查询所有
      *
      * @return 所有记录
