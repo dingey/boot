@@ -111,7 +111,11 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
         return delete(id);
     }
 
-    @Override
+    /**
+     * 获取自身的代理对象,内部调用时解决缓存、事物失效问题。
+     *
+     * @return 代理对象
+     */
     public S proxy() {
         return (S) AopContext.currentProxy();
     }
