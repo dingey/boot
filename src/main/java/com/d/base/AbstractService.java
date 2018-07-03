@@ -111,11 +111,4 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
      * @return 影响的行数
      */
     int deleteCache(Integer id);
-
-    /**
-     * 获取自身的代理对象,内部调用时解决缓存、事物失效问题。
-     *
-     * @return 代理对象
-     */
-    S proxy();
 }
