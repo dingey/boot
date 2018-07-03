@@ -1,4 +1,4 @@
-package com.d.base;
+gipackage com.d.base;
 
 import com.di.kit.SqlProvider;
 import com.github.pagehelper.PageHelper;
@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.lang.reflect.Field;
@@ -91,7 +90,7 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
         }
     }
 
-    @CachePut(value = "cache", key = "#root.targetClass.name+#entity.id", condition = "#entity.id>0")
+    @CacheEvict(value = "cache", key = "#root.targetClass.name+#entity.id", condition = "#entity.id>0")
     @Override
     public int saveCache(T entity) {
         return save(entity);
