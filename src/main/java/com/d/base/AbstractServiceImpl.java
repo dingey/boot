@@ -1,4 +1,4 @@
-gipackage com.d.base;
+package com.d.base;
 
 import com.di.kit.SqlProvider;
 import com.github.pagehelper.PageHelper;
