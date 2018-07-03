@@ -53,5 +53,5 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = SqlProvider.class, method = "listByIds")
 	List<T> listByIds(Class<T> t, Iterable<Integer> ids);
 
-	T getById(Serializable id);
+	//T getById(Serializable id);
 }
