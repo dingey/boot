@@ -59,7 +59,7 @@ public class UserToken {
     public static UserToken fromTokenStringDES(String tokenStr) {
         UserToken ut = new UserToken();
         try {
-            String[] ss = Objects.requireNonNull(DesUtil.decrypt(tokenStr)).split(";");
+            String[] ss = Objects.requireNonNull(DesUtil.decrypt(tokenStr)).split(":");
             ut.setId(Long.valueOf(ss[0]));
             ut.setExpired(Long.valueOf(ss[1]));
         } catch (Exception e) {
