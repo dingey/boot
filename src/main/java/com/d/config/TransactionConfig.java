@@ -24,7 +24,7 @@ public class TransactionConfig {
     @Bean(name = "txAdvice")
     public TransactionInterceptor getAdvisor() {
         Properties properties = new Properties();
-        properties.setProperty("get*", "PROPAGATION_REQUIRED,-Exception");
+        properties.setProperty("get*", "PROPAGATION_REQUIRED,-Exception,readOnly");
         properties.setProperty("add*", "PROPAGATION_REQUIRED,-Exception");
         properties.setProperty("save*", "PROPAGATION_REQUIRED,-Exception");
         properties.setProperty("update*", "PROPAGATION_REQUIRED,-Exception");
