@@ -11,7 +11,7 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
      * 根据主键查询
      *
      * @param id 主键
-     * @return 实体
+     * @return 一条记录
      */
     T get(Integer id);
 
@@ -19,31 +19,31 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
      * 根据主键查询并缓存结果
      *
      * @param id 主键
-     * @return 实体
+     * @return 一条记录
      */
     T getCache(Integer id);
 
     /**
-     * 查询一条记录
+     * 查询一条记录,和entity字段值不为空相等的一条记录，大于1条报错
      *
      * @param entity 查询对象
-     * @return 和entity字段值不为空相等的一条记录，大于1条报错
+     * @return 一条记录
      */
     T get(T entity);
 
     /**
-     * 查询多条记录
+     * 查询和entity字段值不为空相等的多条记录
      *
      * @param entity 查询对象
-     * @return 和entity值不为空相等的所有记录
+     * @return 多条记录
      */
     List<T> list(T entity);
 
     /**
-     * 汇总
+     * 汇总和entity字段值不为空相等的记录数
      *
      * @param entity 查询对象
-     * @return 和entity值不为空相等的记录总数
+     * @return 记录数
      */
     Integer count(T entity);
 
@@ -77,9 +77,17 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
      * 根据主键批量查询
      *
      * @param ids 主键
-     * @return 记录
+     * @return 多条记录
      */
     List<T> listByIds(Iterable<Integer> ids);
+
+    /**
+     * 根据主键从缓存查询
+     *
+     * @param ids 主键
+     * @return 多条记录
+     */
+    List<T> listByIdsCache(Iterable<Integer> ids);
 
     /**
      * 查询总记录数

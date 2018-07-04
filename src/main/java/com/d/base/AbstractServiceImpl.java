@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "unused"})
@@ -85,6 +86,18 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
     @Override
     public List<T> listByIds(Iterable<Integer> ids) {
         return mapper.listByIds(getEntityClass(), ids);
+    }
+
+    @Override
+    public List<T> listByIdsCache(Iterable<Integer> ids) {
+        List<T> list = new ArrayList<>();
+        for (Integer id : ids) {
+            T t = (T) proxy().getCache(id);
+            if (t != null) {
+                list.add(t);
+            }
+        }
+        return list;
     }
 
     @Override
