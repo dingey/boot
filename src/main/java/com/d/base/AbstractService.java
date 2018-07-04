@@ -24,7 +24,15 @@ public interface AbstractService<T extends BaseEntity<T>, S extends AbstractServ
     T getCache(Integer id);
 
     /**
-     * 查询
+     * 查询一条记录
+     *
+     * @param entity 查询对象
+     * @return 和entity字段值不为空相等的一条记录，大于1条报错
+     */
+    T get(T entity);
+
+    /**
+     * 查询多条记录
      *
      * @param entity 查询对象
      * @return 和entity值不为空相等的所有记录

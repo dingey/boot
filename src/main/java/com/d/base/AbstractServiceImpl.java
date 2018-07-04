@@ -28,18 +28,29 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
         if (t != null) {
             t.setId(id);
         }
-        return this.get(t);
+        return mapper.get(t);
     }
 
     @Cacheable(value = "cache", key = "#root.targetClass.name+#id")
     @Override
     public T getCache(Integer id) {
         logger.info("查询数据库【{}】", id);
-        return get(id);
+        T t = newEntity();
+        if (t != null) {
+            t.setId(id);
+        }
+        return mapper.get(t);
     }
 
     public T get(T t) {
-        return mapper.get(t);
+        List<T> list = list(t);
+        if (list == null || list.isEmpty()) {
+            return null;
+        } else if (list.size() == 1) {
+            return list.get(0);
+        } else {
+            throw new RuntimeException("期望1条，但是返回了" + list.size() + "条记录。");
+        }
     }
 
     @Override
@@ -93,7 +104,11 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
     @CacheEvict(value = "cache", key = "#root.targetClass.name+#entity.id", condition = "#entity.id>0")
     @Override
     public int saveCache(T entity) {
-        return save(entity);
+        if (entity.isNewRecord()) {
+            return mapper.insertSelective(entity);
+        } else {
+            return mapper.updateSelective(entity);
+        }
     }
 
     @Override
@@ -108,11 +123,15 @@ public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends Bas
     @CacheEvict(value = "cache", key = "#root.targetClass.name+#id")
     @Override
     public int deleteCache(Integer id) {
-        return delete(id);
+        T t = newEntity();
+        if (t != null) {
+            t.setId(id);
+        }
+        return mapper.delete(t);
     }
 
     /**
-     * 获取自身的代理对象,内部调用时解决缓存、事物失效问题。
+     * 获取自身的代理对象,内部调用时解决缓存失效问题。
      *
      * @return 代理对象
      */
