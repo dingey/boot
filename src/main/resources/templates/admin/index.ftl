@@ -1,4 +1,6 @@
-<#import "base/admin_layout.ftl" as layout /> <#import "base/spring.ftl" as spring/> <@layout.standard title="首页" bodyclass="hold-transition skin-blue sidebar-mini" cssMap={"":"https://dingey.github.io/demo/adminlte/dist/css/AdminLTE.min.css,https://dingey.github.io/demo/adminlte/dist/css/skins/all-skins.min.css"} jsMap={"":"https://dingey.github.io/demo/adminlte/dist/js/app.min.js,https://dingey.github.io/demo/adminlte/dist/js/demo.js,https://dingey.github.io/demo/adminlte/dist/js/index.js"}>
+<#import "base/admin_layout.ftl" as layout /> 
+<#import "base/spring.ftl" as spring/> 
+<@layout.standard title="首页" bodyclass="hold-transition skin-blue sidebar-mini" cssMap={"":"https://dingey.github.io/demo/adminlte/dist/css/AdminLTE.min.css,https://dingey.github.io/demo/adminlte/dist/css/skins/all-skins.min.css"} jsMap={"":"https://dingey.github.io/demo/adminlte/dist/js/app.min.js,https://dingey.github.io/demo/adminlte/dist/js/demo.js,https://dingey.github.io/demo/adminlte/dist/js/index.js"}>
 <style>
 iframe {
 	border: 0px;
