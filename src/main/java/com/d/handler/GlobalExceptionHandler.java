@@ -53,42 +53,42 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ExceptionHandler(value = MissingServletRequestParameterException.class)
 	public Object handle(MissingServletRequestParameterException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = HttpMessageNotReadableException.class)
 	public Object handle(HttpMessageNotReadableException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
 	public Object handle(HttpRequestMethodNotSupportedException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		return Result.fail(e.getMethod() + "方法不支持");
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IllegalStateException.class)
 	public Object handle(IllegalStateException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = IllegalArgumentException.class)
 	public Object handle(IllegalArgumentException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
 	public Object handle(MethodArgumentTypeMismatchException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		Throwable cause = e.getRootCause();
 		if (cause instanceof NumberFormatException) {
 			return Result.fail(e.getName() + "值'" + e.getValue() + "'必须是数字类型.");
@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ExceptionHandler(value = NumberFormatException.class)
 	public Object handle(NumberFormatException e) {
-		logger.debug(e.getMessage(), e);
+		logger.error(e.getMessage(), e);
 		return Result.fail(e.getMessage());
 	}
 
