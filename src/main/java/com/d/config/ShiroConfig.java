@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.d.entity.Permission;
@@ -25,6 +26,7 @@ import com.d.service.PermissionService;
 /**
  * @author d
  */
+@Profile({"test","prod"})
 @Configuration
 public class ShiroConfig {
     private Logger logger = LoggerFactory.getLogger(ShiroConfig.class);

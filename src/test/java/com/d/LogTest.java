@@ -1,19 +1,31 @@
 package com.d;
 
 import com.d.entity.Log;
+import com.d.mapper.LogMapper;
 import com.d.service.LogService;
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class LogTest extends ApplicationTests {
     @Autowired
     private LogService logService;
+    @Autowired
+    private LogMapper logMapper;
 
     @Override
     public void test() {
         //execute();
+        sql();
+    }
+
+    void sql() {
+        SQL s = new SQL().SELECT("*").FROM("log");
+        List<LinkedHashMap> linkedHashMaps = logMapper.listBySQL(s);
+        System.out.println(linkedHashMaps.size());
     }
 
     void execute() {

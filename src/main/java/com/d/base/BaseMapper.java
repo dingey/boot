@@ -1,14 +1,13 @@
 package com.d.base;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 
 import com.di.kit.SqlProvider;
+import org.apache.ibatis.jdbc.SQL;
 
 /**
  * @author di
@@ -53,5 +52,7 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = SqlProvider.class, method = "listByIds")
 	List<T> listByIds(Class<T> t, Iterable<Integer> ids);
 
-	//T getById(Serializable id);
+	@Deprecated
+	@Select("${sql.toString()}")
+	List<LinkedHashMap> listBySQL(@Param("sql") SQL sql);
 }
