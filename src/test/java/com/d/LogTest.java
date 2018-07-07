@@ -19,13 +19,17 @@ public class LogTest extends ApplicationTests {
     @Override
     public void test() {
         //execute();
-        sql();
+        //sql();
     }
 
     void sql() {
         SQL s = new SQL().SELECT("*").FROM("log");
         List<LinkedHashMap> linkedHashMaps = logMapper.listBySQL(s);
         System.out.println(linkedHashMaps.size());
+        s = new SQL().SELECT("*").FROM("log").WHERE("id=1");
+        LinkedHashMap bySQL = logMapper.getBySQL(s);
+        s = new SQL().SELECT("content","line_num").FROM("log").WHERE("id=2");
+        Integer count = logMapper.countBySQL(s);
     }
 
     void execute() {
