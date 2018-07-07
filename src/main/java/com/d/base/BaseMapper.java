@@ -52,15 +52,15 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = SqlProvider.class, method = "listByIds")
 	List<T> listByIds(Class<T> t, Iterable<Integer> ids);
 
-    @Deprecated
-    @Select("${sql.toString()}")
-    LinkedHashMap getBySQL(@Param("sql") SQL sql);
+    	@Deprecated
+   	 @Select("${sql.toString()}")
+    	LinkedHashMap getBySQL(@Param("sql") SQL sql);
 
 	@Deprecated
 	@Select("${sql.toString()}")
 	List<LinkedHashMap> listBySQL(@Param("sql") SQL sql);
 
-    @Deprecated
-    @Select("${sql.toString()}")
-    Integer countBySQL(@Param("sql") SQL sql);
+   	@Deprecated
+    	@Select("${sql.toString()}")
+    	Integer countBySQL(@Param("sql") SQL sql);
 }
