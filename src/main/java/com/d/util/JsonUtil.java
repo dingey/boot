@@ -73,9 +73,8 @@ public class JsonUtil {
         return this;
     }
 
-    public JsonUtil camelUnderline() {
-        objectMapper
-                .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    public JsonUtil snakeCase() {
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         return this;
     }
 
