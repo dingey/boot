@@ -2,6 +2,7 @@ package com.d.web;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -56,7 +57,7 @@ public class PetController {
 
     @ApiOperation(value = "保存", notes = "宠物保存", response = Pet.class)
     @PostMapping(path = "/pet/save")
-    public Object save(@RequestBody Pet pet) {
+    public Object save(Pet pet) {
         return Result.success(pet);
     }
 
@@ -66,7 +67,7 @@ public class PetController {
         Integer id;
         @ApiModelProperty("宠物名称")
         String name;
-        Area area;
+        List<Area> areas;
 
         public Pet() {
         }
@@ -92,12 +93,12 @@ public class PetController {
             this.name = name;
         }
 
-        public Area getArea() {
-            return area;
+        public List<Area> getAreas() {
+            return areas;
         }
 
-        public void setArea(Area area) {
-            this.area = area;
+        public void setAreas(List<Area> areas) {
+            this.areas = areas;
         }
 
         @ApiModel("地区")

@@ -26,7 +26,7 @@ import com.d.service.PermissionService;
 /**
  * @author d
  */
-@Profile({"test","prod"})
+@Profile({"dev","prod"})
 @Configuration
 public class ShiroConfig {
     private Logger logger = LoggerFactory.getLogger(ShiroConfig.class);

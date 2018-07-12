@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="Zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>自定义校验</title>
+    <link href="https://dingey.github.io/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="https://dingey.github.io/demo/summernote/summernote.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="https://dingey.github.io/js/jquery.min.js"></script>
+    <script src="https://dingey.github.io/js/bootstrap.min.js"></script>
+    <script src="https://dingey.github.io/demo/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://dingey.github.io/js/jquery-ui.js"></script>
+    <script src="https://dingey.github.io/demo/layer/layer.js"></script>
+    <!--<script src="https://dingey.github.io/demo/common/common.js"></script>-->
+    <script src="common.js"></script>
+    <style>
+        form.form-inline > .input-group, form.form-inline > label, form.form-inline > select,
+        form.form-inline > input, form.form-inline > a, form.form-inline > button {
+            margin-bottom: 10px;
+        }
+
+        span.help-block {
+            margin-bottom: 0px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">昵称</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" minlength="2" name="name">
+            </div>
+            <label class="col-sm-2 control-label">余额</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" float required name="" value="">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">爱好</label>
+            <div class="col-sm-2">
+                <select class="form-control" required>
+                    <option></option>
+                    <option value="0">A</option>
+                    <option value="1">B</option>
+                </select>
+            </div>
+            <label class="col-sm-offset-2 col-sm-2 control-label">性别</label>
+            <div class="col-sm-4">
+                <label class="radio-inline">
+                    <input type="radio" name="sex" required value="1">男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="sex" required value="2">女
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">城市</label>
+            <div class="col-sm-10">
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="cityId" required value="100000">北京
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="cityId" required value="310000">杭州
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">备注：</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" rows="3" required></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自定义属性</label>
+            <div class="col-sm-6">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">名称</span>
+                    <input type="text" class="form-control" name="areas[0].name">
+                    <span class="input-group-addon" style="border-left-width: 0;border-right-width: 0;">值</span>
+                    <input type="text" class="form-control" name="areas[0].id">
+                    <a class="btn input-group-addon"
+                       onclick="if($('.input-group').length>1){remove($(this).parent());}"><i
+                            class="fa fa-fw fa-close"></i></a>
+                </div>
+            </div>
+            <a class="btn btn-default" onclick="$('.input-group:last').after(renameClone($('.input-group:last')));">新增</a>
+        </div>
+        <br>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <a class="btn btn-primary" onclick="save()">提交</a>
+                <a class="btn btn-default">返回</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    // 通用JS校验
+    $(function () {
+        $("input,select").not(':disabled').each(function () {
+            validHelp(this);
+        }).change(function () {
+            validHelp(this);
+        });
+        $("textarea").not(':disabled').each(function () {
+            validHelp(this, true);
+        }).change(function () {
+            validHelp(this, true);
+        });
+    });
+
+    function save() {
+        $.post("/pet/save", $("form").serialize(), function (data) {
+            if (data.code == 0) {
+                layer.msg("success");
+            }else {
+                layer.msg(data.message);
+            }
+        },"json");
+    }
+</script>
+</body>
+</html>
