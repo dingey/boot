@@ -92,7 +92,7 @@ public class HttpUtil {
                 logger.error(e.getMessage(), e);
             }
         }
-        return null;
+        return new ByteArrayEntity(new byte[0]);
     }
 
     public static HttpEntity request(String url, String str) {
@@ -119,7 +119,7 @@ public class HttpUtil {
                 logger.error(e.getMessage(), e);
             }
         }
-        return null;
+        return new ByteArrayEntity(new byte[0]);
     }
 
     public static void main(String[] args)
