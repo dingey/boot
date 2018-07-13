@@ -15,7 +15,7 @@ function renameOther(dom) {
             var prefix = n.substr(0, n.indexOf("[") + 1);
             var surfix = n.substr(n.indexOf("]"));
             len = parseInt(n.substr(n.indexOf("[") + 1, n.indexOf("]")));
-            $("[name^='" + prefix + "']").each(function () {
+            $("[name^='" + prefix + "'][name$='"+surfix+"']").each(function () {
                 var n0 = $(this).attr("name");
                 var surfix0 = n0.substr(n0.indexOf("]"));
                 var len0 = parseInt(n0.substr(n0.indexOf("[") + 1, n0.indexOf("]")));
