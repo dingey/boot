@@ -89,12 +89,27 @@
                     <input type="text" class="form-control" name="areas[0].name">
                     <span class="input-group-addon" style="border-left-width: 0;border-right-width: 0;">值</span>
                     <input type="text" class="form-control" name="areas[0].id">
-                    <a class="btn input-group-addon"
-                       onclick="if($('.input-group').length>1){remove($(this).parent());}"><i
-                            class="fa fa-fw fa-close"></i></a>
+                    <a class="btn input-group-addon" onclick="if($('.input-group').length>1){remove($(this).parent());}"><i class="fa fa-fw fa-close"></i></a>
                 </div>
             </div>
             <a class="btn btn-default" onclick="$('.input-group:last').after(renameClone($('.input-group:last')));">新增</a>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">值名称</label>
+            <div class="col-sm-6">
+                <div class="form-group nameid">
+                    <label class="col-sm-2 control-label">name</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="area[0].name">
+                    </div>
+                    <label class="col-sm-2 control-label">id</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="area[0].id">
+                    </div>
+                    <a class="btn btn-default" onclick="if($('.nameid').length>1){remove($(this).parent());}"><i class="fa fa-fw fa-close"></i></a>
+                </div>
+            </div>
+            <a class="btn btn-default" onclick="$('.nameid:last').after(renameClone($('.nameid:last')));">新增</a>
         </div>
         <br>
         <div class="form-group">
