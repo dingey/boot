@@ -79,11 +79,7 @@ public class HttpUtil {
             HttpGet httpGet = new HttpGet(url);
             response = httpclient.execute(httpGet);
             HttpEntity entity = response.getEntity();
-            if (entity.isStreaming()) {
-                return new ByteArrayEntity(EntityUtils.toByteArray(entity));
-            } else {
-                return new StringEntity(EntityUtils.toString(entity, "utf-8"));
-            }
+            return new ByteArrayEntity(EntityUtils.toByteArray(entity), ContentType.get(entity));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -111,11 +107,7 @@ public class HttpUtil {
             httpPost.setEntity(httpEntity);
             response = httpclient.execute(httpPost);
             HttpEntity entity = response.getEntity();
-            if (entity.isStreaming()) {
-                return new ByteArrayEntity(EntityUtils.toByteArray(entity));
-            } else {
-                return new StringEntity(EntityUtils.toString(entity, "utf-8"));
-            }
+            return new ByteArrayEntity(EntityUtils.toByteArray(entity), ContentType.get(entity));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         } finally {
