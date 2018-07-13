@@ -13,6 +13,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -122,8 +123,7 @@ public class HttpUtil {
         return new ByteArrayEntity(new byte[0]);
     }
 
-    public static void main(String[] args)
-            throws UnsupportedOperationException, IOException {
+    public static void main(String[] args) throws UnsupportedOperationException, IOException {
         HttpEntity request = request("http://localhost:8090/hi", "name=alice");
         System.out.println(request.isStreaming());
         System.out.println(EntityUtils.toString(request));
