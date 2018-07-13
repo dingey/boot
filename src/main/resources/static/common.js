@@ -292,10 +292,10 @@ function validHelp(dom, b) {
     if (b == undefined) {
         b = false;
     }
-    if (!$(dom).parent().hasClass("has-feedback")) {
-        $(dom).parent().addClass("has-feedback");
-    }
     if ($(dom).attr("minlength") != undefined && $(dom).attr("minlength") != "") {
+        if (!$(dom).parent().hasClass("has-feedback")) {
+            $(dom).parent().addClass("has-feedback");
+        }
         var len = parseInt($(dom).attr("minlength"));
         if ($(dom).val().length < len && $(dom).parent().find("span.help-block").length < 1) {
             var h = "<span class='help-block'>不能小于" + len + "个字符</span>";
@@ -312,6 +312,9 @@ function validHelp(dom, b) {
             }
         }
     } else if ($(dom).attr("required") != undefined) {
+        if (!$(dom).parent().hasClass("has-feedback")) {
+            $(dom).parent().addClass("has-feedback");
+        }
         if ($(dom).attr("type") == "radio" && $(dom).attr("name") != "") {
             if ($("input[type=radio][name='" + $(dom).attr("name") + "']:checked").val() == undefined) {
                 if ($(dom).parent().parent().find("span.help-block").length < 1) {
