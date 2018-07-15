@@ -49,6 +49,7 @@ function renameClone(id) {
 function rename(o) {
     var i = $(o).attr("id");
     var n = $(o).attr("name");
+    $(o).prop("value","");
     var i_ = i;
     if (i != undefined && i != "") {
         var len = 0;

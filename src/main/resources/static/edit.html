@@ -30,6 +30,10 @@
         .form-group {
             margin-bottom: 10px;
         }
+        .form-horizontal .form-group {
+            margin-right:0px;
+            margin-left: 0px;
+        }
     </style>
 </head>
 <body>
@@ -83,7 +87,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">自定义属性</label>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="input-group" style="margin-bottom: 10px;">
                     <span class="input-group-addon">名称</span>
                     <input type="text" class="form-control" name="areas[0].name">
@@ -96,14 +100,15 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">值名称</label>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="form-group nameid">
-                    <label class="col-sm-2 control-label">name</label>
-                    <div class="col-sm-3">
+                    <label class="col-sm-1 control-label">name</label>
+                    <div class="col-sm-4">
                         <input type="text" class="form-control" name="area[0].name">
                     </div>
-                    <label class="col-sm-2 control-label">id</label>
-                    <div class="col-sm-3">
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-1 control-label">id</label>
+                    <div class="col-sm-4">
                         <input type="text" class="form-control" name="area[0].id">
                     </div>
                     <a class="btn btn-default" onclick="if($('.nameid').length>1){remove($(this).parent());}"><i class="fa fa-fw fa-close"></i></a>
