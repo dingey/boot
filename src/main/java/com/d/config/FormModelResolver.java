@@ -1,153 +1,117 @@
 package com.d.config;
 
-import com.di.kit.ClassUtil;
 import com.di.kit.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValues;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.annotation.ModelFactory;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.UnsupportedEncodingException;
+import java.lang.annotation.*;
+import java.net.URLDecoder;
 import java.util.*;
 
-import static com.di.kit.ClassUtil.getFieldArrayType;
-
+@SuppressWarnings("all")
 public class FormModelResolver implements HandlerMethodArgumentResolver {
-    private static final Logger logger = LoggerFactory.getLogger(FormModel.class);
+    private static final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+    protected final Log logger = LogFactory.getLog(getClass());
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(FormModel.class);
     }
 
-    @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        Constructor<?> constructor = parameter.getConstructor();
-        return instance(null, parameter.getParameterType(), request);
+        String name = ModelFactory.getNameForParameter(parameter);
+        ModelAttribute ann = (ModelAttribute) parameter.getParameterAnnotation(ModelAttribute.class);
+        if (ann != null) {
+            mavContainer.setBinding(name, ann.binding());
+        }
+
+        Object attribute = mavContainer.containsAttribute(name) ? mavContainer.getModel().get(name) : this.createAttribute(name, parameter, binderFactory, webRequest);
+        WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);
+        if (binder.getTarget() != null) {
+            if (!mavContainer.isBindingDisabled(name)) {
+                this.bindRequestParameters(binder, webRequest);
+            }
+
+            this.validateIfApplicable(binder, parameter);
+            if (binder.getBindingResult().hasErrors() && this.isBindExceptionRequired(binder, parameter)) {
+                throw new BindException(binder.getBindingResult());
+            }
+        }
+
+        Map<String, Object> bindingResultModel = binder.getBindingResult().getModel();
+        mavContainer.removeAttributes(bindingResultModel);
+        mavContainer.addAllAttributes(bindingResultModel);
+        return binder.convertIfNecessary(binder.getTarget(), parameter.getParameterType(), parameter);
     }
 
-    @Target(ElementType.PARAMETER)
+    private Object createAttribute(String attributeName, MethodParameter parameter, WebDataBinderFactory binderFactory, NativeWebRequest webRequest) throws Exception {
+        return BeanUtils.instantiateClass(parameter.getParameterType());
+    }
+
+    private void bindRequestParameters(WebDataBinder binder, NativeWebRequest request) throws UnsupportedEncodingException {
+        // 将key-value封装为map，传给bind方法进行参数值绑定
+        Map<String, String> map = new HashMap<>();
+        Map<String, String[]> params = request.getParameterMap();
+
+        for (Map.Entry<String, String[]> entry : params.entrySet()) {
+            String name = entry.getKey();
+            // 执行urldecode
+            String value = URLDecoder.decode(entry.getValue()[0], "UTF-8");
+            map.put(StringUtil.camelCase(name), value);
+        }
+        PropertyValues propertyValues = new MutablePropertyValues(map);
+        // 将K-V绑定到binder.target属性上
+        binder.bind(propertyValues);
+    }
+
+    private void validateIfApplicable(WebDataBinder binder, MethodParameter parameter) {
+        Annotation[] annotations = parameter.getParameterAnnotations();
+        Annotation[] var4 = annotations;
+        int var5 = annotations.length;
+
+        for (int var6 = 0; var6 < var5; ++var6) {
+            Annotation ann = var4[var6];
+            Validated validatedAnn = (Validated) AnnotationUtils.getAnnotation(ann, Validated.class);
+            if (validatedAnn != null || ann.annotationType().getSimpleName().startsWith("Valid")) {
+                Object hints = validatedAnn != null ? validatedAnn.value() : AnnotationUtils.getValue(ann);
+                Object[] validationHints = hints instanceof Object[] ? (Object[]) ((Object[]) hints) : new Object[]{hints};
+                binder.validate(validationHints);
+                break;
+            }
+        }
+
+    }
+
+    private boolean isBindExceptionRequired(WebDataBinder binder, MethodParameter parameter) {
+        int i = parameter.getParameterIndex();
+        Class<?>[] paramTypes = parameter.getMethod().getParameterTypes();
+        boolean hasBindingResult = paramTypes.length > i + 1 && Errors.class.isAssignableFrom(paramTypes[i + 1]);
+        return !hasBindingResult;
+    }
+
+    /**
+     * 下划线转驼峰
+     */
+    @Target({ElementType.PARAMETER})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface FormModel {
-    }
-
-    private <T> Object instance(String prefix, Class<T> t, HttpServletRequest req) {
-        try {
-            if (t.getConstructor().getParameterCount() > 0) {
-                throw new RuntimeException("类" + t.getName() + "必须有无参构造方法。");
-            } else {
-                Object o = t.newInstance();
-                for (Field f : ClassUtil.getDeclaredFields(t)) {
-                    setFieldValue(prefix, 0, f, o, req.getParameterMap());
-                }
-                return o;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void setFieldValue(String prefix, int i, Field f, Object o, Map<String, String[]> reqMap) {
-        String name;
-        if (f.getType().isArray() || f.getType() == List.class || f.getType() == ArrayList.class) {
-            name = (prefix == null ? "" : (prefix + ".")) + StringUtil.snakeCase(f.getName()) + "[" + i + "]";
-        } else {
-            name = (prefix == null ? "" : (prefix + ".")) + StringUtil.snakeCase(f.getName());
-        }
-        String[] values = reqMap.get(name);
-        if (values == null || values.length == 0)
-            return;
-        try {
-            if (!f.isAccessible()) f.setAccessible(true);
-            if (f.getType() == boolean.class || f.getType() == java.lang.Boolean.class) {
-                f.set(o, Boolean.valueOf(values[i]));
-            } else if (f.getType() == byte.class || f.getType() == java.lang.Byte.class) {
-                f.set(o, Byte.valueOf(values[i]));
-            } else if (f.getType() == short.class || f.getType() == java.lang.Short.class) {
-                f.set(o, Short.valueOf(values[i]));
-            } else if (f.getType() == int.class || f.getType() == java.lang.Integer.class) {
-                f.set(o, Integer.valueOf(values[i]));
-            } else if (f.getType() == long.class || f.getType() == java.lang.Long.class) {
-                f.set(o, Long.valueOf(values[i]));
-            } else if (f.getType() == double.class || f.getType() == java.lang.Double.class) {
-                f.set(o, Double.valueOf(values[i]));
-            } else if (f.getType() == float.class || f.getType() == java.lang.Float.class) {
-                f.set(o, Float.valueOf(values[i]));
-            } else if (f.getType() == char.class || f.getType() == java.lang.Character.class) {
-                f.set(o, values[i].charAt(0));
-            } else if (f.getType() == BigDecimal.class) {
-                f.set(o, new BigDecimal(values[i]));
-            } else if (f.getType() == java.lang.String.class) {
-                f.set(o, values[i]);
-            } else if (f.getType() == java.sql.Date.class || f.getType() == java.sql.Time.class || f.getType() == java.sql.Timestamp.class) {
-            } else if (f.getType() == java.util.Date.class) {
-                try {
-                    f.set(o, new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(values[i]));
-                } catch (ParseException e) {
-                    f.set(o, new SimpleDateFormat("yyyy-MM-dd").parse(values[i]));
-                }
-            } else if (f.getType() == java.util.List.class || f.getType() == java.util.ArrayList.class) {
-                Type type = f.getGenericType();
-                ParameterizedType pt = (ParameterizedType) type;
-                Type type2 = pt.getActualTypeArguments()[0];
-                String typeName = type2.getTypeName();
-                List<Object> os_ = new ArrayList<>();
-                for (int j = 0; j < count((prefix == null ? "" : prefix) + StringUtil.snakeCase(f.getName()), reqMap.keySet()); j++) {
-                    Object o0 = Class.forName(typeName).newInstance();
-                    for (Field ff : ClassUtil.getDeclaredFields(o0.getClass())) {
-                        setFieldValue(prefix + "[" + j + "]", j, ff, o0, reqMap);
-                    }
-                    os_.add(o0);
-                }
-                f.set(o, os_);
-            } else if (f.getType().isArray()) {
-                Class<?> type = getFieldArrayType(f);
-                if (type == String.class) {
-                    f.set(o, values);
-                } else {
-                    Object[] tos = new Object[count((prefix == null ? "" : prefix) + StringUtil.snakeCase(f.getName()), reqMap.keySet())];
-                    for (int j = 0; j < tos.length; j++) {
-                        Object o0 = Class.forName(type.getName()).newInstance();
-                        for (Field f1 : ClassUtil.getDeclaredFields(o0.getClass())) {
-                            setFieldValue(prefix, j, f1, o0, reqMap);
-                        }
-                        tos[i] = o0;
-                    }
-                    f.set(o, tos);
-                }
-            } else if (f.getType() != null) {
-                Object fo = f.getType().newInstance();
-                for (Field f1 : ClassUtil.getDeclaredFields(fo.getClass())) {
-                    setFieldValue(prefix, 0, f1, fo, reqMap);
-                }
-                f.set(o, fo);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    int count(String k, Collection<String> ks) {
-        int i = 0;
-        for (String s : ks) {
-            if (s.startsWith(k + "["))
-                i++;
-        }
-        return i;
     }
 }
