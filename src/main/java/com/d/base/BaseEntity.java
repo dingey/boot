@@ -23,6 +23,8 @@ public class BaseEntity<T> implements Serializable {
     private Integer delFlag;
     @Transient
     private Boolean newRecord;
+    @Transient
+    private String orderBy;
 
     public Date getCreateTime() {
         return createTime;
@@ -57,4 +59,28 @@ public class BaseEntity<T> implements Serializable {
         this.newRecord = newRecord;
     }
 
+    @java.beans.Transient
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public T orderBy(String... fields) {
+        if (fields == null || fields.length == 0) {
+            throw new RuntimeException("orderBy parameter fields can't be empty.");
+        }
+        if (orderBy != null && !orderBy.isEmpty()) {
+            for (int i = 0; i < fields.length; i++) {
+                orderBy += "," + fields[i];
+            }
+        } else {
+            orderBy = "";
+            for (int i = 0; i < fields.length; i++) {
+                orderBy += fields[i];
+                if (i < fields.length - 1) {
+                    orderBy += ",";
+                }
+            }
+        }
+        return (T) this;
+    }
 }
