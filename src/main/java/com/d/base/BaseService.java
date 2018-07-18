@@ -103,8 +103,4 @@ public abstract class BaseService<D extends BaseMapper<T>, T extends BaseEntity<
         }
         return entityId;
     }
-
-    public S proxy() {
-        return (S) AopContext.currentProxy();
-    }
 }
