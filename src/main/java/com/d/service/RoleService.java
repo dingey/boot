@@ -33,7 +33,7 @@ public class RoleService extends BaseService<RoleMapper, Role, RoleService> {
     }
 
     public Integer saveRole(RoleDTO role) {
-        int i = proxy().save(role.getRole());
+        int i = save(role.getRole());
         List<RolePermission> list = rolePermissionMapper.listByRoleId(role.getRole().getId());
         List<RolePermission> adds = FilterUtil.differenceSet(role.getPermissions(), list, "permissionId");
         List<RolePermission> dels = FilterUtil.differenceSet(list, role.getPermissions(), "permissionId");
