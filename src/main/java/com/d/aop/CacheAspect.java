@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -27,6 +28,7 @@ import com.d.util.JsonUtil;
 
 @Component
 @Aspect
+@Order(2)
 @Profile({"test"})
 public class CacheAspect {
     private Logger logger = LoggerFactory.getLogger(CacheAspect.class);
@@ -46,6 +48,7 @@ public class CacheAspect {
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         if (method.isAnnotationPresent(CacheMethod.class)) {
+            logger.debug("do cache.");
             CacheMethod cacheMethod = method.getAnnotation(CacheMethod.class);
             String key = spelKey(pjp);
             if (srt.hasKey(key)) {
