@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.expression.ExpressionParser;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
+@Order(1)
 @Profile({"test"})
 public class LockAspect {
     private Logger logger = LoggerFactory.getLogger(LockAspect.class);
@@ -55,6 +57,7 @@ public class LockAspect {
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         if (method.isAnnotationPresent(LockMethod.class)) {
+            logger.debug("do lock.");
             LockMethod lockMethod = method.getAnnotation(LockMethod.class);
             String key = spelKey(pjp);
             Lock lock = registry.obtain(key);
