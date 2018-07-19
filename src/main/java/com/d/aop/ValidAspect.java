@@ -12,6 +12,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,8 @@ import com.d.util.Result;
 @Aspect
 @Order(5)
 public class ValidAspect {
+    private Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    
     @Pointcut(value = "execution(* com.d.web..*.*(..))")
     public void access() {
     }
