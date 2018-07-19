@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -21,6 +22,7 @@ import com.d.util.Result;
 
 @Component
 @Aspect
+@Order(5)
 public class ValidAspect {
     @Pointcut(value = "execution(* com.d.web..*.*(..))")
     public void access() {
@@ -32,6 +34,7 @@ public class ValidAspect {
         Parameter[] parameters = methodSignature.getMethod().getParameters();
         String[] parameterNames = methodSignature.getParameterNames();
         if (Objects.nonNull(parameterNames)) {
+            logger.debug("do valid.");
             StringBuilder s = new StringBuilder();
             for (int i = 0; i < parameterNames.length; i++) {
                 Object value = pjp.getArgs()[i];
