@@ -29,7 +29,7 @@ import com.d.util.JsonUtil;
 @Component
 @Aspect
 @Order(2)
-@Profile({"test"})
+@Profile({"dev", "test"})
 public class CacheAspect {
     private Logger logger = LoggerFactory.getLogger(CacheAspect.class);
     @Autowired
