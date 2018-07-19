@@ -17,6 +17,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +36,7 @@ import static java.lang.String.*;
 
 @Component
 @Aspect
+@Order(3)
 @Profile({"dev", "test"})
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(LogAspect.class);
