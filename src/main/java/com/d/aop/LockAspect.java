@@ -100,11 +100,9 @@ public class LockAspect {
 
     private String spelKey(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
-        LockMethod lockMethod = signature.getMethod()
-                .getAnnotation(LockMethod.class);
+        LockMethod lockMethod = signature.getMethod().getAnnotation(LockMethod.class);
         if (lockMethod.value().isEmpty() && lockMethod.key().isEmpty()) {
-            return signature.getMethod().getDeclaringClass().getName() + "."
-                    + signature.getMethod().getName();
+            return signature.getMethod().getDeclaringClass().getName() + "." + signature.getMethod().getName();
         }
         String[] parameterNames = signature.getParameterNames();
         Object[] args = pjp.getArgs();
