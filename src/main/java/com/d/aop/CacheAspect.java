@@ -52,14 +52,11 @@ public class CacheAspect {
             CacheMethod cacheMethod = method.getAnnotation(CacheMethod.class);
             String key = spelKey(pjp);
             if (srt.hasKey(key)) {
-                if ((srt.getExpire(key)) > System.currentTimeMillis()) {
-                    // 未过期
-                    String json = srt.opsForValue().get(key);
-                    if (method.getReturnType().getTypeParameters().length == 0) {
-                        return JsonUtil.singleton().fromJson(json, method.getReturnType());
-                    } else {
-                        return JsonUtil.singleton().fromJsonWrapper(json, method.getReturnType(), ClassUtil.getMethodReturnGenericType(method));
-                    }
+                String json = srt.opsForValue().get(key);
+                if (method.getReturnType().getTypeParameters().length == 0) {
+                    return JsonUtil.singleton().fromJson(json, method.getReturnType());
+                } else {
+                    return JsonUtil.singleton().fromJsonWrapper(json, method.getReturnType(), ClassUtil.getMethodReturnGenericType(method));
                 }
             }
             Object proceed = pjp.proceed();
