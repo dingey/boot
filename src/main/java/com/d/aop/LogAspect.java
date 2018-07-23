@@ -51,9 +51,9 @@ public class LogAspect {
         String requestPath = getRequestPath(signature.getMethod());
         Method method = signature.getMethod();
         if (method.isAnnotationPresent(ApiOperation.class)) {
-            logger.info("请求:{} | {}。", getSwagger(signature.getMethod()), getSwaggerMethodInfo(point));
+            logger.debug("请求:{} | {}。", getSwagger(signature.getMethod()), getSwaggerMethodInfo(point));
         } else {
-            logger.info("path:{} | {}", requestPath, getMethodInfo(point));
+            logger.debug("path:{} | {}", requestPath, getMethodInfo(point));
         }
     }
 

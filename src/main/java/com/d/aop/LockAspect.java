@@ -62,7 +62,7 @@ public class LockAspect {
             String key = spelKey(pjp);
             Lock lock = registry.obtain(key);
             if (lockMethod.singleton()) {
-                long now = System.currentTimeMillis() / 60000;
+                long now = System.currentTimeMillis();
                 long last = now;
                 if (lock.tryLock()) {
                     try {
@@ -79,14 +79,14 @@ public class LockAspect {
                     }
                 }
                 if (last < now) {
-                    logger.info("执行单任务方法:【{}】", key);
+                    logger.debug("执行单任务方法:【{}】", key);
                     return pjp.proceed();
                 } else {
                     return null;
                 }
             } else {
                 if (lock.tryLock()) {
-                    logger.info("执行锁方法:【{}】", key);
+                    logger.debug("执行锁方法:【{}】", key);
                     try {
                         return pjp.proceed();
                     } finally {
