@@ -26,7 +26,7 @@ import com.d.util.Result;
 @Aspect
 @Order(5)
 public class ValidAspect {
-    private Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    private Logger logger = LoggerFactory.getLogger(ValidAspect.class);
     
     @Pointcut(value = "execution(* com.d.web..*.*(..))")
     public void access() {
