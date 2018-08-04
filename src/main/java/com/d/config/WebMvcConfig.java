@@ -1,5 +1,8 @@
 package com.d.config;
 
+import com.d.filter.UrlFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -18,5 +21,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new FormModelResolver());
         super.addArgumentResolvers(argumentResolvers);
+    }
+    
+    @Bean
+    public FilterRegistrationBean testFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new UrlFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("urlFilter");
+        registration.setOrder(1);
+        return registration;
     }
 }
