@@ -23,7 +23,7 @@ public class UrlFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        logger.info("【URL过滤】请求路径：【{}】,GET查询参数【{}】,所有请求参数【{}】。", req.getRequestURI(), req.getQueryString(), JsonUtil.singleton().toJson(req.getParameterMap()));
+        logger.info("【URL过滤】{}请求路径：【{}】,查询参数【{}】。", req.getMethod(), req.getRequestURI() + (req.getQueryString() == null ? "" : ("?" + req.getQueryString())), JsonUtil.singleton().toJson(req.getParameterMap()));
         chain.doFilter(request, response);
     }
 
