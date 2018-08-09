@@ -9,6 +9,7 @@ import java.util.concurrent.locks.Lock;
 
 import javax.annotation.PostConstruct;
 
+import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -49,14 +50,14 @@ public class LockAspect {
         logger.info("自定义redis锁初始化完毕。。。");
     }
 
-    @Pointcut(value = "execution(* com.d.web..*.*(..))")
+    @Pointcut(value = "execution(* com.d.service..*.*(..))")
     public void around() {
     }
 
     @Around("around()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        if (method.isAnnotationPresent(LockMethod.class)) {
+        if (method.isAnnotationPresent(LockMethod.class) && condition(pjp)) {
             logger.debug("do lock.");
             LockMethod lockMethod = method.getAnnotation(LockMethod.class);
             String key = spelKey(pjp);
@@ -94,8 +95,15 @@ public class LockAspect {
                     }
                 }
             }
+            throw new RuntimeException("服务器繁忙，请稍后再试。");
         }
         return pjp.proceed();
+    }
+
+    private boolean condition(ProceedingJoinPoint pjp) {
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+        LockMethod lockMethod = signature.getMethod().getAnnotation(LockMethod.class);
+        return AspectUtil.spel(pjp, lockMethod.condition(), Boolean.class);
     }
 
     private String spelKey(ProceedingJoinPoint pjp) {
@@ -127,5 +135,8 @@ public class LockAspect {
 
         /* 锁的value值，支持spel表达式 */
         String key() default "";
+
+        /* 锁的value值，支持spel表达式 */
+        String condition() default "2>1";
     }
 }
