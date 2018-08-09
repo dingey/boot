@@ -82,7 +82,7 @@ public class LockAspect {
                     logger.debug("执行单任务方法:【{}】", key);
                     return pjp.proceed();
                 } else {
-                    return null;
+                    throw new RuntimeException("该方法同个时间只允许运行一个。");
                 }
             } else {
                 if (lock.tryLock()) {
