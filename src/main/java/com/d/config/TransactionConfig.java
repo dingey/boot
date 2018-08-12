@@ -9,9 +9,6 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import java.util.Properties;
 
-/**
- * @auther d
- */
 @Configuration
 public class TransactionConfig {
     private final DataSourceTransactionManager transactionManager;
@@ -37,7 +34,7 @@ public class TransactionConfig {
     public BeanNameAutoProxyCreator txProxy() {
         BeanNameAutoProxyCreator creator = new BeanNameAutoProxyCreator();
         creator.setInterceptorNames("txAdvice");
-        creator.setBeanNames("*Service", "*ServiceImpl");
+        creator.setBeanNames("*Service", "*Impl", "*Controller", "*Action", "*Job", "*Schedule", "*Task");
         creator.setProxyTargetClass(true);
         return creator;
     }

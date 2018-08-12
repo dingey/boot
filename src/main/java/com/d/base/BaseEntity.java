@@ -52,7 +52,7 @@ public class BaseEntity<T> implements Serializable {
 
     @java.beans.Transient
     public boolean isNewRecord() {
-        return this.getId() == null || (this.newRecord != null && this.newRecord) || this.getId() <= 0;
+        return (this.newRecord != null && this.newRecord) || this.getId() == null || this.getId() <= 0;
     }
 
     public void setNewRecord(boolean newRecord) {
