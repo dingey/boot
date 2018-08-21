@@ -83,7 +83,11 @@ public class LockAspect {
                     logger.debug("执行单任务方法:【{}】", key);
                     return pjp.proceed();
                 } else {
-                    throw new RuntimeException("该方法同个时间只允许运行一个。");
+                    if (lockMethod.message().isEmpty()) {
+                        throw new RuntimeException("该方法同个时间只允许运行一个。");
+                    } else {
+                        throw new RuntimeException(AspectUtil.spel(pjp, lockMethod.message(), String.class));
+                    }
                 }
             } else {
                 if (lock.tryLock()) {
