@@ -14,17 +14,17 @@ import com.d.web.PetController.Pet;
 
 @Service
 public class PetService {
-	Logger logger = LoggerFactory.getLogger(PetService.class);
+    Logger logger = LoggerFactory.getLogger(PetService.class);
 
-	@LockAspect.LockMethod(value = "pet", key = "'id'+#id")
-	public Pet get(Integer id) {
-		logger.info("get pet  {} from db.", id);
-		return new Pet(id, "cat-" + id);
-	}
+    @LockAspect.LockMethod(key = "'id'+#id")
+    public Pet get(Integer id) {
+        logger.info("get pet  {} from db.", id);
+        return new Pet(id, "cat-" + id);
+    }
 
-	@Cacheable(value = "list", key = "'id'+#pet.id+'name:'+#pet.name")
-	public List<Pet> list(Pet pet) {
-		logger.info("get pet  {} from db.", pet);
-		return Arrays.asList(pet);
-	}
+    @Cacheable(value = "list", key = "'id'+#pet.id+'name:'+#pet.name")
+    public List<Pet> list(Pet pet) {
+        logger.info("get pet  {} from db.", pet);
+        return Arrays.asList(pet);
+    }
 }
