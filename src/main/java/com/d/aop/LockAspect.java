@@ -94,8 +94,12 @@ public class LockAspect {
                         lock.unlock();
                     }
                 }
+                if (lockMethod.message().isEmpty()) {
+                    throw new RuntimeException("服务器繁忙，请稍后再试。");
+                } else {
+                    throw new RuntimeException(AspectUtil.spel(pjp, lockMethod.message(), String.class));
+                }
             }
-            throw new RuntimeException("服务器繁忙，请稍后再试。");
         }
         return pjp.proceed();
     }
@@ -103,13 +107,15 @@ public class LockAspect {
     private boolean condition(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         LockMethod lockMethod = signature.getMethod().getAnnotation(LockMethod.class);
+        if (lockMethod.condition().isEmpty())
+            return true;
         return AspectUtil.spel(pjp, lockMethod.condition(), Boolean.class);
     }
 
     private String spelKey(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         LockMethod lockMethod = signature.getMethod().getAnnotation(LockMethod.class);
-        if (lockMethod.value().isEmpty() && lockMethod.key().isEmpty()) {
+        if (lockMethod.key().isEmpty()) {
             return signature.getMethod().getDeclaringClass().getName() + "." + signature.getMethod().getName();
         }
         String[] parameterNames = signature.getParameterNames();
@@ -131,12 +137,15 @@ public class LockAspect {
         boolean singleton() default false;
 
         /* 锁的value值，支持spel表达式 */
-        String value() default "";
+        //String value() default "";
 
         /* 锁的value值，支持spel表达式 */
         String key() default "";
 
         /* 锁的value值，支持spel表达式 */
-        String condition() default "2>1";
+        String condition() default "";
+
+        /* 提示内容 */
+        String message() default "";
     }
 }
