@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.annotation.*;
 import java.net.URLDecoder;
 import java.util.*;
+
 //org.springframework.web.method.annotation.ModelAttributeMethodProcessor
 @SuppressWarnings("all")
 public class FormModelResolver implements HandlerMethodArgumentResolver {
@@ -74,7 +75,11 @@ public class FormModelResolver implements HandlerMethodArgumentResolver {
         for (Map.Entry<String, String[]> entry : params.entrySet()) {
             String name = entry.getKey();
             // 执行urldecode
-            String value = URLDecoder.decode(entry.getValue()[0], "UTF-8");
+            String value = entry.getValue()[0];
+            try {
+                URLDecoder.decode(entry.getValue()[0], "UTF-8");
+            } catch (Exception e) {
+            }
             map.put(StringUtil.camelCase(name), value);
         }
         PropertyValues propertyValues = new MutablePropertyValues(map);
