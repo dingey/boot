@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <title>dataTable</title>
+    <style>
+        body {
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form>
+        <div class="form-row align-items-center">
+            <label>名称</label>
+            <div class="col-auto">
+                <input type="text" class="form-control mb-2" name="name">
+            </div>
+            <div class="col-auto">
+                <div class="form-check mb-2">
+                    <select name="status" class="form-control">
+                        <option value="">全部</option>
+                        <option value="1">正常</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-primary mb-2" id="query">查询</button>
+                <button type="button" class="btn btn-outline-primary mb-2" id="flush">刷新</button>
+                <button type="reset" class="btn btn-outline-info mb-2">重置</button>
+            </div>
+        </div>
+    </form>
+    <table id="example" class="table table-sm table-bordered" style="width:100%">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>age</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>System Architect</td>
+            <td>18</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $.extend($.fn.dataTable.defaults, {
+        "searching": false,
+        "ordering": false,
+        "processing": true,
+        "serverSide": true,
+        "bStateSave": true,
+        "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+        },
+    });
+    $(function () {
+            var table = $('#example').DataTable({
+                "ajax": {
+                    "url": "http://localhost:8090/data.json",
+                    //"type": "POST",
+                    "dataFilter": function (data) {
+                        var json = jQuery.parseJSON(data);
+                        json.recordsTotal = json.total;
+                        json.recordsFiltered = json.total;
+                        json.draw = json.pageNum;
+                        json.data = json.list;
+                        return JSON.stringify(json); // return JSON string
+                    }, "data": {
+                        "name": $("[name=name]").val(),
+                        "status": $("[name='status']").val()}
+                },
+                "columns": [
+                    {"data": "id"},
+                    {"data": "name"},
+                    {"data": "age"},
+                    {
+                        "render": function (data, type, row, meta) {
+                            return "<a href='#'>" + row.name + "</a>";
+                        }
+                    }
+                ]
+            });
+            $("#query").click(function () {
+                table.ajax.reload();
+            });
+            $("#flush").click(function () {
+                table.draw(false);
+            });
+        }
+    );
+</script>
+</body>
+</html>

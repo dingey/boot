@@ -41,9 +41,9 @@ public class MybatisConfig {
     public PageHelper pageHelper() {
         PageHelper pageHelper = new PageHelper();
         Properties p = new Properties();
-        p.setProperty("offsetAsPageNum", "true");
+        p.setProperty("offsetAsPageNum", "false");
         p.setProperty("rowBoundsWithCount", "true");
-        p.setProperty("reasonable", "true");
+        p.setProperty("reasonable", "false");
         pageHelper.setProperties(p);
         return pageHelper;
     }
