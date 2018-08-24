@@ -25,6 +25,7 @@
                 <div class="form-check mb-2">
                     <select name="status" class="form-control">
                         <option value="">全部</option>
+                        <option value="0">0</option>
                         <option value="1">正常</option>
                     </select>
                 </div>
@@ -106,9 +107,10 @@
                         json.draw = json.pageNum;
                         json.data = json.list;
                         return JSON.stringify(json); // return JSON string
-                    }, "data": {
-                        "name": $("[name=name]").val(),
-                        "status": $("[name='status']").val()}
+                    },
+                    "data": function (d) {
+                        d.status = $("[name=status]").val();
+                    }
                 },
                 "columns": [
                     {"data": "id"},
