@@ -28,7 +28,9 @@ public class UserMapperTest extends ApplicationTests {
 	}
 
 	public void getByid() {
-		userMapper.getById(1);
+		User u=new User();
+		u.setId(1);
+		userMapper.get(u);
 	}
 
 	public void insert() {

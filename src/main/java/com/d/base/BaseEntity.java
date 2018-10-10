@@ -10,7 +10,7 @@ import com.di.kit.SqlProvider.Transient;
 /**
  * @author di
  */
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 public class BaseEntity<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final int DEL_FLAG_NORMAL = 0;

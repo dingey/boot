@@ -15,7 +15,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings({"unchecked", "unused", "rawtypes"})
 public abstract class AbstractServiceImpl<D extends BaseMapper<T>, T extends BaseEntity<T>, S extends AbstractService> implements AbstractService<T, S> {
     public Logger logger = LoggerFactory.getLogger(AbstractServiceImpl.class);
     @Autowired

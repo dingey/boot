@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "rawtypes" })
 public interface AbstractService<T extends BaseEntity<T>, S extends AbstractService> {
 
     /**

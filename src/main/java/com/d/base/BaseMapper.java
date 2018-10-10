@@ -54,11 +54,11 @@ public interface BaseMapper<T> {
 
     @Select("${sql.toString()}")
     @Deprecated
-    LinkedHashMap getBySQL(@Param("sql") SQL sql);
+    LinkedHashMap<?, ?> getBySQL(@Param("sql") SQL sql);
 
     @Select("${sql.toString()}")
     @Deprecated
-    List<LinkedHashMap> listBySQL(@Param("sql") SQL sql);
+    List<LinkedHashMap<?, ?>> listBySQL(@Param("sql") SQL sql);
 
     @Select("${sql.toString()}")
     @Deprecated

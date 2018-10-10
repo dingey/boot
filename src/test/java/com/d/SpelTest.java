@@ -41,6 +41,7 @@ public class SpelTest {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	void list() {
 		PetService petService = new PetService();
 		Method method;
