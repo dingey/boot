@@ -4,7 +4,6 @@ import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,24 +45,18 @@ public class LockEvictAspect {
         logger.info("自定义标识锁退出初始化完毕。。。");
     }
 
-    @Pointcut(value = "execution(* com.d.web..*.*(..))")
-    public void around() {
-    }
-
-    @Around("around()")
+    @Around("@annotation(com.d.aop.LockEvictAspect.LockEvict)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        if (method.isAnnotationPresent(LockEvict.class)) {
-            LockEvict lockEvict = method.getAnnotation(LockEvict.class);
-            logger.debug("do lock evict.");
-            String key = AspectUtil.spel(pjp, lockEvict.key().isEmpty() ? lockEvict.value() : lockEvict.key(), String.class);
-            Lock lock = registry.obtain(key);
-            if (lock.tryLock()) {
-                try {
-                    srt.delete(key);
-                } finally {
-                    lock.unlock();
-                }
+        LockEvict lockEvict = method.getAnnotation(LockEvict.class);
+        logger.debug("do lock evict.");
+        String key = AspectUtil.spel(pjp, lockEvict.key().isEmpty() ? lockEvict.value() : lockEvict.key(), String.class);
+        Lock lock = registry.obtain(key);
+        if (lock.tryLock()) {
+            try {
+                srt.delete(key);
+            } finally {
+                lock.unlock();
             }
         }
         return pjp.proceed();
