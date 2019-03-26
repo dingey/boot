@@ -30,6 +30,11 @@ public class PermissionServiceImpl extends AbstractServiceImpl<PermissionMapper,
         return mapper.updateTarget(parentId, index);
     }
 
+    @Override
+    public Integer updateSequence(int id, int index) {
+        return mapper.updateSequence(id, index);
+    }
+
     public Integer countByParentId(int parentId) {
         return mapper.countByParentId(parentId);
     }

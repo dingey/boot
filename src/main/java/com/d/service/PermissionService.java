@@ -16,6 +16,8 @@ public interface PermissionService extends AbstractService<Permission, Permissio
 
     Integer updateTarget(int parentId, int index);
 
+    Integer updateSequence(int id, int index);
+
     Integer countByParentId(int parentId);
 
     List<Permission> listAuthc();

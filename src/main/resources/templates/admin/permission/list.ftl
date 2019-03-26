@@ -64,7 +64,7 @@ $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 		}
 	};
 
-	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : false<#if (t.parentId==0)>,drag:false<#else></#if>}<#if (t_index!=(list?size-1))>,</#if></#list>];
+	var zNodes = [<#list list as t>{id : ${t.id!},pId : ${t.parentId!"0"},name : "${t.name!}",open : false<#if (t.parentId==0)>,drag:true<#else></#if>}<#if (t_index!=(list?size-1))>,</#if></#list>];
 	//拖拽
 	function beforeDrag(treeId, treeNodes) {
 		for (var i = 0, l = treeNodes.length; i < l; i++) {
@@ -81,13 +81,25 @@ $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 		//console.log(JSON.stringify(treeNodes));
 	}
 	function zTreeOnDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
-		var index =  $.fn.zTree.getZTreeObj(treeId).getNodeIndex(treeNodes[0]);
-		var id=treeNodes[0].id;
-		var pid=treeNodes[0].pId==null?0:treeNodes[0].pId;
-		console.log(treeNodes[0].name+"[id:"+id+",pid:"+pid+",index:"+index+"]");
-		$.post("sort","id="+id+"&pid="+pid+"&index="+index,function(data){
-			
-		},"text");
+		//var index =  $.fn.zTree.getZTreeObj(treeId).getNodeIndex(treeNodes[0]);
+		//var id=treeNodes[0].id;
+		//var pid=treeNodes[0].pId==null?0:treeNodes[0].pId;
+		//console.log(treeNodes[0].name+"[id:"+id+",pid:"+pid+",index:"+index+"]");
+		//$.post("sort","id="+id+"&pid="+pid+"&index="+index,function(data){},"text");
+		var nodes=new Array();
+		var preNode=treeNodes[0].getPreNode();
+		while (preNode!=null&&preNode!=undefined){
+			nodes.push(preNode.id);
+			preNode=preNode.getPreNode();
+		}
+		nodes.push(id);
+		var nextNode=treeNodes[0].getNextNode();
+		while (nextNode!=null&&nextNode!=undefined){
+			nodes.push(nextNode.id);
+			nextNode=nextNode.getNextNode();
+		}
+		console.log(nodes);
+		$.post("sorts","ids="+nodes.join(","),function(data){},"text");
 	}
 	function printAllNode() {
 		var data = [];
