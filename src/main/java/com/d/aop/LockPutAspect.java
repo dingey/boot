@@ -4,7 +4,6 @@ import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ import java.util.concurrent.locks.Lock;
 @Order(1)
 @Profile({"dev", "test"})
 public class LockPutAspect {
-    private Logger logger = LoggerFactory.getLogger(LockAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(LockAspect.class);
     private final RedisConnectionFactory connectionFactory;
     private RedisLockRegistry registry;
     private final StringRedisTemplate srt;
@@ -46,34 +45,27 @@ public class LockPutAspect {
         logger.info("自定义标识锁初入口始化完毕。。。");
     }
 
-    @Pointcut(value = "execution(* com.d.web..*.*(..))")
-    public void around() {
-    }
-
-    @Around("around()")
+    @Around("@annotation(com.d.aop.LockPutAspect.LockPut)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        if (method.isAnnotationPresent(LockPut.class)) {
-            logger.debug("do lock put.");
-            LockPut lockPut = method.getAnnotation(LockPut.class);
-            String key = AspectUtil.spel(pjp, lockPut.key().isEmpty() ? lockPut.value() : lockPut.key(), String.class);
-            Lock lock = registry.obtain(key);
-            boolean exists = false;
-            if (lock.tryLock()) {
-                try {
-                    exists = srt.hasKey(key);
-                } finally {
-                    lock.unlock();
-                }
-            }
-            if (!exists) {
-                srt.opsForValue().set(key, "", lockPut.timeout());
-                return pjp.proceed();
-            } else {
-                throw new RuntimeException(AspectUtil.spel(pjp, lockPut.message(), String.class));
+        logger.debug("do lock put.");
+        LockPut lockPut = method.getAnnotation(LockPut.class);
+        String key = AspectUtil.spel(pjp, lockPut.key().isEmpty() ? lockPut.value() : lockPut.key(), String.class);
+        Lock lock = registry.obtain(key);
+        boolean exists = false;
+        if (lock.tryLock()) {
+            try {
+                exists = srt.hasKey(key);
+            } finally {
+                lock.unlock();
             }
         }
-        return pjp.proceed();
+        if (!exists) {
+            srt.opsForValue().set(key, "", lockPut.timeout());
+            return pjp.proceed();
+        } else {
+            throw new RuntimeException(AspectUtil.spel(pjp, lockPut.message(), String.class));
+        }
     }
 
     @Retention(RetentionPolicy.RUNTIME)
