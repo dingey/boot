@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import javax.annotation.PostConstruct;
 
+import com.d.util.AspectUtil;
 import com.di.kit.ClassUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
 import com.d.util.JsonUtil;
@@ -31,20 +28,20 @@ import com.d.util.JsonUtil;
 @Order(2)
 @Profile({"dev", "test"})
 public class CacheAspect {
-    private Logger logger = LoggerFactory.getLogger(CacheAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(CacheAspect.class);
+    private final StringRedisTemplate srt;
+
     @Autowired
-    private StringRedisTemplate srt;
+    public CacheAspect(StringRedisTemplate srt) {
+        this.srt = srt;
+    }
 
     @PostConstruct
     public void init() {
         logger.info("自定义缓存初始化完毕。。。");
     }
 
-    @Pointcut(value = "execution(* com.d.service..*.*(..))")
-    public void around() {
-    }
-
-    @Around("around()")
+    @Around("@annotation(com.d.aop.CacheAspect.CacheMethod)||@annotation(com.d.aop.CacheAspect.CacheEvictMethod)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         if (method.isAnnotationPresent(CacheMethod.class)) {
@@ -72,20 +69,11 @@ public class CacheAspect {
     private String spelKey(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         CacheMethod cacheMethod = signature.getMethod().getAnnotation(CacheMethod.class);
-        String[] parameterNames = signature.getParameterNames();
-        Object[] args = pjp.getArgs();
         if (cacheMethod.value().isEmpty() && cacheMethod.key().isEmpty()) {
-            return signature.getMethod().getDeclaringClass().getName() + "." + signature.getMethod().getName() + JsonUtil.singleton().toJson(args);
+            return signature.getMethod().getDeclaringClass().getName() + "." + signature.getMethod().getName() + JsonUtil.singleton().toJson(pjp.getArgs());
+        } else {
+            return AspectUtil.spel(pjp, cacheMethod.key().isEmpty() ? cacheMethod.value() : cacheMethod.key(), String.class);
         }
-        ExpressionParser parser = new SpelExpressionParser();
-        StandardEvaluationContext context = new StandardEvaluationContext();
-        if (args.length > 0) {
-            for (int i = 0; i < args.length; i++) {
-                context.setVariable(parameterNames[i], args[i]);
-            }
-        }
-        String value = parser.parseExpression(cacheMethod.key()).getValue(context, String.class);
-        return cacheMethod.value() + value;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
