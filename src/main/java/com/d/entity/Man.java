@@ -1,10 +1,7 @@
 package com.d.entity;
 
 import com.d.base.BaseEntity;
-import com.di.jdbc.mapper.annotation.NamedNativeQueries;
-import com.di.jdbc.mapper.annotation.NamedNativeQuery;
 
-@NamedNativeQueries({ @NamedNativeQuery(name = "get", query = "select * from man where id=?") })
 public class Man extends BaseEntity<Man> {
 	private static final long serialVersionUID = 5478404573506550506L;
 	private String name;
