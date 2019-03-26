@@ -13,7 +13,6 @@ import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +21,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Component;
 
@@ -50,14 +46,10 @@ public class LockAspect {
         logger.info("自定义redis锁初始化完毕。。。");
     }
 
-    @Pointcut(value = "execution(* com.d.service..*.*(..))")
-    public void around() {
-    }
-
-    @Around("around()")
+    @Around("@annotation(com.d.aop.LockAspect.LockMethod)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        if (method.isAnnotationPresent(LockMethod.class) && condition(pjp)) {
+        if (condition(pjp)) {
             logger.debug("do lock.");
             LockMethod lockMethod = method.getAnnotation(LockMethod.class);
             String key = spelKey(pjp);
@@ -122,16 +114,7 @@ public class LockAspect {
         if (lockMethod.key().isEmpty()) {
             return signature.getMethod().getDeclaringClass().getName() + "." + signature.getMethod().getName();
         }
-        String[] parameterNames = signature.getParameterNames();
-        Object[] args = pjp.getArgs();
-        ExpressionParser parser = new SpelExpressionParser();
-        StandardEvaluationContext context = new StandardEvaluationContext();
-        if (args.length > 0) {
-            for (int i = 0; i < args.length; i++) {
-                context.setVariable(parameterNames[i], args[i]);
-            }
-        }
-        return parser.parseExpression(lockMethod.key()).getValue(context, String.class);
+        return AspectUtil.spel(pjp, lockMethod.key(), String.class);
     }
 
     @Retention(RetentionPolicy.RUNTIME)
