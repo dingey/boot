@@ -7,12 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.d.config.DecryptionMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.d.service.PetService;
 import com.d.util.Result;
@@ -50,10 +48,11 @@ public class PetController {
 
 	@ApiOperation(value = "保存", notes = "宠物保存", response = Pet.class)
 	@PostMapping(path = "/pet/save")
-	public Object save(Pet pet) {
+	public Object save(@RequestBody Pet pet) {
 		return Result.success(pet);
 	}
 
+	@DecryptionMessageConverter.Decryptable
 	@ApiModel("宠物")
 	public static class Pet implements Serializable {
 		private static final long serialVersionUID = -5310279155008867167L;
