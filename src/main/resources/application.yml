@@ -1,6 +1,6 @@
 server:
   port: 8080
-  ssl:
+  #ssl:
     #服务端
     #key-store: classpath:ssl/server.p12
     #key-store-password: 123456
