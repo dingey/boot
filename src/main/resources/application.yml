@@ -28,9 +28,6 @@ spring:
     password: 123456
     port: 6379
 
-#schedule
-schedule.every.ten.minutes: 0/600 * * * * *
-
 mybatis:
   type-aliases-package: com.d.entity
   configuration.map-underscore-to-camel-case: true
@@ -38,12 +35,11 @@ logging:
   config: classpath:logback-spring.xml
   path: /logs/${spring.application.name}_${server.port}
   level:
-    com.d.web: info
+    com.d: info
     com.d.mapper: debug
 ---
 spring.profiles: prod
 logging:
   level:
-    com.d.web: info
     com.d.mapper: info
 ---
