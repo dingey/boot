@@ -1,5 +1,17 @@
 server:
-  port: 8090
+  port: 8080
+  ssl:
+    #服务端
+    key-store: classpath:ssl/server.p12
+    key-store-password: 123456
+    key-store-type: JKS
+    key-alias: tomcat
+    #客户端
+    trust-store: classpath:ssl/server.p12
+    trust-store-password: 123456
+    client-auth: need
+    trust-store-type: JKS
+    trust-store-provider: SUN
 
 spring:
   application:
