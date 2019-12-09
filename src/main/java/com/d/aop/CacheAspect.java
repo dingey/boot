@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import javax.annotation.PostConstruct;
 
+import com.d.annotation.CacheEvictMethod;
+import com.d.annotation.CacheMethod;
 import com.d.util.AspectUtil;
 import com.di.kit.ClassUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -41,7 +43,7 @@ public class CacheAspect {
         logger.info("自定义缓存初始化完毕。。。");
     }
 
-    @Around("@annotation(com.d.aop.CacheAspect.CacheMethod)||@annotation(com.d.aop.CacheAspect.CacheEvictMethod)")
+    @Around("@annotation(com.d.annotation.CacheMethod)||@annotation(com.d.annotation.CacheEvictMethod)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         if (method.isAnnotationPresent(CacheMethod.class)) {
@@ -76,26 +78,4 @@ public class CacheAspect {
         }
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
-    public @interface CacheMethod {
-        // 缓存名称
-        String value() default "";
-
-        // 缓存key值，支持spel表达式
-        String key() default "";
-
-        // 过期时间60S
-        int expire() default 60000;
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
-    public @interface CacheEvictMethod {
-        // 缓存名称
-        String value() default "";
-
-        // 缓存key值，支持spel表达式
-        String key() default "";
-    }
 }

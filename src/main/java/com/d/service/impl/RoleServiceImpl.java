@@ -10,14 +10,14 @@ import com.d.service.RoleService;
 import com.di.kit.FilterUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class RoleServiceImpl extends AbstractServiceImpl<RoleMapper, Role, RoleService> implements RoleService {
-    @Autowired
+    @Resource
     private RolePermissionMapper rolePermissionMapper;
 
     public List<Role> listByUserId(Integer userId) {

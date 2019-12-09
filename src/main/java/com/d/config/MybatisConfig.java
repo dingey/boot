@@ -1,7 +1,5 @@
 package com.d.config;
 
-import java.util.Properties;
-
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
@@ -20,8 +18,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
-import com.github.pagehelper.PageHelper;
-
 @Configuration
 @MapperScan(basePackages = "com.d.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class MybatisConfig {
@@ -33,19 +29,7 @@ public class MybatisConfig {
 
     @PostConstruct
     public void initMethod() {
-        logger.info("分页插件初始化成功。");
         logger.info("mybatis初始化成功。");
-    }
-
-    @Bean
-    public PageHelper pageHelper() {
-        PageHelper pageHelper = new PageHelper();
-        Properties p = new Properties();
-        p.setProperty("offsetAsPageNum", "false");
-        p.setProperty("rowBoundsWithCount", "true");
-        p.setProperty("reasonable", "false");
-        pageHelper.setProperties(p);
-        return pageHelper;
     }
 
     @Bean(name = "sqlSessionFactory")

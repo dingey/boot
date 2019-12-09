@@ -1,5 +1,6 @@
 package com.d.aop;
 
+import com.d.annotation.LockEvict;
 import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,10 +17,6 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.concurrent.locks.Lock;
 
@@ -45,7 +42,7 @@ public class LockEvictAspect {
         logger.info("自定义标识锁退出初始化完毕。。。");
     }
 
-    @Around("@annotation(com.d.aop.LockEvictAspect.LockEvict)")
+    @Around("@annotation(com.d.annotation.LockEvict)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         LockEvict lockEvict = method.getAnnotation(LockEvict.class);
@@ -60,16 +57,5 @@ public class LockEvictAspect {
             }
         }
         return pjp.proceed();
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
-    public @interface LockEvict {
-
-        /* 锁的value值，支持spel表达式 */
-        String value() default "";
-
-        /* 锁的value值，支持spel表达式 */
-        String key() default "";
     }
 }

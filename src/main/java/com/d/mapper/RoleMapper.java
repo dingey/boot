@@ -13,5 +13,5 @@ public interface RoleMapper extends BaseMapper<Role> {
 	List<Role> listByUserId(Integer userId);
 	
 	@Select("<script>select * from role where del_flag=0 <if test=\"name !=null and name!=''\"> and `name` like CONCAT('%',#{name},'%')</if></script>")
-	List<Role> listByName(@Param("name")String name);
+	List<Role> listByName(@Param("name") String name);
 }

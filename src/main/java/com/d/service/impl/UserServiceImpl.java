@@ -7,15 +7,15 @@ import com.d.mapper.UserMapper;
 import com.d.mapper.UserRoleMepper;
 import com.d.service.UserService;
 import com.d.util.PasswordHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class UserServiceImpl extends AbstractServiceImpl<UserMapper, User, UserService> implements UserService {
-    @Autowired
+    @Resource
     private UserRoleMepper userRoleMepper;
 
     public User getByUsername(String username) {

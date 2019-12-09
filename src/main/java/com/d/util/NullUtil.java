@@ -23,7 +23,7 @@ public class NullUtil {
 
 	@SuppressWarnings({ "unchecked" })
 	public static Object replaceObjectNullFields(Object o, Class<?> type) {
-		if (type == java.util.Map.class || type == java.util.HashMap.class) {
+		if (type == Map.class || type == HashMap.class) {
 			Map<Object, Object> m = (Map<Object, Object>) o;
 			if (o == null) {
 				return new HashMap<>();
@@ -38,26 +38,26 @@ public class NullUtil {
 				}
 			}
 			return m;
-		} else if (type == java.lang.Byte.class || type == java.lang.Short.class || type == java.lang.Integer.class
-				|| type == java.lang.Long.class || type == java.lang.Double.class || type == java.lang.Float.class
+		} else if (type == Byte.class || type == Short.class || type == Integer.class
+				|| type == Long.class || type == Double.class || type == Float.class
 				|| type == java.math.BigDecimal.class||type == java.math.BigInteger.class) {
 			if (o == null) {
 				return 0;
 			}
-		} else if (type == java.util.Date.class || type == java.lang.String.class) {
+		} else if (type == java.util.Date.class || type == String.class) {
 			if (o == null)
 				return "";
 		} else if (type == Object[].class) {
 			if (o == null)
 				return new Object[0];
-		} else if (type == java.util.ArrayList.class || type == java.util.LinkedList.class) {
+		} else if (type == ArrayList.class || type == java.util.LinkedList.class) {
 			if (o == null)
 				return new ArrayList<>();
 		} else if (type.isEnum()) {
 			if (o == null) {
 				return type.getEnumConstants()[0];
 			}
-		} else if (type != java.lang.Object.class) {
+		} else if (type != Object.class) {
 			if (o == null) {
 				try {
 					o = type.newInstance();

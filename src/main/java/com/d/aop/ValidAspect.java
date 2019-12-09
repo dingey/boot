@@ -27,8 +27,11 @@ import com.d.util.Result;
 @Order(5)
 public class ValidAspect {
     private Logger logger = LoggerFactory.getLogger(ValidAspect.class);
-    
-    @Pointcut(value = "execution(* com.d.web..*.*(..))")
+
+    @Pointcut(value = "execution(* com.d.web..*.*(..))||" +
+            "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
+            "@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
+            "@annotation(org.springframework.web.bind.annotation.GetMapping)")
     public void access() {
     }
 
