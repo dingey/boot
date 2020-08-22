@@ -103,7 +103,7 @@ public class DesUtil {
         String stmp;
         int n;
         for (n = 0; n < b.length; n++) {
-            stmp = (java.lang.Integer.toHexString(b[n] & 0XFF));
+            stmp = (Integer.toHexString(b[n] & 0XFF));
             if (stmp.length() == 1)
                 hs.append("0").append(stmp);
             else

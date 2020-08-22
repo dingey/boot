@@ -3,7 +3,7 @@ package com.d.service;
 import java.util.Arrays;
 import java.util.List;
 
-import com.d.aop.LockAspect;
+import com.d.annotation.LockMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,7 +15,7 @@ import com.d.web.PetController.Pet;
 public class PetService {
     Logger logger = LoggerFactory.getLogger(PetService.class);
 
-    @LockAspect.LockMethod(key = "'id'+#id")
+    @LockMethod(key = "'id'+#id")
     public Pet get(Integer id) {
         logger.info("get pet  {} from db.", id);
         return new Pet(id, "cat-" + id);

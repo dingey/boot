@@ -32,7 +32,7 @@ public class Result {
 	private Object data;
 
 	@ApiModelProperty(value = "中间map变量", hidden = true)
-	@JsonInclude(JsonInclude.Include.NON_ABSENT)
+	@JsonInclude(Include.NON_ABSENT)
 	private Map<String, Object> map;
 
 	public void setCode(Integer code) {

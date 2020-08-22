@@ -1,5 +1,6 @@
 package com.d.aop;
 
+import com.d.annotation.LockPut;
 import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,10 +17,6 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.concurrent.locks.Lock;
 
@@ -45,7 +42,7 @@ public class LockPutAspect {
         logger.info("自定义标识锁初入口始化完毕。。。");
     }
 
-    @Around("@annotation(com.d.aop.LockPutAspect.LockPut)")
+    @Around("@annotation(com.d.annotation.LockPut)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         logger.debug("do lock put.");
@@ -67,21 +64,4 @@ public class LockPutAspect {
             throw new RuntimeException(AspectUtil.spel(pjp, lockPut.message(), String.class));
         }
     }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
-    public @interface LockPut {
-
-        /* 锁的value值，支持spel表达式 */
-        String value() default "";
-
-        /* 锁的value值，支持spel表达式 */
-        String key() default "";
-
-        /* 超时时间毫秒 */
-        long timeout() default 100;
-
-        String message() default "";
-    }
-
 }

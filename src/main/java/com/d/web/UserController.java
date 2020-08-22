@@ -60,7 +60,7 @@ public class UserController {
     @GetMapping(value = "/user/{id}")
     @ApiOperation(value = "查询", notes = "查询")
     public Object get(@PathVariable("id") @ApiParam(defaultValue = "1") Integer id) {
-        return userService.get(id);
+        return userService.getCache(id);
     }
 
     @ResponseBody

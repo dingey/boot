@@ -2,6 +2,7 @@ package com.d.config;
 
 import java.util.LinkedHashMap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
@@ -10,8 +11,6 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +22,17 @@ import com.d.entity.Permission;
 import com.d.interceptor.MyShiroRealm;
 import com.d.service.PermissionService;
 
+import javax.annotation.Resource;
+
 /**
  * @author d
  */
-@Profile({"dev","prod"})
+@Slf4j
+@Profile({"dev", "prod"})
 @Configuration
 public class ShiroConfig {
-    private Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
-    @Autowired
+
+    @Resource
     private PermissionService permissionService;
 
     @Bean
@@ -45,7 +47,7 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-        logger.info("ShiroConfiguration.shiroFilter()");
+        log.info("ShiroConfiguration.shiroFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置SecuritManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);

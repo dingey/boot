@@ -12,9 +12,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(exposeProxy = true)
-public class Application {
+public class BootApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(BootApplication.class, args);
+	}
+
 }

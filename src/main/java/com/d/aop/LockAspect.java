@@ -1,14 +1,12 @@
 package com.d.aop;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import javax.annotation.PostConstruct;
 
+import com.d.annotation.LockMethod;
 import com.d.util.AspectUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -46,7 +44,7 @@ public class LockAspect {
         logger.info("自定义redis锁初始化完毕。。。");
     }
 
-    @Around("@annotation(com.d.aop.LockAspect.LockMethod)")
+    @Around("@annotation(com.d.annotation.LockMethod)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         if (condition(pjp)) {
@@ -54,15 +52,15 @@ public class LockAspect {
             LockMethod lockMethod = method.getAnnotation(LockMethod.class);
             String key = spelKey(pjp);
             Lock lock = registry.obtain(key);
-            if (lockMethod.singleton()) {
+            if (lockMethod.lockTime() > 0L) {
                 long now = System.currentTimeMillis();
                 long last = now;
-                if (lock.tryLock()) {
+                if (lock.tryLock(lockMethod.waitTime(), TimeUnit.MILLISECONDS)) {
                     try {
                         try {
                             last = Long.valueOf(srt.opsForValue().get(key));
                         } catch (NumberFormatException e) {
-                            last = 0;
+                            last = 0L;
                         }
                         if (last < now) {
                             srt.opsForValue().set(key, String.valueOf(now));
@@ -71,7 +69,7 @@ public class LockAspect {
                         lock.unlock();
                     }
                 }
-                if (last < now) {
+                if (last + lockMethod.lockTime() <= now) {
                     logger.debug("执行单任务方法:【{}】", key);
                     return pjp.proceed();
                 } else {
@@ -82,7 +80,7 @@ public class LockAspect {
                     }
                 }
             } else {
-                if (lock.tryLock()) {
+                if (lock.tryLock(lockMethod.waitTime(), TimeUnit.MILLISECONDS)) {
                     logger.debug("执行锁方法:【{}】", key);
                     try {
                         return pjp.proceed();
@@ -103,8 +101,9 @@ public class LockAspect {
     private boolean condition(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         LockMethod lockMethod = signature.getMethod().getAnnotation(LockMethod.class);
-        if (lockMethod.condition().isEmpty())
+        if (lockMethod.condition().isEmpty()) {
             return true;
+        }
         return AspectUtil.spel(pjp, lockMethod.condition(), Boolean.class);
     }
 
@@ -115,24 +114,5 @@ public class LockAspect {
             return signature.getMethod().getDeclaringClass().getName() + "." + signature.getMethod().getName();
         }
         return AspectUtil.spel(pjp, lockMethod.key(), String.class);
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
-    public @interface LockMethod {
-        /* 是否单任务 */
-        boolean singleton() default false;
-
-        /* 锁的value值，支持spel表达式 */
-        //String value() default "";
-
-        /* 锁的value值，支持spel表达式 */
-        String key() default "";
-
-        /* 锁的value值，支持spel表达式 */
-        String condition() default "";
-
-        /* 提示内容 */
-        String message() default "";
     }
 }
